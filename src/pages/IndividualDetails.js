@@ -3,7 +3,7 @@ import PageTitle from "../components/Typography/PageTitle";
 import SectionTitle from "../components/Typography/SectionTitle";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getData, addUser, updateUser, getUser } from "./../utils/demo/ApiCall";
+import { addUser, updateUser, getUser } from "./../utils/demo/ApiCall";
 import { TailSpin } from "react-loading-icons";
 import axios from "axios";
 import {
@@ -139,6 +139,7 @@ function IndividualDetails() {
               <span>Email</span>
               <Input
                 className="mt-1"
+                type="email"
                 defaultValue={email}
                 placeholder="xyz@gmail.com"
                 onChange={(e) => setEmail(e.target.value)}

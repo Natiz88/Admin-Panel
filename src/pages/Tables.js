@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import PageTitle from "../components/Typography/PageTitle";
 import { TailSpin } from "react-loading-icons";
+import { getData, deleteUsers } from "./../utils/demo/ApiCall";
 // import Modal from "react-responsive-modal";
 import { useHistory, Link } from "react-router-dom";
 import {
@@ -41,43 +42,23 @@ function Tables() {
     setPageTable(p);
   }
 
-  const getData = async () => {
-    const url = "http://192.168.1.98:8081/api/user";
-    const token = localStorage.getItem("token");
-    const config = {
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const resp = await axios.get(url, config);
-    setData(resp.data);
-  };
+  useEffect(() => {
+    getData().then((res) => setData(res));
+  }, [del]);
+
   useEffect(() => {
     setResponse(
       data.slice((pageTable - 1) * resultsPerPage, pageTable * resultsPerPage)
     );
   }, [data]);
 
-  useEffect(() => {
-    getData();
-  }, [pageTable, del]);
-
   const deleteUser = (user) => {
     setId(user.id);
     setIsModalOpen(true);
   };
 
-  const sendDeleteUser = async () => {
-    const url = `http://192.168.1.98:8081/api/user/${id}/delete`;
-    const token = localStorage.getItem("token");
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const response = await axios.delete(url, config);
-    console.log("del-user", response);
+  const sendDeleteUser = () => {
+    deleteUsers(id).then((res) => console.log("del-user", res));
     setDel(!true);
   };
   function closeModal() {

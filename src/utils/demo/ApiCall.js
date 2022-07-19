@@ -2,8 +2,24 @@ import axios from "axios";
 
 const token = localStorage.getItem("token");
 
+export const loginData = async (email, password) => {
+  const url = "http://192.168.1.98:8081/api/login";
+  const config = {
+    headers: {
+      Accept: "application/json",
+    },
+  };
+  const data = {
+    email: email,
+    password: password,
+    device_name: "acer",
+  };
+  const resp = await axios.post(url, data, config);
+  return resp.data;
+};
+
 export const getData = async () => {
-  const url = "http://192.168.1.98:8081/api/user";
+  const url = "http://192.168.1.98:8081/api/admin/user";
   const config = {
     headers: {
       Accept: "application/json",
@@ -15,7 +31,7 @@ export const getData = async () => {
 };
 
 export const getUser = async (id) => {
-  const url = `http://192.168.1.98:8081/api/user/${id}`;
+  const url = `http://192.168.1.98:8081/api/admin/user/${id}`;
   const config = {
     headers: {
       Accept: "application/json",
@@ -27,7 +43,7 @@ export const getUser = async (id) => {
 };
 
 export const updateUser = async (id, name, address, mobile_number, type) => {
-  const url = `http://192.168.1.98:8081/api/user/${id}/update`;
+  const url = `http://192.168.1.98:8081/api/admin/user/${id}/update`;
   const config = {
     headers: {
       Accept: "application/json",
@@ -42,6 +58,18 @@ export const updateUser = async (id, name, address, mobile_number, type) => {
     is_admin: false,
   };
   const resp = await axios.put(url, data, config);
+  return resp;
+};
+
+export const deleteUsers = async (id) => {
+  const url = `http://192.168.1.98:8081/api/admin/user/${id}/delete`;
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const resp = await axios.delete(url, config);
   return resp;
 };
 

@@ -1,20 +1,25 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
-import axios from "axios";
+import { loginData } from "./../utils/demo/ApiCall";
+
+import { LoginContext } from "./../context/LoginContext";
 
 import ImageLight from "../assets/img/login-office.jpeg";
 import ImageDark from "../assets/img/login-office-dark.jpeg";
-import { GithubIcon, TwitterIcon } from "../icons";
 import { Label, Input, Button } from "@windmill/react-ui";
 
 function Login() {
+  const { logIn } = useContext(LoginContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [response, setResponse] = useState("");
   const [isInValid, setInValid] = useState(false);
   const [isEmailFormat, setIsEmailFormat] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
-  const [isVerified, setVerified] = useState(true);
+  const [isServerError, setServerError] = useState(false);
+  const [isRequestFailed, setRequestFailed] = useState(false);
   const history = useHistory();
   const handleEmail = (event) => {
     setEmail(event.target.value);
@@ -24,44 +29,41 @@ function Login() {
   };
   const loginVerify = (e) => {
     e.preventDefault();
+    setInValid(false);
+    setIsEmailFormat(false);
+    setIsEmpty(false);
     if (email === "" || password === "") {
       setIsEmpty(true);
       return;
     }
-    sendRequest();
+    login();
   };
-  const sendRequest = async () => {
-    setInValid(false);
-    setIsEmailFormat(false);
-    setIsEmpty(false);
-    const url = "http://192.168.1.98:8081/api/login";
-    const config = {
-      headers: {
-        Accept: "application/json",
-      },
-    };
-    const data = {
-      email: email,
-      password: password,
-      device_name: "acer",
-    };
-    try {
-      const response = await axios.post(url, data, config);
-      if (response.status == 200) {
-        localStorage.setItem("token", response.data.token);
-        console.log("res-data", response.data);
+
+  const login = () => {
+    loginData(email, password)
+      .then((res) => {
+        console.log("success");
+        localStorage.setItem("token", res.token);
+        logIn();
         history.push(`/app`);
-      }
-    } catch (err) {
-      if (err.response.status === 404) {
-        setInValid(true);
-      } else if (err.response.status === 422) {
-        setIsEmailFormat(true);
-      }
-    }
-    //  else if (response.response.status === 404) {
-    //       setInValid(true);
-    //       console.log("invalid", isInValid);
+      })
+      .catch((err) => {
+        if (err.response.status === 404) {
+          setInValid(true);
+          return;
+        }
+        if (err.response.status === 422) {
+          setIsEmailFormat(true);
+          return;
+        }
+        if (err.response.status === 500) {
+          setServerError(true);
+          return;
+        } else {
+          console.log("unknown-error");
+        }
+      });
+    setRequestFailed(true);
   };
 
   return (
@@ -96,6 +98,16 @@ function Login() {
               {isEmpty && (
                 <h1 className="text-red-500 mb-[30px]">
                   Please Fill the required fields
+                </h1>
+              )}
+              {isServerError && (
+                <h1 className="text-red-500 mb-[30px]">
+                  Internal Server Error
+                </h1>
+              )}
+              {isRequestFailed && (
+                <h1 className="text-red-500 mb-[30px]">
+                  Could not send request
                 </h1>
               )}
               <Label>
@@ -135,14 +147,6 @@ function Login() {
                   to="/forgot-password"
                 >
                   Forgot your password?
-                </Link>
-              </p>
-              <p className="mt-1">
-                <Link
-                  className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
-                  to="/create-account"
-                >
-                  Create account
                 </Link>
               </p>
             </div>

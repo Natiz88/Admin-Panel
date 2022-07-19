@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { SidebarContext } from "../context/SidebarContext";
+import { LoginContext } from "../context/LoginContext";
 import {
   SearchIcon,
   MoonIcon,
@@ -18,11 +19,13 @@ import {
   DropdownItem,
   WindmillContext,
 } from "@windmill/react-ui";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 function Header() {
   const { mode, toggleMode } = useContext(WindmillContext);
   const { toggleSidebar } = useContext(SidebarContext);
+  const { logOut } = useContext(LoginContext);
+  const history = useHistory();
 
   const [isNotificationsMenuOpen, setIsNotificationsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -34,6 +37,11 @@ function Header() {
   function handleProfileClick() {
     setIsProfileMenuOpen(!isProfileMenuOpen);
   }
+
+  const logOutHandler = () => {
+    localStorage.removeItem("token");
+    history.push(`/login`);
+  };
 
   return (
     <header className="z-40 py-4 bg-white shadow-bottom dark:bg-gray-800">
@@ -139,14 +147,12 @@ function Header() {
                 <OutlineCogIcon className="w-4 h-4 mr-3" aria-hidden="true" />
                 <span>Settings</span>
               </DropdownItem>
-              <DropdownItem>
+              <DropdownItem onClick={logOutHandler}>
                 <OutlineLogoutIcon
                   className="w-4 h-4 mr-3"
                   aria-hidden="true"
                 />
-                <Link to="/login">
-                  <span>Log out</span>
-                </Link>
+                <span>Log out</span>
               </DropdownItem>
             </Dropdown>
           </li>
