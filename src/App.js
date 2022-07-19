@@ -1,6 +1,5 @@
 import React, { lazy } from "react";
-import axios from "axios";
-import { useEffect, useContext } from "react";
+import { useContext } from "react";
 import { LoginContext } from "./context/LoginContext";
 import {
   BrowserRouter as Router,
@@ -22,7 +21,7 @@ function App() {
       <Router>
         <AccessibleNavigationAnnouncer />
         <Switch>
-          {!isLoggedIn && <Route path="/login" component={Login} />}
+          <Route path="/login" component={Login} />
           <Route path="/forgot-password" component={ForgotPassword} />
           {isLoggedIn && <Route path="/app" component={Layout} />}
           {/* If you have an index page, you can remothis Redirect */}

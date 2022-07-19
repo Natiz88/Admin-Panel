@@ -11,7 +11,6 @@ const Tables = lazy(() => import("../pages/Tables"));
 const Page404 = lazy(() => import("../pages/404"));
 const Blank = lazy(() => import("../pages/Blank"));
 const IndividualDetails = lazy(() => import("../pages/IndividualDetails"));
-const CorporateDetails = lazy(() => import("../pages/CorporateDetails"));
 
 /**
  * ⚠ These are internal routes!
@@ -55,10 +54,6 @@ const routes = [
   {
     path: "/individualDetails/:id",
     component: IndividualDetails,
-  },
-  {
-    path: "/corporateDetails",
-    component: CorporateDetails,
   },
   {
     path: "/404",

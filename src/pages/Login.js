@@ -13,13 +13,9 @@ function Login() {
   const { logIn } = useContext(LoginContext);
 
   const [email, setEmail] = useState("");
+  const [isError, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("Couldn't send Request");
   const [password, setPassword] = useState("");
-  const [response, setResponse] = useState("");
-  const [isInValid, setInValid] = useState(false);
-  const [isEmailFormat, setIsEmailFormat] = useState(false);
-  const [isEmpty, setIsEmpty] = useState(false);
-  const [isServerError, setServerError] = useState(false);
-  const [isRequestFailed, setRequestFailed] = useState(false);
   const history = useHistory();
   const handleEmail = (event) => {
     setEmail(event.target.value);
@@ -29,11 +25,10 @@ function Login() {
   };
   const loginVerify = (e) => {
     e.preventDefault();
-    setInValid(false);
-    setIsEmailFormat(false);
-    setIsEmpty(false);
+    setError(false);
     if (email === "" || password === "") {
-      setIsEmpty(true);
+      setError(true);
+      setErrorMessage("Please fill up the required fields");
       return;
     }
     login();
@@ -42,28 +37,14 @@ function Login() {
   const login = () => {
     loginData(email, password)
       .then((res) => {
-        console.log("success");
         localStorage.setItem("token", res.token);
         logIn();
         history.push(`/app`);
       })
       .catch((err) => {
-        if (err.response.status === 404) {
-          setInValid(true);
-          return;
-        }
-        if (err.response.status === 422) {
-          setIsEmailFormat(true);
-          return;
-        }
-        if (err.response.status === 500) {
-          setServerError(true);
-          return;
-        } else {
-          console.log("unknown-error");
-        }
+        setError(true);
+        setErrorMessage(err.response.data.message);
       });
-    setRequestFailed(true);
   };
 
   return (
@@ -89,7 +70,7 @@ function Login() {
               <h1 className="mb-2 text-xl font-semibold text-gray-700 dark:text-gray-200">
                 Login
               </h1>
-              {isInValid && (
+              {/* {isInValid && (
                 <h1 className="text-red-500 mb-4">
                   Incorrect email or Password
                 </h1>
@@ -104,11 +85,9 @@ function Login() {
                 <h1 className="text-red-500 mb-[30px]">
                   Internal Server Error
                 </h1>
-              )}
-              {isRequestFailed && (
-                <h1 className="text-red-500 mb-[30px]">
-                  Could not send request
-                </h1>
+              )} */}
+              {isError && (
+                <h1 className="text-red-500 mb-[30px]">{errorMessage}</h1>
               )}
               <Label>
                 <span>Email</span>
@@ -120,9 +99,6 @@ function Login() {
                   onChange={handleEmail}
                 />
               </Label>
-              {isEmailFormat && (
-                <h1 className="text-red-500 mb-[30px]">Invalid email format</h1>
-              )}
 
               <Label className="mt-4">
                 <span>Password</span>

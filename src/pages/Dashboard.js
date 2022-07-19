@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import CTA from "../components/CTA";
 import InfoCard from "../components/Cards/InfoCard";
 import ChartCard from "../components/Chart/ChartCard";
 import { Doughnut, Line } from "react-chartjs-2";

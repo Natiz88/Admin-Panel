@@ -5,19 +5,9 @@ import { Link, useParams, useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { addUser, updateUser, getUser } from "./../utils/demo/ApiCall";
 import { TailSpin } from "react-loading-icons";
-import axios from "axios";
-import {
-  Input,
-  HelperText,
-  Label,
-  Select,
-  Button,
-  Modal,
-} from "@windmill/react-ui";
-import { MailIcon } from "../icons";
+import { Input, HelperText, Label, Button, Modal } from "@windmill/react-ui";
 
 function IndividualDetails() {
-  const [response, setResponse] = useState("");
   const [res, setRes] = useState("");
   const [user, setUser] = useState([]);
   const { id } = useParams();

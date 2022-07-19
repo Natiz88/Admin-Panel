@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import PageTitle from "../components/Typography/PageTitle";
 import { TailSpin } from "react-loading-icons";
 import { getData, deleteUsers } from "./../utils/demo/ApiCall";
 // import Modal from "react-responsive-modal";
-import { useHistory, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Table,
   TableHeader,
@@ -13,8 +12,6 @@ import {
   TableRow,
   TableFooter,
   TableContainer,
-  Badge,
-  Avatar,
   Input,
   Modal,
   Button,
