@@ -116,11 +116,18 @@ function UserTable() {
   return (
     <>
       <PageTitle>User Details</PageTitle>
-      <Button tag={Link} to={`/app/individualDetails/-1`}>
-        Add new User
-      </Button>
+      <div className="">
+        <Button
+          iconRight={FormsIcon}
+          tag={Link}
+          to={`/app/individualDetails/-1`}
+        >
+          <span>Add new User</span>
+        </Button>
+      </div>
       <DataTableExtensions {...tableData}>
         <DataTable
+          className="mt-20"
           noHeader
           defaultSortField="title"
           // sortIcon={<SortIcon />}

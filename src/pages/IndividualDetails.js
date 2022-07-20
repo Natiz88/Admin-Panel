@@ -18,6 +18,7 @@ function IndividualDetails() {
   const [isUserAdded, setUserAdded] = useState(false);
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
+  const [gender, setGender] = useState("");
   const [contact, setContact] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -37,11 +38,15 @@ function IndividualDetails() {
       setContact(user.mobile_number);
       setAddress(user.address);
       setType(user.type);
+      setGender(user.gender);
     }
   }, [user]);
 
-  const handleRadio = (e) => {
+  const handleRadioType = (e) => {
     setType(e.target.value);
+  };
+  const handleRadioGender = (e) => {
+    setGender(e.target.value);
   };
 
   const validatePassword = (e) => {
@@ -81,7 +86,7 @@ function IndividualDetails() {
 
   const updateUserHandler = (e) => {
     e.preventDefault();
-    updateUser(id, name, address, contact, type)
+    updateUser(id, name, address, gender, contact, type)
       .then((res) => userAddedSuccess(res))
       .catch((err) => userAddedError(err));
   };
@@ -91,6 +96,7 @@ function IndividualDetails() {
     if (
       name == "" ||
       email == "" ||
+      gender == "" ||
       contact == "" ||
       password == "" ||
       confirmPassword == "" ||
@@ -104,7 +110,16 @@ function IndividualDetails() {
       setErrorMessage("The passwords donot match");
       return;
     }
-    addUser(name, address, contact, password, confirmPassword, email, type)
+    addUser(
+      name,
+      address,
+      gender,
+      contact,
+      password,
+      confirmPassword,
+      email,
+      type
+    )
       .then((res) => userAddedSuccess())
       .catch((err) => userAddedError(err));
   };
@@ -141,6 +156,38 @@ function IndividualDetails() {
                 onChange={(e) => setAddress(e.target.value)}
               />
             </Label>
+            <div className="mt-4">
+              <Label>Gender</Label>
+              <Label radio>
+                <Input
+                  type="radio"
+                  value="male"
+                  name="genderType"
+                  onClick={handleRadioGender}
+                  // checked={type == "corporate" ? "false" : "true"}
+                />
+                <span className="ml-2">Male</span>
+              </Label>
+              <Label className="ml-6" radio>
+                <Input
+                  type="radio"
+                  value="female"
+                  name="genderType"
+                  onClick={handleRadioGender}
+                  // checked={type == "corporate" ? "true" : "false"}
+                />
+                <span className="ml-2">Female</span>
+              </Label>
+              <Label className="ml-6" radio>
+                <Input
+                  type="radio"
+                  value="others"
+                  name="genderType"
+                  onClick={handleRadioGender}
+                />
+                <span className="ml-2">Others</span>
+              </Label>
+            </div>
             <Label className="mt-5">
               <span>Email</span>
               <Input
@@ -167,8 +214,8 @@ function IndividualDetails() {
                   type="radio"
                   value="individual"
                   name="accountType"
-                  onClick={handleRadio}
-                  checked={type == "corporate" ? "false" : "true"}
+                  onClick={handleRadioType}
+                  // checked={type == "corporate" ? "false" : "true"}
                 />
                 <span className="ml-2">individual</span>
               </Label>
@@ -177,8 +224,8 @@ function IndividualDetails() {
                   type="radio"
                   value="corporate"
                   name="accountType"
-                  onClick={handleRadio}
-                  checked={type == "corporate" ? "true" : "false"}
+                  onClick={handleRadioType}
+                  // checked={type == "corporate" ? "true" : "false"}
                 />
                 <span className="ml-2">corporate</span>
               </Label>

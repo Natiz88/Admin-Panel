@@ -42,7 +42,14 @@ export const getUser = async (id) => {
   return resp.data;
 };
 
-export const updateUser = async (id, name, address, mobile_number, type) => {
+export const updateUser = async (
+  id,
+  name,
+  address,
+  gender,
+  mobile_number,
+  type
+) => {
   const url = `http://192.168.1.98:8081/api/admin/user/${id}/update`;
   const config = {
     headers: {
@@ -53,6 +60,7 @@ export const updateUser = async (id, name, address, mobile_number, type) => {
   const data = {
     name: name,
     address: address,
+    gender: gender,
     mobile_number: mobile_number,
     type: type,
     is_admin: false,
@@ -76,6 +84,7 @@ export const deleteUsers = async (id) => {
 export const addUser = async (
   name,
   address,
+  gender,
   mobile_number,
   password,
   password_confirmation,
@@ -94,6 +103,7 @@ export const addUser = async (
   const data = {
     name: name,
     address: address,
+    gender: gender,
     mobile_number: mobile_number,
     password: password,
     password_confirmation: password_confirmation,

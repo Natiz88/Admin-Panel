@@ -38,6 +38,7 @@ function Header() {
 
   const logOutHandler = () => {
     localStorage.removeItem("token");
+    history.index = -1;
     history.push(`/login`);
   };
 
