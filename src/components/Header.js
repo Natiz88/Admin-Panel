@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { SidebarContext } from "../context/SidebarContext";
-import { LoginContext } from "../context/LoginContext";
 import {
   SearchIcon,
   MoonIcon,
@@ -24,7 +23,6 @@ import { useHistory } from "react-router-dom";
 function Header() {
   const { mode, toggleMode } = useContext(WindmillContext);
   const { toggleSidebar } = useContext(SidebarContext);
-  const { logOut } = useContext(LoginContext);
   const history = useHistory();
 
   const [isNotificationsMenuOpen, setIsNotificationsMenuOpen] = useState(false);
