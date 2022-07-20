@@ -32,9 +32,9 @@ const routes = [
     name: "Buttons",
   },
   {
-    path: "/app/modals",
+    path: "/app/ContactUs",
     icon: "ModalsIcon",
-    name: "Modals",
+    name: "Contact Us",
   },
   {
     path: "/app/banners",

@@ -67,9 +67,14 @@ function UserTable() {
       selector: (row) => row.type,
       sortable: true,
     },
+    // {
+    //   name: "Gender",
+    //   selector: (row) => row.gender,
+    //   sortable: true,
+    // },
     {
-      name: "Gender",
-      selector: (row) => row.gender,
+      name: "Joined Date",
+      selector: (row) => row.created_at,
       sortable: true,
     },
     {
