@@ -8,7 +8,8 @@ import { TailSpin } from "react-loading-icons";
 import { Input, HelperText, Label, Button, Modal } from "@windmill/react-ui";
 
 function IndividualDetails() {
-  const [res, setRes] = useState("");
+  const [isError, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [user, setUser] = useState([]);
   const { id } = useParams();
   const [name, setName] = useState("");
@@ -21,7 +22,7 @@ function IndividualDetails() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [type, setType] = useState("");
-  const [created, setCreated] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const history = useHistory();
 
@@ -60,39 +61,54 @@ function IndividualDetails() {
     }
   };
 
-  const updateUserHandler = (e) => {
-    e.preventDefault();
-    updateUser(id, name, address, contact, type)
-      .then((res) => console.log("update-user", res))
-      .catch((err) => console.log("errrorr", err));
+  const userAddedSuccess = (res) => {
     setTimeout(() => {
       setUserAdded(false);
       history.push("/app/tables");
     }, 1000);
+    setModalMessage("The user was updated");
     setUserAdded(true);
   };
-  const addUserHandler = async (e) => {
-    e.preventDefault();
-    addUser(
-      name,
-      address,
-      contact,
-      password,
-      confirmPassword,
-      email,
-      type
-    ).then((res) => setRes(res));
-    console.log(res);
-    if (res.status === 201) {
-      setTimeout(() => {
-        setUserAdded(false);
-        history.push("/app/tables");
-      }, 1000);
-      setUserAdded(true);
-    }
+  const userAddedError = (err) => {
+    setTimeout(() => {
+      setUserAdded(false);
+      return;
+    }, 1000);
+    console.log(err);
+    setModalMessage(err.response.data.message);
+    setUserAdded(true);
   };
 
-  console.log("user", user);
+  const updateUserHandler = (e) => {
+    e.preventDefault();
+    updateUser(id, name, address, contact, type)
+      .then((res) => userAddedSuccess(res))
+      .catch((err) => userAddedError(err));
+  };
+  const addUserHandler = (e) => {
+    e.preventDefault();
+    setError(false);
+    if (
+      name == "" ||
+      email == "" ||
+      contact == "" ||
+      password == "" ||
+      confirmPassword == "" ||
+      type == ""
+    ) {
+      setErrorMessage("Please fill up  all the fields");
+      setError(true);
+      return;
+    } else if (!isPasswordSame || !isPasswordValid) {
+      setError(true);
+      setErrorMessage("The passwords donot match");
+      return;
+    }
+    addUser(name, address, contact, password, confirmPassword, email, type)
+      .then((res) => userAddedSuccess())
+      .catch((err) => userAddedError(err));
+  };
+
   return (
     <div>
       <PageTitle>User Details</PageTitle>
@@ -152,7 +168,7 @@ function IndividualDetails() {
                   value="individual"
                   name="accountType"
                   onClick={handleRadio}
-                  // checked={type == "individual" ? "true" : "false"}
+                  checked={type == "corporate" ? "false" : "true"}
                 />
                 <span className="ml-2">individual</span>
               </Label>
@@ -162,7 +178,7 @@ function IndividualDetails() {
                   value="corporate"
                   name="accountType"
                   onClick={handleRadio}
-                  // checked={type == "corporate" ? "true" : "false"}
+                  checked={type == "corporate" ? "true" : "false"}
                 />
                 <span className="ml-2">corporate</span>
               </Label>
@@ -193,11 +209,7 @@ function IndividualDetails() {
             {type === "corporate" && (
               <Label className="mt-5">
                 <span>PAN</span>
-                <Input
-                  className="mt-1"
-                  defaultValue={contact}
-                  placeholder="9890239203"
-                />
+                <Input className="mt-1" placeholder="9890239203" />
               </Label>
             )}
             <Label className="mt-5">
@@ -228,6 +240,7 @@ function IndividualDetails() {
                 <HelperText>Passwords donot match.</HelperText>
               )}
             </Label>
+            {isError && <h1 className="text-red-500 my-3">{errorMessage}</h1>}
             <Button
               onClick={id < 0 ? addUserHandler : updateUserHandler}
               className="m-auto mt-4"
@@ -237,9 +250,7 @@ function IndividualDetails() {
           </div>
         </>
       )}
-      <Modal isOpen={isUserAdded}>
-        The user was {id < 0 ? "Added" : "Updated"}
-      </Modal>
+      <Modal isOpen={isUserAdded}>{modalMessage}</Modal>
     </div>
   );
 }

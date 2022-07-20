@@ -10,6 +10,8 @@ const Modals = lazy(() => import("../pages/Modals"));
 const Tables = lazy(() => import("../pages/Tables"));
 const Page404 = lazy(() => import("../pages/404"));
 const Blank = lazy(() => import("../pages/Blank"));
+const Logout = lazy(() => import("../pages/Logout"));
+const Banners = lazy(() => import("../pages/Banners"));
 const IndividualDetails = lazy(() => import("../pages/IndividualDetails"));
 
 /**
@@ -48,6 +50,10 @@ const routes = [
     component: Modals,
   },
   {
+    path: "/banners",
+    component: Banners,
+  },
+  {
     path: "/tables",
     component: Tables,
   },
@@ -58,6 +64,10 @@ const routes = [
   {
     path: "/404",
     component: Page404,
+  },
+  {
+    path: "/logout",
+    component: Logout,
   },
   {
     path: "/blank",

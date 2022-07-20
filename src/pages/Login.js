@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { loginData } from "./../utils/demo/ApiCall";
 
@@ -40,10 +40,12 @@ function Login() {
         localStorage.setItem("token", res.token);
         logIn();
         history.push(`/app`);
+        return;
       })
       .catch((err) => {
         setError(true);
         setErrorMessage(err.response.data.message);
+        return;
       });
   };
 

@@ -1,63 +1,38 @@
 import React, { useState, useEffect } from "react";
+import DataTable from "react-data-table-component";
+import DataTableExtensions from "react-data-table-component-extensions";
+import "react-data-table-component-extensions/dist/index.css";
 import PageTitle from "../components/Typography/PageTitle";
-import { TailSpin } from "react-loading-icons";
 import { getData, deleteUsers } from "./../utils/demo/ApiCall";
-// import Modal from "react-responsive-modal";
 import { Link } from "react-router-dom";
 import {
-  Table,
-  TableHeader,
-  TableCell,
-  TableBody,
-  TableRow,
-  TableFooter,
-  TableContainer,
-  Input,
   Modal,
   Button,
-  Pagination,
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Table,
+  TableHeader,
 } from "@windmill/react-ui";
-import { EditIcon, TrashIcon, FormsIcon } from "../icons";
+import { EditIcon, TrashIcon, FormsIcon, SortIcon } from "../icons";
 
-function Tables() {
-  const [response, setResponse] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isAlertOpen, setAlertOpen] = useState(false);
-  const [data, setData] = useState("");
+function UserTable() {
+  const [response, setResponse] = useState([]);
   const [id, setId] = useState(null);
   const [del, setDel] = useState(true);
-  const [searchValue, setSearchValue] = useState("");
-  const [sortType, setSortType] = useState(false);
-  const [pageTable, setPageTable] = useState(1);
-  const resultsPerPage = 10;
-  const totalResults = data.length;
-
-  function onPageChangeTable(p) {
-    setPageTable(p);
-  }
-
   useEffect(() => {
-    getData().then((res) => setData(res));
+    getData()
+      .then((res) => setResponse(res))
+      .catch((err) => console.log(err));
   }, [del]);
 
-  useEffect(() => {
-    setResponse(
-      data.slice((pageTable - 1) * resultsPerPage, pageTable * resultsPerPage)
-    );
-  }, [data]);
-
   const deleteUser = (user) => {
-    setId(user.id);
+    setId(user);
     setIsModalOpen(true);
   };
 
-  const sendDeleteUser = () => {
-    deleteUsers(id).then((res) => console.log("del-user", res));
-    setDel(!true);
-  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAlertOpen, setAlertOpen] = useState(false);
   function closeModal() {
     setIsModalOpen(false);
   }
@@ -67,216 +42,112 @@ function Tables() {
     setTimeout(() => setAlertOpen(false), 1000);
     setAlertOpen(true);
   };
-  const onSort = (event, sortKey) => {
-    let dataCpy = [...data];
-
-    if (sortType) {
-      setData(dataCpy.sort((a, b) => a[sortKey] > b[sortKey]));
-    } else {
-      setData(dataCpy.sort((a, b) => b[sortKey] > a[sortKey]));
-    }
-
-    setSortType(!sortType);
+  const sendDeleteUser = () => {
+    deleteUsers(id).then((res) => console.log("del-user", res));
+    setDel(!true);
   };
+  const columns = [
+    {
+      name: "Name",
+      selector: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Email",
+      selector: (row) => row.email,
+      sortable: true,
+    },
+    {
+      name: "Phone",
+      selector: (row) => row.mobile_number,
+      sortable: true,
+    },
+    {
+      name: "User Type",
+      selector: (row) => row.type,
+      sortable: true,
+    },
+    {
+      name: "Gender",
+      selector: (row) => row.gender,
+      sortable: true,
+    },
+    {
+      name: "Update",
+      selector: (row) => (
+        <div className="flex items-center space-x-4">
+          <Button layout="link" size="icon" aria-label="Edit"></Button>
 
-  const onSortNum = (event, sortKey) => {
-    let dataCpy = [...data];
+          <Button
+            layout="link"
+            size="icon"
+            aria-label="Edit"
+            tag={Link}
+            to={`/app/individualDetails/${row.id}`}
+          >
+            <EditIcon className="w-5 h-5" aria-hidden="true" />
+          </Button>
+          <Button layout="link" size="icon" aria-label="Delete">
+            <TrashIcon
+              className="w-5 h-5"
+              aria-hidden="true"
+              onClick={() => deleteUser(row.id)}
+            />
+          </Button>
+        </div>
+      ),
+      /* <span className="flex">
+          <EditIcon className="w-5 h-5 cursor-pointer" aria-hidden="true" />
+          <TrashIcon
+            className="w-5 h-5 ml-2 cursor-pointer"
+            aria-hidden="true"
+            onClick={() => deleteUser()}
+          />
+      </span> */
+    },
+  ];
 
-    if (sortType) {
-      setData(dataCpy.sort((a, b) => a[sortKey] - b[sortKey]));
-    } else {
-      setData(dataCpy.sort((a, b) => b[sortKey] - a[sortKey]));
-    }
-
-    setSortType(!sortType);
+  const data = response;
+  console.log("data", data);
+  const tableData = {
+    columns,
+    data,
   };
-
-  const searchHandler = (e) => {
-    setResponse(
-      data.filter(
-        (a) =>
-          a.name.toLowerCase().includes(e.target.value) ||
-          a.email.toLowerCase().includes(e.target.value) ||
-          a.mobile_number.toLowerCase().includes(e.target.value) ||
-          a.address.toLowerCase().includes(e.target.value)
-      )
-    );
-  };
-
   return (
     <>
-      <PageTitle className="text-center">Users</PageTitle>
-      <Input
-        type="text"
-        className="my-4"
-        placeholder="search user by name"
-        onChange={searchHandler}
-      />
-      <div className="">
-        <Button
-          iconRight={FormsIcon}
-          tag={Link}
-          to={`/app/individualDetails/-1`}
-        >
-          <span>Create New User</span>
-        </Button>
-      </div>
-      {response.length <= 0 ? (
-        <div className="mt-10 m-auto">
-          <TailSpin stroke="black" width="200" height="50" />
-        </div>
-      ) : (
-        <>
-          <TableContainer className="mb-8">
-            <Table>
-              <TableHeader>
-                <tr>
-                  <TableCell>
-                    <input
-                      type="checkbox"
-                      value="true"
-                      className=""
-                      // onChange={handleAllChecked}
-                    />
-                  </TableCell>
-                  <TableCell>S.N.</TableCell>
-                  <TableCell onClick={(e) => onSort(e, "name")}>Name</TableCell>
-                  <TableCell onClick={(e) => onSort(e, "email")}>
-                    Email
-                  </TableCell>
-                  <TableCell onClick={(e) => onSort(e, "address")}>
-                    Address
-                  </TableCell>
-                  <TableCell onClick={(e) => onSort(e, "mobile_number")}>
-                    Phone
-                  </TableCell>
-                  <TableCell onClick={(e) => onSort(e, "type")}>
-                    User Type
-                  </TableCell>
-                  <TableCell onClick={(e) => onSort(e, "created_at")}>
-                    Joined
-                  </TableCell>
-                  <TableCell>Update</TableCell>
-                </tr>
-              </TableHeader>
-              <TableBody>
-                {response.map((user, i) => (
-                  <TableRow key={user.id}>
-                    <TableCell>
-                      <input
-                        type="checkbox"
-                        value="true"
-                        className=""
-                        // checked={user.isChecked ? "checked" : ""}
-                        // onChange={(event) =>
-                        //   handleChecked(event, user, "isChecked")
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center text-sm">
-                        <p>{i + 1}</p>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div>
-                        <p className="font-semibold">{user.name}</p>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">{user.email}</span>
-                    </TableCell>
-                    <TableCell>
-                      <p>{user.address}</p>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">{user.mobile_number}</span>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">{user.type}</span>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">{user.created_at}</span>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-4">
-                        <Button
-                          layout="link"
-                          size="icon"
-                          aria-label="Edit"
-                        ></Button>
-
-                        <Button
-                          layout="link"
-                          size="icon"
-                          aria-label="Edit"
-                          tag={Link}
-                          to={`/app/individualDetails/${user.id}`}
-                        >
-                          <EditIcon className="w-5 h-5" aria-hidden="true" />
-                        </Button>
-                        <Button layout="link" size="icon" aria-label="Delete">
-                          <TrashIcon
-                            className="w-5 h-5"
-                            aria-hidden="true"
-                            onClick={() => deleteUser(user)}
-                          />
-                        </Button>
-                        <Modal isOpen={isModalOpen} onClose={closeModal}>
-                          <ModalHeader>Delete User</ModalHeader>
-                          <ModalBody>
-                            Are you sure you want to delete the user?
-                          </ModalBody>
-                          <ModalFooter>
-                            <div className="hidden sm:block">
-                              <Button layout="outline" onClick={closeModal}>
-                                Cancel
-                              </Button>
-                            </div>
-                            <div className="hidden sm:block">
-                              <Button onClick={confirmDelete}>
-                                Ok, Continue
-                              </Button>
-                            </div>
-                            <div className="block w-full sm:hidden">
-                              <Button
-                                block
-                                size="large"
-                                layout="outline"
-                                onClick={closeModal}
-                              >
-                                Cancel
-                              </Button>
-                            </div>
-                            <div className="block w-full sm:hidden">
-                              <Button block size="large">
-                                Accept
-                              </Button>
-                            </div>
-                          </ModalFooter>
-                        </Modal>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            <TableFooter>
-              <Pagination
-                totalResults={totalResults}
-                resultsPerPage={resultsPerPage}
-                onChange={onPageChangeTable}
-                label="Table navigation"
-              />
-            </TableFooter>
-          </TableContainer>
-          {isAlertOpen && (
-            <Modal isOpen={isAlertOpen}>
-              The user was deleted successfully
-            </Modal>
-          )}
-        </>
-      )}
+      <PageTitle>User Details</PageTitle>
+      <Button tag={Link} to={`/app/individualDetails/-1`}>
+        Add new User
+      </Button>
+      <DataTableExtensions {...tableData}>
+        <DataTable
+          noHeader
+          defaultSortField="title"
+          // sortIcon={<SortIcon />}
+          subHeader={true}
+          subHeaderAlign="center"
+          highlightOnHover
+          pagination
+          selectableRows
+          striped
+        />
+      </DataTableExtensions>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <ModalHeader>Delete User</ModalHeader>
+        <ModalBody>Are you sure you want to delete the user?</ModalBody>
+        <ModalFooter>
+          <div className="hidden sm:block">
+            <Button layout="outline" onClick={closeModal}>
+              Cancel
+            </Button>
+          </div>
+          <div className="hidden sm:block">
+            <Button onClick={confirmDelete}>Ok, Continue</Button>
+          </div>
+        </ModalFooter>
+      </Modal>
     </>
   );
 }
-export default Tables;
+
+export default UserTable;
