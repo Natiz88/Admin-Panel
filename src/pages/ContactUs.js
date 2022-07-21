@@ -1,6 +1,7 @@
 import React from "react";
 import PageTitle from "../components/Typography/PageTitle";
 import { useState, useEffect } from "react";
+import Logo from "./../utils/images/user.png";
 import {
   Input,
   ModalHeader,
@@ -15,8 +16,8 @@ import axios from "axios";
 // import Photo from './user.png'
 
 function ContactUs() {
-  const [name, setName] = useState("");
   const [response, setResponse] = useState([]);
+  const [name, setName] = useState("");
   const [established, setEstablished] = useState("");
   const [address, setAddress] = useState("");
   const [zip, setZip] = useState("");
@@ -31,7 +32,7 @@ function ContactUs() {
   const [website, setWebsite] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalText, setIsModalText] = useState("");
-  const [img, setImg] = useState(null);
+  const [img, setImg] = useState(Logo);
   const [isEmpty, setIsEmpty] = useState(false);
 
   function closeModal() {
@@ -53,7 +54,7 @@ function ContactUs() {
       },
     };
     let data = {
-      logo: "formData",
+      logo: "logo",
       name: name,
       estd: established,
       address: address,
@@ -68,11 +69,11 @@ function ContactUs() {
       linkedIn: linkedIn,
       website: website,
     };
-    console.log("data", data);
     axios
       .put("http://192.168.1.98:8081/api/admin/about/1/update", data, config)
       .then(
         (response) => setIsModalText("Data was updated"),
+        console.log("innner", response),
         setTimeout(() => setIsModalOpen(false), 1000),
         setIsModalOpen(true)
       )
@@ -128,12 +129,12 @@ function ContactUs() {
         <Label>
           <span>Logo</span>
         </Label>
-        <div className="my-4 h-32 w-32 rounded-full relative">
+        <div className="my-4 h-32 w-32 rounded-full relative flex justify-center">
           <label>
             <span>
               <img
                 className=" h-32 w-32 -z-10 rounded-full cursor-pointer border-black border-2 "
-                src={response.logo}
+                src={img}
               />
               <Input
                 type="file"
@@ -235,7 +236,6 @@ function ContactUs() {
           <span>Twitter</span>
           <Input
             className="mt-2"
-            type="url"
             value={twitter}
             onChange={(e) => setTwitter(e.target.value)}
           />
@@ -245,7 +245,6 @@ function ContactUs() {
           <span>Instagram</span>
           <Input
             className="mt-2"
-            type="url"
             value={instagram}
             onChange={(e) => setInstagram(e.target.value)}
           />
@@ -255,7 +254,6 @@ function ContactUs() {
           <span>LinkedIn</span>
           <Input
             className="mt-2"
-            type="url"
             value={linkedIn}
             onChange={(e) => setLinkedIn(e.target.value)}
           />
@@ -265,7 +263,6 @@ function ContactUs() {
           <span>Website</span>
           <Input
             className="mt-2"
-            type="url"
             value={website}
             onChange={(e) => setWebsite(e.target.value)}
           />
