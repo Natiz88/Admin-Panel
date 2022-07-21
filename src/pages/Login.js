@@ -47,6 +47,8 @@ function Login() {
         setErrorMessage(err.response.data.message);
         return;
       });
+    setError(true);
+    setErrorMessage("could not send Request");
   };
 
   return (

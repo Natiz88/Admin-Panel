@@ -130,7 +130,7 @@ function UserTable() {
           <span>Add new User</span>
         </Button>
       </div>
-      <DataTableExtensions {...tableData}>
+      <DataTableExtensions {...tableData} className="bg-red-300">
         <DataTable
           className="mt-20"
           noHeader
