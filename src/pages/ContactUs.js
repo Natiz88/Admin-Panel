@@ -1,6 +1,6 @@
 import React from "react";
 import PageTitle from "../components/Typography/PageTitle";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Input,
   ModalHeader,
@@ -13,25 +13,24 @@ import {
 } from "@windmill/react-ui";
 import axios from "axios";
 // import Photo from './user.png'
-import { useEffect } from "react";
 
-const ContactUs = () => {
+function ContactUs() {
   const [name, setName] = useState("");
-  const [esta, setEsta] = useState("");
-  const [add, setAdd] = useState("");
+  const [response, setResponse] = useState([]);
+  const [established, setEstablished] = useState("");
+  const [address, setAddress] = useState("");
   const [zip, setZip] = useState("");
-  const [mob, setMob] = useState("");
-  const [lan, setLan] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [landline, setLandline] = useState("");
   const [email, setEmail] = useState("");
   const [aboutUs, setAboutUs] = useState("");
   const [facebook, setFacebook] = useState("");
-  const [twit, setTwit] = useState("");
-  const [inst, setInst] = useState("");
-  const [link, setLink] = useState("");
-  const [web, setWeb] = useState("");
+  const [twitter, setTwitter] = useState("");
+  const [instagram, setInstagram] = useState("");
+  const [linkedIn, setLinkedIn] = useState("");
+  const [website, setWebsite] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalText, setIsModalText] = useState("");
-  const [response, setResponse] = useState("");
   const [img, setImg] = useState(null);
   const [isEmpty, setIsEmpty] = useState(false);
 
@@ -56,28 +55,30 @@ const ContactUs = () => {
     let data = {
       logo: "formData",
       name: name,
-      estd: esta,
-      address: add,
+      estd: established,
+      address: address,
       zip: zip,
-      mobile_number: mob,
-      landline: lan,
+      mobile_number: mobile,
+      landline: landline,
       email: email,
       about_us: aboutUs,
       facebook: facebook,
-      twitter: twit,
-      instagram: inst,
-      linkedIn: link,
-      website: web,
+      twitter: twitter,
+      instagram: instagram,
+      linkedIn: linkedIn,
+      website: website,
     };
-    console.log(data);
+    console.log("data", data);
     axios
       .put("http://192.168.1.98:8081/api/admin/about/1/update", data, config)
       .then(
         (response) => setIsModalText("Data was updated"),
+        setTimeout(() => setIsModalOpen(false), 1000),
         setIsModalOpen(true)
       )
       .catch(
         (err) => setIsModalText(err.response.data.message),
+        setTimeout(() => setIsModalOpen(false), 1000),
         setIsModalOpen(true)
       );
   };
@@ -93,16 +94,30 @@ const ContactUs = () => {
 
     axios
       .get("http://192.168.1.98:8081/api/about", config)
-      .then((response) => setResponse(response.data[0]))
+      .then((res) => setResponse(res.data[0]))
       .catch((err) => console.log(err.response.data.message));
   }, []);
-  console.log(response);
+
+  useEffect(() => {
+    setName(response.name);
+    setEstablished(response.estd);
+    setAddress(response.address);
+    setZip(response.zip);
+    setMobile(response.mobile_number);
+    setLandline(response.landline);
+    setEmail(response.email);
+    setAboutUs(response.about_us);
+    setFacebook(response.facebook);
+    setTwitter(response.twitter);
+    setInstagram(response.instagram);
+    setLinkedIn(response.linkedIn);
+    setWebsite(response.website);
+  }, [response]);
 
   const onImageChange = (e) => {
     const [file] = e.target.files;
     setImg(URL.createObjectURL(file));
   };
-  console.log(response);
   return (
     <>
       <PageTitle>Contact Us</PageTitle>
@@ -117,14 +132,13 @@ const ContactUs = () => {
           <label>
             <span>
               <img
-                className=" h-32 w-32 -z-10 rounded-full cursor-pointer "
+                className=" h-32 w-32 -z-10 rounded-full cursor-pointer border-black border-2 "
                 src={response.logo}
-                alt="pic"
               />
               <Input
                 type="file"
                 accept="image/*"
-                class="hidden"
+                className="hidden"
                 onChange={onImageChange}
               />
             </span>
@@ -135,7 +149,7 @@ const ContactUs = () => {
           <Input
             className="mt-2"
             type="text"
-            defaultValue={response.name}
+            value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </Label>
@@ -144,8 +158,8 @@ const ContactUs = () => {
           <span>Established</span>
           <Input
             className="mt-2"
-            defaultValue={response.created_at}
-            onChange={(e) => setEsta(e.target.value)}
+            value={established}
+            onChange={(e) => setEstablished(e.target.value)}
           />
         </Label>
 
@@ -153,8 +167,8 @@ const ContactUs = () => {
           <span>Address</span>
           <Input
             className="mt-2"
-            defaultValue={response.address}
-            onChange={(e) => setAdd(e.target.value)}
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
           />
         </Label>
 
@@ -162,7 +176,7 @@ const ContactUs = () => {
           <span>Zip</span>
           <Input
             className="mt-2"
-            defaultValue={response.zip}
+            value={zip}
             onChange={(e) => setZip(e.target.value)}
           />
         </Label>
@@ -171,10 +185,10 @@ const ContactUs = () => {
           <span>Mobile Number</span>
 
           <Input
-            defaultValue={response.mobile_number}
+            value={mobile}
             className="mt-2"
             type="number"
-            onChange={(e) => setMob(e.target.value)}
+            onChange={(e) => setMobile(e.target.value)}
           />
         </Label>
 
@@ -183,8 +197,8 @@ const ContactUs = () => {
           <Input
             type="number"
             className="mt-2"
-            defaultValue={response.landline}
-            onChange={(e) => setLan(e.target.value)}
+            value={landline}
+            onChange={(e) => setLandline(e.target.value)}
           />
         </Label>
 
@@ -193,7 +207,7 @@ const ContactUs = () => {
           <Input
             type="email"
             className="mt-2"
-            defaultValue={response.email}
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </Label>
@@ -202,7 +216,7 @@ const ContactUs = () => {
           <span>About Us</span>
           <Textarea
             className="mt-2"
-            defaultValue={response.about_us}
+            value={aboutUs}
             onChange={(e) => setAboutUs(e.target.value)}
           />
         </Label>
@@ -212,7 +226,7 @@ const ContactUs = () => {
           <Input
             className="mt-2"
             type="url"
-            defaultValue={response.facebook}
+            value={facebook}
             onChange={(e) => setFacebook(e.target.value)}
           />
         </Label>
@@ -222,8 +236,8 @@ const ContactUs = () => {
           <Input
             className="mt-2"
             type="url"
-            defaultValue={response.twitter}
-            onChange={(e) => setTwit(e.target.value)}
+            value={twitter}
+            onChange={(e) => setTwitter(e.target.value)}
           />
         </Label>
 
@@ -232,8 +246,8 @@ const ContactUs = () => {
           <Input
             className="mt-2"
             type="url"
-            defaultValue={response.instagram}
-            onChange={(e) => setInst(e.target.value)}
+            value={instagram}
+            onChange={(e) => setInstagram(e.target.value)}
           />
         </Label>
 
@@ -242,8 +256,8 @@ const ContactUs = () => {
           <Input
             className="mt-2"
             type="url"
-            defaultValue={response.linkedIn}
-            onChange={(e) => setLink(e.target.value)}
+            value={linkedIn}
+            onChange={(e) => setLinkedIn(e.target.value)}
           />
         </Label>
 
@@ -252,8 +266,8 @@ const ContactUs = () => {
           <Input
             className="mt-2"
             type="url"
-            defaultValue={response.website}
-            onChange={(e) => setWeb(e.target.value)}
+            value={website}
+            onChange={(e) => setWebsite(e.target.value)}
           />
         </Label>
         {isEmpty && <h1>The field is empty</h1>}
@@ -272,6 +286,6 @@ const ContactUs = () => {
       </div>
     </>
   );
-};
+}
 
 export default ContactUs;

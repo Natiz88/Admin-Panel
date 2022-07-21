@@ -16,6 +16,10 @@ const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 function App() {
   const { isLoggedIn } = useContext(LoginContext);
   console.log("isloggedin", isLoggedIn);
+  // window.addEventListener("beforeunload", (e) => {
+  //   e.preventDefault();
+  //   localStorage.removeItem("token");
+  // });
   return (
     <>
       <Router>
@@ -24,7 +28,6 @@ function App() {
           <Route path="/login" component={Login} />
           <Route path="/forgot-password" component={ForgotPassword} />
           {isLoggedIn && <Route path="/app" component={Layout} />}
-          {/* If you have an index page, you can remothis Redirect */}
 
           <Route path="*">
             <Redirect exact from="/" to="/login" />

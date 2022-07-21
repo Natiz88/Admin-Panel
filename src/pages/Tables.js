@@ -48,34 +48,9 @@ function UserTable() {
   };
   const columns = [
     {
-      name: "Name",
-      selector: (row) => row.name,
-      sortable: true,
-    },
-    {
-      name: "Email",
-      selector: (row) => row.email,
-      sortable: true,
-    },
-    {
-      name: "Phone",
-      selector: (row) => row.mobile_number,
-      sortable: true,
-    },
-    {
-      name: "User Type",
-      selector: (row) => row.type,
-      sortable: true,
-    },
-    // {
-    //   name: "Gender",
-    //   selector: (row) => row.gender,
-    //   sortable: true,
-    // },
-    {
-      name: "Joined Date",
-      selector: (row) => row.created_at,
-      sortable: true,
+      name: "S.N.",
+      selector: (row, idx) => idx + 1,
+      sortable: false,
     },
     {
       name: "Update",
@@ -101,14 +76,41 @@ function UserTable() {
           </Button>
         </div>
       ),
-      /* <span className="flex">
-          <EditIcon className="w-5 h-5 cursor-pointer" aria-hidden="true" />
-          <TrashIcon
-            className="w-5 h-5 ml-2 cursor-pointer"
-            aria-hidden="true"
-            onClick={() => deleteUser()}
-          />
-      </span> */
+    },
+    {
+      name: "Name",
+      selector: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Email",
+      selector: (row) => row.email,
+      sortable: true,
+    },
+    {
+      name: "Phone",
+      selector: (row) => row.mobile_number,
+      sortable: true,
+    },
+    {
+      name: "Gender",
+      selector: (row) => row.gender,
+      sortable: true,
+    },
+    {
+      name: "User Type",
+      selector: (row) => row.type,
+      sortable: true,
+    },
+    // {
+    //   name: "Gender",
+    //   selector: (row) => row.gender,
+    //   sortable: true,
+    // },
+    {
+      name: "Joined Date",
+      selector: (row) => row.created_at,
+      sortable: true,
     },
   ];
 
@@ -130,14 +132,11 @@ function UserTable() {
           <span>Add new User</span>
         </Button>
       </div>
-      <DataTableExtensions {...tableData} className="bg-red-300">
+      <DataTableExtensions {...tableData} style={{ background: "red" }}>
         <DataTable
-          className="mt-20"
           noHeader
           defaultSortField="title"
           // sortIcon={<SortIcon />}
-          subHeader={true}
-          subHeaderAlign="center"
           highlightOnHover
           pagination
           selectableRows

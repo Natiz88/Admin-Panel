@@ -12,16 +12,16 @@ import {
 
 import PageTitle from "../components/Typography/PageTitle";
 
-const Banners = () => {
+const NewBanner = () => {
   return (
     <div>
-      <PageTitle>Banners</PageTitle>
-      <Button tag={Link} to="/app/newBanner">
-        Add new banner
+      <PageTitle>New Banner</PageTitle>
+      <Button tag={Link} to="/app/banners">
+        Cancel
       </Button>
       <form className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"></form>
     </div>
   );
 };
 
-export default Banners;
+export default NewBanner;

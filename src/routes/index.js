@@ -12,6 +12,7 @@ const Page404 = lazy(() => import("../pages/404"));
 const Blank = lazy(() => import("../pages/Blank"));
 const Logout = lazy(() => import("../pages/Logout"));
 const Banners = lazy(() => import("../pages/Banners"));
+const NewBanner = lazy(() => import("../pages/NewBanner"));
 const IndividualDetails = lazy(() => import("../pages/IndividualDetails"));
 
 /**
@@ -52,6 +53,10 @@ const routes = [
   {
     path: "/banners",
     component: Banners,
+  },
+  {
+    path: "/newBanner",
+    component: NewBanner,
   },
   {
     path: "/tables",
