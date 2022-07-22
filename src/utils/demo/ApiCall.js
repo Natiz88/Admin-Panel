@@ -2,6 +2,22 @@ import axios from "axios";
 
 const token = localStorage.getItem("token");
 
+export const deleteAllUsers = async (arr) => {
+  const url = "http://192.168.1.98:8081/api/admin/deleteAllUser";
+  console.log("url", url);
+  const config = {
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const data = {
+    id: arr,
+  };
+  const resp = await axios.post(url, data, config);
+  return resp;
+};
+
 export const loginData = async (email, password) => {
   const url = "http://192.168.1.98:8081/api/login";
   const config = {

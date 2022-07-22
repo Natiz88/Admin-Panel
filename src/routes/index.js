@@ -8,6 +8,7 @@ const Charts = lazy(() => import("../pages/Charts"));
 const Buttons = lazy(() => import("../pages/Buttons"));
 const ContactUs = lazy(() => import("../pages/ContactUs"));
 const Tables = lazy(() => import("../pages/Tables"));
+const NewTables = lazy(() => import("../pages/NewTable"));
 const Page404 = lazy(() => import("../pages/404"));
 const Blank = lazy(() => import("../pages/Blank"));
 const Logout = lazy(() => import("../pages/Logout"));
@@ -61,6 +62,10 @@ const routes = [
   {
     path: "/tables",
     component: Tables,
+  },
+  {
+    path: "/newTables",
+    component: NewTables,
   },
   {
     path: "/individualDetails/:id",

@@ -100,19 +100,21 @@ function ContactUs() {
   }, []);
 
   useEffect(() => {
-    setName(response.name);
-    setEstablished(response.estd);
-    setAddress(response.address);
-    setZip(response.zip);
-    setMobile(response.mobile_number);
-    setLandline(response.landline);
-    setEmail(response.email);
-    setAboutUs(response.about_us);
-    setFacebook(response.facebook);
-    setTwitter(response.twitter);
-    setInstagram(response.instagram);
-    setLinkedIn(response.linkedIn);
-    setWebsite(response.website);
+    if (response.length !== undefined || response.length !== 0) {
+      setName(response.name);
+      setEstablished(response.estd);
+      setAddress(response.address);
+      setZip(response.zip);
+      setMobile(response.mobile_number);
+      setLandline(response.landline);
+      setEmail(response.email);
+      setAboutUs(response.about_us);
+      setFacebook(response.facebook);
+      setTwitter(response.twitter);
+      setInstagram(response.instagram);
+      setLinkedIn(response.linkedIn);
+      setWebsite(response.website);
+    }
   }, [response]);
 
   const onImageChange = (e) => {

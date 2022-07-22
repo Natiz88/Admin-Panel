@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { loginData } from "./../utils/demo/ApiCall";
 
@@ -41,9 +41,13 @@ function Login() {
     loginData(email, password)
       .then((res) => {
         localStorage.setItem("token", res.token);
-        logIn();
-        history.push(`/app`);
-        return;
+        let token = localStorage.getItem("token");
+        if (token === res.token) {
+          logIn();
+          history.push(`/app`);
+        } else {
+          return;
+        }
       })
       .catch((err) => {
         setError(true);
