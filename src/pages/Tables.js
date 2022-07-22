@@ -26,6 +26,10 @@ function UserTable() {
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [isAlertOpen, setAlertOpen] = useState(false);
   const [selected, setSelected] = useState([]);
+  const [isDeleteSuccessfull, setDeleteSuccessfull] = useState(false);
+  const [usersCount, setUsersCount] = useState(0);
+  const [isError, setError] = useState(false);
+  const [errorText, setErrorText] = useState("");
 
   const deleteUser = (user) => {
     setId(user);
@@ -44,20 +48,32 @@ function UserTable() {
   const confirmDelete = () => {
     sendDeleteUser();
     setIsModalOpen(false);
-    setTimeout(() => setAlertOpen(false), 1000);
-    setAlertOpen(true);
   };
   const sendDeleteUser = () => {
-    deleteUsers(id).then((res) => console.log("del-user", res));
+    deleteUsers(id)
+      .then(
+        (res) => console.log("del-user", res),
+        setTimeout(() => setDeleteSuccessfull(false), 1000),
+        setDeleteSuccessfull(true)
+      )
+      .catch((err) => setErrorText(err.response.data.message));
     setDel(!true);
   };
 
   const confirmUsersDelete = () => {
     const arr = selected.map((a) => a.id);
     deleteAllUsers(arr)
-      .then((res) => console.log("allres", res))
+      .then(
+        (res) => console.log("allres", res),
+        setTimeout(() => setDeleteSuccessfull(false), 1000),
+        setDeleteSuccessfull(true)
+      )
       .catch((err) => console.log("err", err));
     setIsUsersModalOpen(false);
+  };
+
+  const closeSuccessModal = () => {
+    setDeleteSuccessfull(false);
   };
 
   const sendNotification = () => {
@@ -68,10 +84,13 @@ function UserTable() {
     setSelected(state.selectedRows);
   };
 
-  console.log(
-    "selected rows",
-    selected.map((a) => a.id)
-  );
+  const closeErrorModal = () => {
+    setError(false);
+  };
+
+  useEffect(() => {
+    setUsersCount(selected.length);
+  }, [selected]);
   const columns = [
     {
       name: "S.N.",
@@ -165,7 +184,7 @@ function UserTable() {
       {selected.length > 0 && (
         <div className="flex justify-end">
           <Button onClick={() => setIsUsersModalOpen(true)}>
-            Delete users
+            Delete users ({usersCount})
           </Button>
           <Button className="ml-4" onClick={sendNotification}>
             Send Notifications
@@ -202,7 +221,7 @@ function UserTable() {
       <Modal isOpen={isUsersModalOpen} onClose={closeUsersModal}>
         <ModalHeader>Delete Users</ModalHeader>
         <ModalBody>
-          Are you sure you want to delete the selected users?
+          Are you sure you want to delete {usersCount} users?
         </ModalBody>
         <ModalFooter>
           <div className="hidden sm:block">
@@ -225,6 +244,12 @@ function UserTable() {
             <Button onClick={confirmDelete}>Send</Button>
           </div>
         </ModalFooter>
+      </Modal>
+      <Modal isOpen={isDeleteSuccessfull} close={closeSuccessModal}>
+        <ModalBody>The users were deleted successfully</ModalBody>
+      </Modal>
+      <Modal isOpen={isError} close={closeErrorModal}>
+        <ModalBody>{errorText}</ModalBody>
       </Modal>
     </>
   );
