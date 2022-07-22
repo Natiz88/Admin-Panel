@@ -8,8 +8,9 @@ export const LoginProvider = ({ children }) => {
   const [token, setToken] = useState(initialToken);
   const [isLoggedIn, setLoggedIn] = useState(!!token);
 
-  function logIn() {
+  function logIn(token) {
     setLoggedIn(true);
+    setToken(token);
   }
   function logOut() {
     setLoggedIn(false);
