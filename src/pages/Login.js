@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { loginData } from "./../utils/demo/ApiCall";
 
@@ -11,7 +11,6 @@ import { Label, Input, Button } from "@windmill/react-ui";
 
 function Login() {
   const { logIn } = useContext(LoginContext);
-
   const [email, setEmail] = useState("");
   const [isError, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("Couldn't send Request");
@@ -32,9 +31,6 @@ function Login() {
       return;
     }
     login();
-
-    // setError(true);
-    // setErrorMessage("could not send Request");
   };
 
   const login = () => {
@@ -51,8 +47,11 @@ function Login() {
       })
       .catch((err) => {
         setError(true);
-        setErrorMessage(err.response.data.message);
-        return;
+        if (err.name === "AxiosError") {
+          setErrorMessage("Couldn't send request");
+        } else {
+          setErrorMessage(err.response.data.message);
+        }
       });
   };
 

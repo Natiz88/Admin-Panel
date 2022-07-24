@@ -73,7 +73,6 @@ function ContactUs() {
       .put("http://192.168.1.98:8081/api/admin/about/1/update", data, config)
       .then(
         (response) => setIsModalText("Data was updated"),
-        console.log("innner", response),
         setTimeout(() => setIsModalOpen(false), 1000),
         setIsModalOpen(true)
       )
@@ -152,7 +151,7 @@ function ContactUs() {
           <Input
             className="mt-2"
             type="text"
-            value={name}
+            defaultValue={name}
             onChange={(e) => setName(e.target.value)}
           />
         </Label>
