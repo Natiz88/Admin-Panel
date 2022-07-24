@@ -128,7 +128,36 @@ export const addUser = async (
     pan: pan,
     is_admin: false,
   };
-  console.log("data", data);
   const resp = await axios.post(url, data, config);
   return resp;
+};
+
+export const updateProfile = async (name, address, mobile, gender) => {
+  const url = "http://192.168.100.21:8081/api/profile/update";
+  const config = {
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const data = {
+    name: name,
+    address: address,
+    mobile_number: mobile,
+    gender: gender,
+  };
+  const resp = await axios.put(url, data, config);
+  return resp;
+};
+
+export const getAdminProfile = async () => {
+  const url = "http://192.168.100.21:8081/api/profile";
+  const config = {
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.get(url, config);
+  return response;
 };

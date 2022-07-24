@@ -18,7 +18,7 @@ import {
   DropdownItem,
   WindmillContext,
 } from "@windmill/react-ui";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
 function Header() {
   const { mode, toggleMode } = useContext(WindmillContext);
@@ -135,16 +135,16 @@ function Header() {
               isOpen={isProfileMenuOpen}
               onClose={() => setIsProfileMenuOpen(false)}
             >
-              <DropdownItem tag="a" href="#">
+              <DropdownItem tag={Link} to="/app/adminProfile">
                 <OutlinePersonIcon
                   className="w-4 h-4 mr-3"
                   aria-hidden="true"
                 />
                 <span>Profile</span>
               </DropdownItem>
-              <DropdownItem tag="a" href="#">
+              <DropdownItem tag={Link} to="/app/changePassword">
                 <OutlineCogIcon className="w-4 h-4 mr-3" aria-hidden="true" />
-                <span>Settings</span>
+                <span>Change Password</span>
               </DropdownItem>
               <DropdownItem onClick={logOutHandler}>
                 <OutlineLogoutIcon

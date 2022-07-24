@@ -46,11 +46,25 @@ function Login() {
         }
       })
       .catch((err) => {
-        setError(true);
+        console.log("error", err);
+
         if (err.name === "AxiosError") {
+          setError(true);
           setErrorMessage("Couldn't send request");
-        } else {
+        }
+        if (
+          err.response.status === 404 ||
+          err.response.status === 422 ||
+          err.response.status === 401
+        ) {
+          setError(true);
           setErrorMessage(err.response.data.message);
+        } else if (err.response.status === "500") {
+          setError(true);
+          setErrorMessage("Internal server error");
+        } else {
+          setError(true);
+          setErrorMessage("Unknown Error");
         }
       });
   };

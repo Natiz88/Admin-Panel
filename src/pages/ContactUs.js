@@ -95,7 +95,7 @@ function ContactUs() {
     axios
       .get("http://192.168.1.98:8081/api/about", config)
       .then((res) => setResponse(res.data[0]))
-      .catch((err) => console.log(err.response.data.message));
+      .catch((err) => console.log(err.response));
   }, []);
 
   useEffect(() => {

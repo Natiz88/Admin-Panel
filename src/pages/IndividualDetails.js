@@ -164,7 +164,7 @@ function IndividualDetails() {
                   value="male"
                   name="genderType"
                   onClick={handleRadioGender}
-                  // checked={type == "corporate" ? "false" : "true"}
+                  checked={gender === "male" ? true : false}
                 />
                 <span className="ml-2">Male</span>
               </Label>
@@ -174,16 +174,17 @@ function IndividualDetails() {
                   value="female"
                   name="genderType"
                   onClick={handleRadioGender}
-                  // checked={type == "corporate" ? "true" : "false"}
+                  checked={gender === "female" ? true : false}
                 />
                 <span className="ml-2">Female</span>
               </Label>
               <Label className="ml-6" radio>
                 <Input
                   type="radio"
-                  value="others"
+                  value="other"
                   name="genderType"
                   onClick={handleRadioGender}
+                  checked={gender === "other" ? true : false}
                 />
                 <span className="ml-2">Others</span>
               </Label>
@@ -215,8 +216,8 @@ function IndividualDetails() {
                     type="radio"
                     value="individual"
                     name="accountType"
-                    onClick={handleRadioType}
-                    // checked={type == "corporate" ? "false" : "true"}
+                    onChange={handleRadioType}
+                    checked={type === "individual" ? true : false}
                   />
                   <span className="ml-2">individual</span>
                 </Label>
@@ -225,8 +226,8 @@ function IndividualDetails() {
                     type="radio"
                     value="corporate"
                     name="accountType"
-                    onClick={handleRadioType}
-                    // checked={type == "corporate" ? "true" : "false"}
+                    onChange={handleRadioType}
+                    checked={type == "corporate" ? true : false}
                   />
                   <span className="ml-2">corporate</span>
                 </Label>
