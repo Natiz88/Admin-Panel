@@ -69,7 +69,7 @@ const ContactUs = () => {
       linkedIn: link,
       website: web,
     };
-    console.log(data);
+    // console.log(data);
     axios
       .put("http://192.168.1.98:8081/api/admin/about/1/update", data, config)
       .then(
@@ -124,7 +124,7 @@ const ContactUs = () => {
               <Input
                 type="file"
                 accept="image/*"
-                class="hidden"
+                className="hidden"
                 onChange={onImageChange}
               />
             </span>

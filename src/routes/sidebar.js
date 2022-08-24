@@ -14,7 +14,7 @@ const routes = [
   {
     path: "/app/forms",
     icon: "FormsIcon",
-    name: "Forms",
+    name: "AddProducts",
   },
   {
     path: "/app/cards",
@@ -42,9 +42,20 @@ const routes = [
     name: "Banners",
   },
   {
+    path: "/app/CouponCodes",
+    icon: "CardsIcon",
+    name: "Coupon Codes",
+  },
+  ,
+  {
     path: "/app/tables",
     icon: "TablesIcon",
-    name: "Tables",
+    name: "Users",
+  },
+  {
+    path: "/app/orderList",
+    icon: "TablesIcon",
+    name: "Order List",
   },
   {
     icon: "PagesIcon",

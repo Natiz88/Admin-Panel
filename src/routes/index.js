@@ -12,7 +12,12 @@ const Page404 = lazy(() => import("../pages/404"));
 const Blank = lazy(() => import("../pages/Blank"));
 const Logout = lazy(() => import("../pages/Logout"));
 const Banners = lazy(() => import("../pages/Banners"));
+const ChangePassword = lazy(() => import("../pages/ChangePassword"));
 const IndividualDetails = lazy(() => import("../pages/IndividualDetails"));
+// const AddBanners = lazy(() => import("../pages/AddBanners"));
+const CouponCodes = lazy(() => import("../pages/CouponCodes"));
+const OrderList = lazy(() => import("../pages/OrderList"));
+
 
 /**
  * ⚠ These are internal routes!
@@ -25,6 +30,10 @@ const IndividualDetails = lazy(() => import("../pages/IndividualDetails"));
  * `routes/sidebar.js`
  */
 const routes = [
+  {
+    path: "/CouponCodes", // the url
+    component: CouponCodes, // view rendered
+  },
   {
     path: "/dashboard", // the url
     component: Dashboard, // view rendered
@@ -50,6 +59,10 @@ const routes = [
     component: ContactUs,
   },
   {
+    path: "/changePassword",
+    component: ChangePassword,
+  },
+  {
     path: "/banners",
     component: Banners,
   },
@@ -58,9 +71,17 @@ const routes = [
     component: Tables,
   },
   {
+    path: "/orderlist",
+    component: OrderList,
+  },
+  {
     path: "/individualDetails/:id",
     component: IndividualDetails,
   },
+  // {
+  //   path: "/addBanner",
+  //   component: AddBanners,
+  // },
   {
     path: "/404",
     component: Page404,

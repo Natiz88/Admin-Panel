@@ -19,7 +19,7 @@ function IndividualDetails() {
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("");
-  const [contact, setContact] = useState("");
+  const [contact, setContact] = useState([]);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [type, setType] = useState("");
@@ -94,13 +94,13 @@ function IndividualDetails() {
     e.preventDefault();
     setError(false);
     if (
-      name == "" ||
-      email == "" ||
-      gender == "" ||
-      contact == "" ||
-      password == "" ||
-      confirmPassword == "" ||
-      type == ""
+      name === "" ||
+      email === "" ||
+      gender === "" ||
+      contact === "" ||
+      password === "" ||
+      confirmPassword === "" ||
+      type === ""
     ) {
       setErrorMessage("Please fill up  all the fields");
       setError(true);

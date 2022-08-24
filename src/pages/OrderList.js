@@ -1,3 +1,15 @@
+// import React from 'react'
+
+// const OrderList = () => {
+//   return (
+//     <div>
+      
+//     </div>
+//   )
+// }
+
+// export default OrderList
+
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import DataTableExtensions from "react-data-table-component-extensions";
@@ -13,13 +25,12 @@ import {
   ModalFooter,
   Textarea,
 } from "@windmill/react-ui";
-import { EditIcon, TrashIcon, FormsIcon } from "../icons";
+import {view, TrashIcon, FormsIcon } from "../icons";
 
-function UserTable() {
-  const [mainResponse, setMainResponse] = useState([]);
+
+function OrderList() {
   const [response, setResponse] = useState([]);
   const [id, setId] = useState(null);
-  const [buttonValue, setButtonValue] = useState("all");
   const [del, setDel] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUsersModalOpen, setIsUsersModalOpen] = useState(false);
@@ -93,19 +104,50 @@ function UserTable() {
   }, [selected]);
   const columns = [
     {
-      name: "S.N.",
+      name: "Order ID",
       cell: (row, idx) => idx + 1,
       sortable: false,
     },
     {
-      name: "Update",
+      name: "Customer Name",
+      cell: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Product Name",
+      cell: (row) => row.email,
+      sortable: true,
+    },
+    {
+      name: "Delivery Date",
+      cell: (row) => row.mobile_number,
+      sortable: true,
+    },
+
+    {
+      name: "Total Amount",
+      cell: (row) => row.type,
+      sortable: true,
+    },
+    {
+      name: "Status",
+      cell: (row) => row.gender,
+      sortable: true,
+    },
+    {
+      name: "Payment Modes",
+      cell: (row) => row.created_at,
+      sortable: true,
+    },
+    {
+      name: "View",
       print: false,
       export: false,
       cell: (row) => (
         <div className="flex items-center">
-          <Button layout="link" size="icon" aria-label="Edit"></Button>
+          {/* <Button layout="link" size="icon" aria-label="Edit"></Button> */}
 
-          <Button
+          {/* <Button
             layout="link"
             size="icon"
             aria-label="Edit"
@@ -113,7 +155,7 @@ function UserTable() {
             to={`/app/individualDetails/${row.id}`}
           >
             <EditIcon className="w-5 h-5" aria-hidden="true" />
-          </Button>
+          </Button> */}
           <Button layout="link" size="icon" aria-label="Delete">
             <TrashIcon
               className="w-5 h-5"
@@ -121,41 +163,17 @@ function UserTable() {
               onClick={() => deleteUser(row.id)}
             />
           </Button>
+
+          <Button layout="link" size="icon" aria-label="View">
+            <view
+              className="w-5 h-5"
+              aria-hidden="true"
+              onClick={() => deleteUser(row.id)}
+            />
+          </Button>
         </div>
       ),
-    },
-
-    {
-      name: "Name",
-      cell: (row) => row.name,
-      sortable: true,
-    },
-    {
-      name: "Email",
-      cell: (row) => row.email,
-      sortable: true,
-    },
-    {
-      name: "Phone",
-      cell: (row) => row.mobile_number,
-      sortable: true,
-    },
-
-    {
-      name: "User Type",
-      cell: (row) => row.type,
-      sortable: true,
-    },
-    {
-      name: "Gender",
-      cell: (row) => row.gender,
-      sortable: true,
-    },
-    {
-      name: "Joined Date",
-      cell: (row) => row.created_at,
-      sortable: true,
-    },
+    }
   ];
 
   const data = response;
@@ -163,49 +181,16 @@ function UserTable() {
     columns,
     data,
   };
-
-
-  //create this function for sorting ind cor all
-  function setData() {
-    console.log("function");
-    if (buttonValue === "individual") {
-      let resp = mainResponse.filter((r) => r.type === "individual");
-      setResponse(resp);
-    } else if (buttonValue === "corporate") {
-      let resp = mainResponse.filter((r) => r.type === "corporate");
-      setResponse(resp);
-    } else {
-      console.log("main", mainResponse);
-      setResponse(mainResponse);
-    }
-  }
   useEffect(() => {
     getData()
-      .then((res) => {
-        setMainResponse(res);
-        setResponse(res);
-        console.log("reloaded", mainResponse);
-      })
+      .then((res) => setResponse(res))
       .catch((err) => console.log(err));
-  }, []);
-
-
-  //for type handle in table
-  const typeHandler = (e) => {
-    setButtonValue(e);
-  };
-
-  useEffect(() => {
-    setData();
-  }, [buttonValue]);
-
-  console.log("resr,", mainResponse);
-  console.log("button,", buttonValue);
+  }, [del, confirmUsersDelete]);
 
   return (
     <>
-      <PageTitle>User Details</PageTitle>
-      <div className="">
+      <PageTitle>Order List</PageTitle>
+      {/* <div className="">
         <Button
           iconRight={FormsIcon}
           tag={Link}
@@ -213,8 +198,7 @@ function UserTable() {
         >
           <span>Add new User</span>
         </Button>
-      </div>
-
+      </div> */}
       {selected.length > 0 && (
         <div className="flex justify-end">
           <Button onClick={() => setIsUsersModalOpen(true)}>
@@ -225,27 +209,6 @@ function UserTable() {
           </Button>
         </div>
       )}
-      <div className="w-full  flex justify-start mt-8 text-[24px]">
-        <button
-          className="ml-2 w-[80px] border-b-2 border-black"
-          onClick={(e) => typeHandler("all")}
-        >
-          All
-        </button>
-        <button
-          className="ml-2 w-[30px] bg-red-400"
-          value="individual"
-          onClick={(e) => typeHandler("individual")}
-        >
-          Ind
-        </button>
-        <button
-          className="ml-2 w-[30px]"
-          onClick={(e) => typeHandler("corporate")}
-        >
-          corp
-        </button>
-      </div>
       <DataTableExtensions {...tableData}>
         <DataTable
           noHeader
@@ -288,7 +251,7 @@ function UserTable() {
             <Button onClick={confirmUsersDelete}>Ok, Continue</Button>
           </div>
         </ModalFooter>
-      </Modal>
+      </Modal>   
       <Modal isOpen={isNotificationModalOpen} onClose={closeNotificationModal}>
         <ModalHeader>Send Notification</ModalHeader>
         <ModalBody>
@@ -310,4 +273,4 @@ function UserTable() {
   );
 }
 
-export default UserTable;
+export default OrderList;

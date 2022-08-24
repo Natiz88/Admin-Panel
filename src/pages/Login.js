@@ -11,7 +11,6 @@ import { Label, Input, Button } from "@windmill/react-ui";
 
 function Login() {
   const { logIn } = useContext(LoginContext);
-
   const [email, setEmail] = useState("");
   const [isError, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("Couldn't send Request");
@@ -38,14 +37,35 @@ function Login() {
     loginData(email, password)
       .then((res) => {
         localStorage.setItem("token", res.token);
-        logIn();
-        history.push(`/app`);
-        return;
+        let token = localStorage.getItem("token");
+        if (token === res.token) {
+          logIn();
+          history.push(`/app`);
+        } else {
+          return;
+        }
       })
       .catch((err) => {
-        setError(true);
-        setErrorMessage(err.response.data.message);
-        return;
+        console.log("error", err);
+
+        if (err.name === "AxiosError") {
+          setError(true);
+          setErrorMessage("Couldn't send request");
+        }
+        if (
+          err.response.status === 404 ||
+          err.response.status === 422 ||
+          err.response.status === 401
+        ) {
+          setError(true);
+          setErrorMessage(err.response.data.message);
+        } else if (err.response.status === "500") {
+          setError(true);
+          setErrorMessage("Internal server error");
+        } else {
+          setError(true);
+          setErrorMessage("Unknown Error");
+        }
       });
   };
 
@@ -77,7 +97,6 @@ function Login() {
                   Incorrect email or Password
                 </h1>
               )}
-
               {isEmpty && (
                 <h1 className="text-red-500 mb-[30px]">
                   Please Fill the required fields
