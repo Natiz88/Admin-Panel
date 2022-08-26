@@ -9,6 +9,6 @@
 }
 @media (prefers-color-scheme: dark) {
     .rdt_TableCol{
-        background-color: red;
+        /* background-color: red; */
     }
 }

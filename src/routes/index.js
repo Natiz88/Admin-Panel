@@ -14,13 +14,10 @@ const Page404 = lazy(() => import("../pages/404"));
 const Blank = lazy(() => import("../pages/Blank"));
 const Logout = lazy(() => import("../pages/Logout"));
 const Banners = lazy(() => import("../pages/Banners"));
-<<<<<<< HEAD
 const ChangePassword = lazy(() => import("../pages/ChangePassword"));
-=======
 const AdminProfile = lazy(() => import("../pages/AdminProfile"));
-const ChangePassword = lazy(() => import("../pages/ChangePassword"));
+// const ChangePassword = lazy(() => import("../pages/ChangePassword"));
 const NewBanner = lazy(() => import("../pages/NewBanner"));
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
 const IndividualDetails = lazy(() => import("../pages/IndividualDetails"));
 // const AddBanners = lazy(() => import("../pages/AddBanners"));
 const CouponCodes = lazy(() => import("../pages/CouponCodes"));
@@ -100,13 +97,10 @@ const routes = [
     component: Tables,
   },
   {
-<<<<<<< HEAD
     path: "/orderlist",
     component: OrderList,
-=======
     path: "/newTables",
     component: NewTables,
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
   },
   {
     path: "/individualDetails/:id",

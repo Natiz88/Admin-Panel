@@ -3,11 +3,9 @@ import axios from "axios";
 const token = localStorage.getItem("token");
 
 export const deleteAllUsers = async (arr) => {
-<<<<<<< HEAD
-  const url = "http://192.168.100.21:8081/api/admin/deleteAllUser";
-=======
+
   const url = "http://192.168.100.17:8081/api/admin/deleteAllUser";
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
+
   console.log("url", url);
   const config = {
     headers: {
@@ -136,7 +134,7 @@ export const addUser = async (
   return resp;
 };
 
-<<<<<<< HEAD
+
 export const addCoupon = async (
   range,
   discount,
@@ -145,10 +143,11 @@ export const addCoupon = async (
 ) => {
   const url = "http://192.168.100.17:8081/api/signup";
   console.log("url", url);
-=======
+}
+
 export const updateProfile = async (name, address, mobile, gender) => {
   const url = "http://192.168.100.17:8081/api/profile/update";
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
+
   const config = {
     headers: {
       Accept: "application/json",
@@ -156,25 +155,17 @@ export const updateProfile = async (name, address, mobile, gender) => {
     },
   };
   const data = {
-<<<<<<< HEAD
-    name: range,
-    address: discount,
-    gender: product,
-    mobile_number: shipping
+
+    name: name,
+    address: address,
+    gender: gender,
+    mobile_number: mobile
   };
   console.log("data", data);
   const resp = await axios.post(url, data, config);
   return resp;
 };
-=======
-    name: name,
-    address: address,
-    mobile_number: mobile,
-    gender: gender,
-  };
-  const resp = await axios.put(url, data, config);
-  return resp;
-};
+
 
 export const getAdminProfile = async () => {
   const url = "http://192.168.100.17:8081/api/profile";
@@ -187,4 +178,4 @@ export const getAdminProfile = async () => {
   const response = await axios.get(url, config);
   return response;
 };
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
+

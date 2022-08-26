@@ -2,15 +2,15 @@ import React from "react";
 import { ImCross } from "react-icons/im";
 import PageTitle from "../components/Typography/PageTitle";
 import { Link } from "react-router-dom";
-<<<<<<< HEAD
+
 import { Images } from "./Images";
-import { useState } from "react";
+// import { useState } from "react";
 import photo from "./imagesbanner.jpg";
-=======
-import Images from "./../utils/images/Images";
+
+// import Images from "./../utils/images/Images";
 import { useState } from "react";
 // import photo from "./imagesbanner.jpg";
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
+
 
 import {
   Modal,
@@ -26,11 +26,11 @@ import {
 const Banners = () => {
   console.log("images from", Images);
 
-<<<<<<< HEAD
+
   const [img, setImg] = useState(photo);
-=======
-  const [img, setImg] = useState(null);
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
+
+  // const [img, setImg] = useState(null);
+
   const onImageChange = (e) => {
     const [file] = e.target.files;
     setImg(URL.createObjectURL(file));
@@ -65,7 +65,7 @@ const Banners = () => {
             <span>Add Banner</span>
           </Button>
         </div>
-<<<<<<< HEAD
+
         
         </div>
 
@@ -78,10 +78,8 @@ const Banners = () => {
                 <Button>Delete</Button>
             </div>
            </div>
+           
         ))} 
-        </>)
-=======
-      </div>
 
       {Images.map((e) => (
         <div className="mt-10 sm:mt-10 block w-full sm:w-4/5 sm:m-auto sm:flex sm:items-center ">
@@ -95,7 +93,7 @@ const Banners = () => {
       ))}
     </>
   );
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
+
 };
 
 export default Banners;

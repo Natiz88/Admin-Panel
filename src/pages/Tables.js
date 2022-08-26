@@ -5,14 +5,11 @@ import "react-data-table-component-extensions/dist/index.css";
 import PageTitle from "../components/Typography/PageTitle";
 import { getData, deleteUsers, deleteAllUsers } from "./../utils/demo/ApiCall";
 import { Link } from "react-router-dom";
-<<<<<<< HEAD
 // import { MdCorporateFare } from 'react-icons/md';
 // import { HiUserGroup } from 'react-icons/hi';
 // import { GiPerson } from 'react-icons/gi';
-=======
 import datas from "./../utils/demo/tableData";
 import "./Tables.css";
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
 import {
   Modal,
   Button,
@@ -33,11 +30,11 @@ function UserTable() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUsersModalOpen, setIsUsersModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
-<<<<<<< HEAD
+
   // const [isAlertOpen, setAlertOpen] = useState(false);
-=======
+
   const [isAlertOpen, setAlertOpen] = useState(false);
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
+
   const [selected, setSelected] = useState([]);
   const [isDeleteSuccessfull, setDeleteSuccessfull] = useState(false);
   const [usersCount, setUsersCount] = useState(0);
@@ -104,12 +101,12 @@ function UserTable() {
   useEffect(() => {
     setUsersCount(selected.length);
   }, [selected]);
+
   const columns = [
     {
       name: "S.N.",
       cell: (row, idx) => idx + 1,
       sortable: false,
-<<<<<<< HEAD
     },
     {
       name: "Name",
@@ -142,8 +139,6 @@ function UserTable() {
       name: "Joined Date",
       cell: (row) => row.created_at,
       sortable: true,
-=======
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
     },
     {
       name: "Update",
@@ -171,43 +166,7 @@ function UserTable() {
           </Button>
         </div>
       ),
-<<<<<<< HEAD
-    }
-=======
     },
-
-    {
-      name: "Name",
-      cell: (row) => row.name,
-      sortable: true,
-    },
-    {
-      name: "Email",
-      cell: (row) => row.email,
-      sortable: true,
-    },
-    {
-      name: "Phone",
-      cell: (row) => row.mobile_number,
-      sortable: true,
-    },
-
-    {
-      name: "User Type",
-      cell: (row) => row.type,
-      sortable: true,
-    },
-    {
-      name: "Gender",
-      cell: (row) => row.gender,
-      sortable: true,
-    },
-    {
-      name: "Joined Date",
-      cell: (row) => row.created_at,
-      sortable: true,
-    },
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
   ];
 
   console.log("colc", col);
@@ -248,7 +207,6 @@ function UserTable() {
     columns,
     data,
   };
-<<<<<<< HEAD
 
   //for type handle in table
   const typeHandler = (e) => {
@@ -262,13 +220,12 @@ function UserTable() {
   console.log("resr,", mainResponse);
   console.log("button,", buttonValue);
   // const initialState = { hiddenColumns: ['Name'] };
-=======
+
   useEffect(() => {
     getData()
       .then((res) => setResponse(res))
       .catch((err) => console.log(err));
   }, [del, confirmUsersDelete]);
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
 
   return (
     <>
@@ -282,10 +239,7 @@ function UserTable() {
           <span>Add new User</span>
         </Button>
       </div>
-<<<<<<< HEAD
 
-=======
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
       {selected.length > 0 && (
         <div className="flex justify-end">
           <Button onClick={() => setIsUsersModalOpen(true)}>
@@ -296,7 +250,7 @@ function UserTable() {
           </Button>
         </div>
       )}
-<<<<<<< HEAD
+
       <div className="w-full  flex justify-start mt-8 text-[24px] gap-4">
         <p
           className={
@@ -333,12 +287,10 @@ function UserTable() {
           <p>Corporate</p>
         </p>
       </div>
-=======
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
+
       <DataTableExtensions {...tableData}>
         <DataTable
           noHeader
-          columns={col}
           defaultSortField="title"
           defaultSortAsc={false}
           highlightOnHover

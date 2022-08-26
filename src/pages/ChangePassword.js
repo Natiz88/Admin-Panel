@@ -3,7 +3,7 @@ import PageTitle from "../components/Typography/PageTitle";
 import { useState } from "react";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { AiOutlineEye } from "react-icons/ai";
-<<<<<<< HEAD
+
 import {
   Label,
   Modal,
@@ -12,14 +12,14 @@ import {
 } from "@windmill/react-ui";
 import axios from "axios";
 
+// function ChangePassword() {
+
+
+// import { Label, Modal, ModalBody, Button } from "@windmill/react-ui";
+// import axios from "axios";
+
 function ChangePassword() {
 
-=======
-import { Label, Modal, ModalBody, Button } from "@windmill/react-ui";
-import axios from "axios";
-
-function ChangePassword() {
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -49,12 +49,12 @@ function ChangePassword() {
     setShow1(!show1);
   }
 
-<<<<<<< HEAD
+
 
 
   
-=======
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
+
+
   const updatePasswordHandler = (e) => {
     e.preventDefault();
     if (oldPassword === "" || newPassword === "" || confirmPassword === "") {
@@ -65,16 +65,16 @@ function ChangePassword() {
       return;
     }
 
-<<<<<<< HEAD
+
     // const token = '1N3qD4Vb9K2t6BkuPAausfJsy4b7TH5WsZT9i6HD'; 
     const token = localStorage.getItem("token");
 
 
     
-=======
+
     // const token = '1N3qD4Vb9K2t6BkuPAausfJsy4b7TH5WsZT9i6HD';
-    const token = localStorage.getItem("token");
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
+    // const token = localStorage.getItem("token");
+
     const config = {
       headers: {
         Accept: "application/json",
@@ -89,16 +89,16 @@ function ChangePassword() {
 
     axios
       .post(
-<<<<<<< HEAD
+
         "http://192.168.100.21:8081/api/profile/change-password",
-=======
-        "http://192.168.1.98:8081/api/profile/change-password",
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
+
+        // "http://192.168.1.98:8081/api/profile/change-password",
+
         data,
         config
       )
       .then(
-<<<<<<< HEAD
+
         (res) => setIsModalText("Data was Updated."),
         setTimeout(() => {
           setIsModalOpen(false);
@@ -107,7 +107,7 @@ function ChangePassword() {
       )
       .catch(
         (err) => setIsModalText(err.response.data.message),
-=======
+
         (res) => console.log("chnge", res),
         setIsModalText("Data was updated"),
         setTimeout(() => {
@@ -117,7 +117,7 @@ function ChangePassword() {
       )
       .catch(
         (err) => console.log(err),
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
+
         setTimeout(() => {
           setIsModalOpen(false);
         }, 2000),
@@ -138,12 +138,12 @@ function ChangePassword() {
               <span>Old Password</span>
               <div className="relative text-gray-500 focus-within:text-purple-600">
                 <input
-<<<<<<< HEAD
+
                   type={show1 === true ? "text" : "password" }
                   
-=======
-                  type={show1 === true ? "text" : "password"}
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
+
+                  // type={show1 === true ? "text" : "password"}
+
                   onChange={(e) => setOldPassword(e.target.value)}
                   className="block w-full pr-20 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
                 />

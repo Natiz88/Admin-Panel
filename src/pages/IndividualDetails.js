@@ -99,11 +99,8 @@ function IndividualDetails() {
       gender === "" ||
       contact === "" ||
       password === "" ||
-<<<<<<< HEAD
       confirmPassword === "" ||
-=======
       confirmPassword == "" ||
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
       type === ""
     ) {
       setErrorMessage("Please fill up  all the fields");

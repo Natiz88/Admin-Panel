@@ -39,15 +39,12 @@
     "react-responsive-modal": "^6.2.0",
     "react-router-dom": "5.2.0",
     "react-scripts": "3.4.1",
-<<<<<<< HEAD
     "react-styled-toggle": "^1.0.18",
     "react-transition-group": "4.4.1",
-    "yup": "^0.32.11"
-=======
+    "yup": "^0.32.11",
     "react-transition-group": "4.4.1",
     "styled": "^1.0.0",
     "styled-components": "^5.3.5"
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
   },
   "devDependencies": {
     "@release-it/conventional-changelog": "1.1.4",

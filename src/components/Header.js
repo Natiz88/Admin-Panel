@@ -18,11 +18,10 @@ import {
   DropdownItem,
   WindmillContext,
 } from "@windmill/react-ui";
-<<<<<<< HEAD
+
 import { useHistory ,Link} from "react-router-dom";
-=======
-import { useHistory, Link } from "react-router-dom";
->>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
+
+
 
 function Header() {
   const { mode, toggleMode } = useContext(WindmillContext);
