@@ -182,4 +182,8 @@ function AdminProfile() {
   );
 }
 
+<<<<<<< HEAD
 export default AdminProfile;
+=======
+export default AdminProfile;
+>>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595

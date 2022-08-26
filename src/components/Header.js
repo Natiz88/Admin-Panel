@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { SidebarContext } from "../context/SidebarContext";
 import {
   SearchIcon,
@@ -18,7 +18,11 @@ import {
   DropdownItem,
   WindmillContext,
 } from "@windmill/react-ui";
+<<<<<<< HEAD
 import { useHistory ,Link} from "react-router-dom";
+=======
+import { useHistory, Link } from "react-router-dom";
+>>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
 
 function Header() {
   const { mode, toggleMode } = useContext(WindmillContext);
@@ -138,7 +142,7 @@ function Header() {
               isOpen={isProfileMenuOpen}
               onClose={() => setIsProfileMenuOpen(false)}
             >
-              <DropdownItem tag="a" href="#">
+              <DropdownItem tag={Link} to="/app/adminProfile">
                 <OutlinePersonIcon
                   className="w-4 h-4 mr-3"
                   aria-hidden="true"

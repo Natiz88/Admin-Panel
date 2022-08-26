@@ -99,7 +99,11 @@ function IndividualDetails() {
       gender === "" ||
       contact === "" ||
       password === "" ||
+<<<<<<< HEAD
       confirmPassword === "" ||
+=======
+      confirmPassword == "" ||
+>>>>>>> 786caa1a37a84e05bdce8455ca8c963320431595
       type === ""
     ) {
       setErrorMessage("Please fill up  all the fields");
@@ -134,7 +138,7 @@ function IndividualDetails() {
       ) : (
         <>
           <SectionTitle>{type} Account</SectionTitle>
-          <Button tag={Link} to="/app/tables">
+          <Button tag={Link} to="/app/tables" className="my-3">
             Cancel
           </Button>
           <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
@@ -164,7 +168,7 @@ function IndividualDetails() {
                   value="male"
                   name="genderType"
                   onClick={handleRadioGender}
-                  // checked={type == "corporate" ? "false" : "true"}
+                  checked={gender === "male" ? true : false}
                 />
                 <span className="ml-2">Male</span>
               </Label>
@@ -174,16 +178,17 @@ function IndividualDetails() {
                   value="female"
                   name="genderType"
                   onClick={handleRadioGender}
-                  // checked={type == "corporate" ? "true" : "false"}
+                  checked={gender === "female" ? true : false}
                 />
                 <span className="ml-2">Female</span>
               </Label>
               <Label className="ml-6" radio>
                 <Input
                   type="radio"
-                  value="others"
+                  value="other"
                   name="genderType"
                   onClick={handleRadioGender}
+                  checked={gender === "other" ? true : false}
                 />
                 <span className="ml-2">Others</span>
               </Label>
@@ -207,52 +212,31 @@ function IndividualDetails() {
                 onChange={(e) => setContact(e.target.value)}
               />
             </Label>
-            <div className="mt-4">
-              <Label>Account Type</Label>
-              <Label radio>
-                <Input
-                  type="radio"
-                  value="individual"
-                  name="accountType"
-                  onClick={handleRadioType}
-                  // checked={type == "corporate" ? "false" : "true"}
-                />
-                <span className="ml-2">individual</span>
-              </Label>
-              <Label className="ml-6" radio>
-                <Input
-                  type="radio"
-                  value="corporate"
-                  name="accountType"
-                  onClick={handleRadioType}
-                  // checked={type == "corporate" ? "true" : "false"}
-                />
-                <span className="ml-2">corporate</span>
-              </Label>
-              <Label disabled className="ml-6" radio>
-                <Input
-                  disabled
-                  type="radio"
-                  value="disabled"
-                  name="accountType"
-                />
-                <span className="ml-2">Admin</span>
-              </Label>
-            </div>
-
-            {/* <div className="mt-4">
-            <Label className="mt-5">Account Type</Label>
-            <div className="mt-2">
-              <Label className="ml-6" radio>
-                <Input type="radio" name="accountType" checked />
-                <span className="ml-2">Individual</span>
-              </Label>
-              <Label className="ml-6" radio>
-                <Input type="radio" name="accountType" />
-                <span className="ml-2">Corporate</span>
-              </Label>
-            </div>
-          </div> */}
+            {type !== "admin" && (
+              <div className="mt-4">
+                <Label>Account Type</Label>
+                <Label radio>
+                  <Input
+                    type="radio"
+                    value="individual"
+                    name="accountType"
+                    onChange={handleRadioType}
+                    checked={type === "individual" ? true : false}
+                  />
+                  <span className="ml-2">individual</span>
+                </Label>
+                <Label className="ml-6" radio>
+                  <Input
+                    type="radio"
+                    value="corporate"
+                    name="accountType"
+                    onChange={handleRadioType}
+                    checked={type == "corporate" ? true : false}
+                  />
+                  <span className="ml-2">corporate</span>
+                </Label>
+              </div>
+            )}
             {type === "corporate" && (
               <Label className="mt-5">
                 <span>PAN</span>

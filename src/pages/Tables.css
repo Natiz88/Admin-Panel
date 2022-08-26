@@ -1,0 +1,14 @@
+.rdt_Table{
+    margin-top: 50px;
+}
+.rdt_TableCol{
+    font-size: 1rem;
+}
+.rdt_input{
+    background:red;
+}
+@media (prefers-color-scheme: dark) {
+    .rdt_TableCol{
+        background-color: red;
+    }
+}
