@@ -41,6 +41,10 @@ function OrderList() {
   const [usersCount, setUsersCount] = useState(0);
   const [isError, setError] = useState(false);
   const [errorText, setErrorText] = useState("");
+  const [buttonValue, setButtonValue] = useState("allorders");
+  const [mainResponse, setMainResponse] = useState([]);
+
+
 
   const deleteUser = (user) => {
     setId(user);
@@ -111,32 +115,38 @@ function OrderList() {
     {
       name: "Customer Name",
       cell: (row) => row.name,
+      // cell: (row) => row.customerName,
       sortable: true,
     },
     {
       name: "Product Name",
       cell: (row) => row.email,
+      // cell: (row) => row.productName,
       sortable: true,
     },
     {
       name: "Delivery Date",
       cell: (row) => row.mobile_number,
+      // cell: (row) => row.deliveredDate,
       sortable: true,
     },
 
     {
       name: "Total Amount",
       cell: (row) => row.type,
+      // cell: (row) => row.totalAmount,
       sortable: true,
     },
     {
       name: "Status",
       cell: (row) => row.gender,
+      // cell: (row) => row.status,
       sortable: true,
     },
     {
       name: "Payment Modes",
       cell: (row) => row.created_at,
+      // cell: (row) => row.paymentModes,
       sortable: true,
     },
     {
@@ -176,16 +186,77 @@ function OrderList() {
     }
   ];
 
+
+
+  function setData() {
+    console.log("function");
+    if (buttonValue === "individual") {
+      let resp = mainResponse.filter((r) => r.status === "pending");
+      // let cols = columns.filter((c) => c.name === "Gender");
+      // setCol(cols)
+      setResponse(resp);
+    } else if (buttonValue === "corporate") {
+      let resp = mainResponse.filter((r) => r.status === "deffered");
+      // let cols = columns.filter((c) => c.name === "Name");
+      // setCol(cols)
+      
+      setResponse(resp);
+    }
+    else if (buttonValue === "individual") {
+      let resp = mainResponse.filter((r) => r.status === "cancelled");
+      // let cols = columns.filter((c) => c.name === "Gender");
+      // setCol(cols)
+      setResponse(resp);
+    } else if (buttonValue === "corporate") {
+      let resp = mainResponse.filter((r) => r.status === "underProcess");
+      // let cols = columns.filter((c) => c.name === "Name");
+      // setCol(cols)
+      
+      setResponse(resp);
+    }
+    else if (buttonValue === "corporate") {
+    let resp = mainResponse.filter((r) => r.status === "delivered");
+    // let cols = columns.filter((c) => c.name === "Name");
+    // setCol(cols)
+    
+    setResponse(resp);
+  } else {
+      console.log("main", mainResponse);
+      // setCol(columns)
+      setResponse(mainResponse);
+
+    }
+  }
+
+  useEffect(() => {
+    // setCol(columns)
+    getData()
+      .then((res) => {
+        setMainResponse(res);
+        setResponse(res);
+        console.log("reloaded", mainResponse);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   const data = response;
   const tableData = {
     columns,
     data,
   };
+
+  
+
+
+  const typeHandler = (e) => {
+    setButtonValue(e);
+  };
+
   useEffect(() => {
-    getData()
-      .then((res) => setResponse(res))
-      .catch((err) => console.log(err));
-  }, [del, confirmUsersDelete]);
+    setData();
+  }, [buttonValue]);
+
+  
 
   return (
     <>
@@ -209,6 +280,46 @@ function OrderList() {
           </Button>
         </div>
       )}
+
+<div className="w-full  flex justify-start  text-[24px] gap-4 border-gray-400 pb-3  ">
+        <p
+          className={buttonValue === "allorders" ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2":"text-black"}
+          onClick={(e) => typeHandler("allorders")}
+        >
+           All Orders
+        </p>
+        <p
+           className={buttonValue === "pending" ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2":"text-black"} 
+          onClick={(e) => typeHandler("pending")}
+        >
+          <p>Pending</p>
+        </p>
+        <p
+            className={buttonValue === "deffered" ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2":"text-black"}
+          onClick={(e) => typeHandler("deffered")}
+        >
+           Deffered
+        </p>
+        <p
+         className={buttonValue === "cancelled" ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2":"text-black"}
+          onClick={(e) => typeHandler("cancelled")}
+        >
+           Cancelled
+        </p>
+        <p
+            className={buttonValue === "underProcess" ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2":"text-black"}
+          onClick={(e) => typeHandler("underProcess")}
+        >
+          Under Process
+        </p>
+        <p
+         className={buttonValue === "delivered" ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2":"text-black"}
+          onClick={(e) => typeHandler("delivered")}
+        >
+           Delivered
+        </p>
+      </div>
+
       <DataTableExtensions {...tableData}>
         <DataTable
           noHeader

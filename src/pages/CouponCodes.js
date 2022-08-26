@@ -15,9 +15,9 @@ import {
   Textarea,
 } from "@windmill/react-ui";
 import Toggle from "react-styled-toggle";
-import { view, TrashIcon, FormsIcon } from "../icons";
-import DataTableExtensions from "react-data-table-component-extensions";
-import DataTable from "react-data-table-component";
+// import { view, TrashIcon, FormsIcon } from "../icons";
+// import DataTableExtensions from "react-data-table-component-extensions";
+// import DataTable from "react-data-table-component";
 
 const CouponCodes = () => {
   // const [productChecked, setProductChecked] = useState(true);
@@ -126,13 +126,49 @@ const CouponCodes = () => {
         />
       </DataTableExtensions>
       ; */}
-       <PageTitle>Discount From Coupon</PageTitle>
+       <PageTitle>Create Coupons</PageTitle>
       <form 
         onSubmit={(e) => {
         e.preventDefault();
         formik.handleSubmit();
       }}>
-        <div className="border border-gray-500 p-2 mt-4">
+
+        <Label className="mt-4">
+          <span>Coupon Code</span>
+          <Input
+            className="mt-1"
+            placeholder="Business Card"
+            // onChange={(e) => setproductName(e.target.value)}
+          />
+        </Label>
+
+        <Label className="mt-4">
+          <span>Discount</span>
+          <Input
+            className="mt-1"
+            placeholder="Business Card"
+            // onChange={(e) => setproductName(e.target.value)}
+          />
+        </Label>
+
+        {/* <Label className="mt-4">
+                  <span className="flex  font-bold">
+                    Shipping
+                  </span>
+                  <Toggle
+                    width="55"
+                    height="20"
+                    name="shipping"
+                    // checked={shippingChecked}
+                    // onChange={() => setShippingChecked(!shippingChecked)}
+                    onChange={formik.handleChange}
+                    value={formik.values.shipping}
+
+                  />
+                </Label> */}
+
+
+        {/* <div className="border border-gray-500 p-2 mt-4">
           <div className="flex flex-col gap-1 justify-between md:flex-row">
             <div className="flex w-full md:w-1/2 justify-around">
               <div>
@@ -190,7 +226,7 @@ const CouponCodes = () => {
                     Products
                   </span>
                   {/* <Toggle width="80" height="30" checked={productChecked} onChange={()=>setProductChecked(!productChecked)}/> */}
-                  <Toggle
+                  {/* <Toggle
                     width="55"
                     height="20"
                     name="product"
@@ -209,7 +245,7 @@ const CouponCodes = () => {
               Add Coupons
             </Button>
           </div>
-        </div>
+        </div> */} 
       </form>
     </>
   );

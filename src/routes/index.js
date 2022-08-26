@@ -1,8 +1,9 @@
 import { lazy } from "react";
+import CouponTable from "../pages/CouponTable";
 
 // use lazy for better code splitting, a.k.a. load faster
 const Dashboard = lazy(() => import("../pages/Dashboard"));
-const Forms = lazy(() => import("../pages/Forms"));
+const AddProducts = lazy(() => import("../pages/AddProducts"));
 const Cards = lazy(() => import("../pages/Cards"));
 const Charts = lazy(() => import("../pages/Charts"));
 const Buttons = lazy(() => import("../pages/Buttons"));
@@ -17,6 +18,7 @@ const IndividualDetails = lazy(() => import("../pages/IndividualDetails"));
 // const AddBanners = lazy(() => import("../pages/AddBanners"));
 const CouponCodes = lazy(() => import("../pages/CouponCodes"));
 const OrderList = lazy(() => import("../pages/OrderList"));
+const ProductList = lazy(() => import("../pages/ProductList"));
 
 
 /**
@@ -35,12 +37,20 @@ const routes = [
     component: CouponCodes, // view rendered
   },
   {
+    path: "/couponTable", // the url
+    component: CouponTable, // view rendered
+  },
+  {
+    path: "/productList", // the url
+    component: ProductList, // view rendered
+  },
+  {
     path: "/dashboard", // the url
     component: Dashboard, // view rendered
   },
   {
-    path: "/forms",
-    component: Forms,
+    path: "/addProducts",
+    component: AddProducts,
   },
   {
     path: "/cards",

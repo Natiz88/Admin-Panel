@@ -5,6 +5,9 @@ import "react-data-table-component-extensions/dist/index.css";
 import PageTitle from "../components/Typography/PageTitle";
 import { getData, deleteUsers, deleteAllUsers } from "./../utils/demo/ApiCall";
 import { Link } from "react-router-dom";
+// import { MdCorporateFare } from 'react-icons/md';
+// import { HiUserGroup } from 'react-icons/hi';
+// import { GiPerson } from 'react-icons/gi';
 import {
   Modal,
   Button,
@@ -17,6 +20,7 @@ import { EditIcon, TrashIcon, FormsIcon } from "../icons";
 
 function UserTable() {
   const [mainResponse, setMainResponse] = useState([]);
+  const [col, setCol] = useState([]);
   const [response, setResponse] = useState([]);
   const [id, setId] = useState(null);
   const [buttonValue, setButtonValue] = useState("all");
@@ -24,7 +28,7 @@ function UserTable() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUsersModalOpen, setIsUsersModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
-  const [isAlertOpen, setAlertOpen] = useState(false);
+  // const [isAlertOpen, setAlertOpen] = useState(false);
   const [selected, setSelected] = useState([]);
   const [isDeleteSuccessfull, setDeleteSuccessfull] = useState(false);
   const [usersCount, setUsersCount] = useState(0);
@@ -98,6 +102,38 @@ function UserTable() {
       sortable: false,
     },
     {
+      name: "Name",
+      cell: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Email",
+      cell: (row) => row.email,
+      sortable: true,
+    },
+    {
+      name: "Phone",
+      cell: (row) => row.mobile_number,
+      sortable: true,
+    },
+
+    {
+      name: "User Type",
+      cell: (row) => row.type,
+      sortable: true,
+      isVisible: false,
+    },
+    {
+      name: "Gender",
+      cell: (row) => row.gender,
+      sortable: true,
+    },
+    {
+      name: "Joined Date",
+      cell: (row) => row.created_at,
+      sortable: true,
+    },
+    {
       name: "Update",
       print: false,
       export: false,
@@ -123,63 +159,33 @@ function UserTable() {
           </Button>
         </div>
       ),
-    },
-
-    {
-      name: "Name",
-      cell: (row) => row.name,
-      sortable: true,
-    },
-    {
-      name: "Email",
-      cell: (row) => row.email,
-      sortable: true,
-    },
-    {
-      name: "Phone",
-      cell: (row) => row.mobile_number,
-      sortable: true,
-    },
-
-    {
-      name: "User Type",
-      cell: (row) => row.type,
-      sortable: true,
-    },
-    {
-      name: "Gender",
-      cell: (row) => row.gender,
-      sortable: true,
-    },
-    {
-      name: "Joined Date",
-      cell: (row) => row.created_at,
-      sortable: true,
-    },
+    }
   ];
 
-  const data = response;
-  const tableData = {
-    columns,
-    data,
-  };
-
+  console.log("colc", col);
 
   //create this function for sorting ind cor all
   function setData() {
     console.log("function");
     if (buttonValue === "individual") {
       let resp = mainResponse.filter((r) => r.type === "individual");
+      // let cols = columns.filter((c) => c.name === "Gender");
+      // setCol(cols)
       setResponse(resp);
     } else if (buttonValue === "corporate") {
       let resp = mainResponse.filter((r) => r.type === "corporate");
+      // let cols = columns.filter((c) => c.name === "Name");
+      // setCol(cols)
+
       setResponse(resp);
     } else {
       console.log("main", mainResponse);
+      // setCol(columns)
       setResponse(mainResponse);
     }
   }
   useEffect(() => {
+    // setCol(columns)
     getData()
       .then((res) => {
         setMainResponse(res);
@@ -189,6 +195,11 @@ function UserTable() {
       .catch((err) => console.log(err));
   }, []);
 
+  const data = response;
+  const tableData = {
+    columns,
+    data,
+  };
 
   //for type handle in table
   const typeHandler = (e) => {
@@ -201,6 +212,7 @@ function UserTable() {
 
   console.log("resr,", mainResponse);
   console.log("button,", buttonValue);
+  // const initialState = { hiddenColumns: ['Name'] };
 
   return (
     <>
@@ -225,35 +237,52 @@ function UserTable() {
           </Button>
         </div>
       )}
-      <div className="w-full  flex justify-start mt-8 text-[24px]">
-        <button
-          className="ml-2 w-[80px] border-b-2 border-black"
+      <div className="w-full  flex justify-start mt-8 text-[24px] gap-4">
+        <p
+          className={
+            buttonValue === "all"
+              ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2"
+              : "text-black"
+          }
           onClick={(e) => typeHandler("all")}
         >
-          All
-        </button>
-        <button
-          className="ml-2 w-[30px] bg-red-400"
+          {/* <HiUserGroup/> */}
+          <p className="ml-2">All user</p>
+        </p>
+        <p
+          className={
+            buttonValue === "individual"
+              ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2"
+              : "text-black"
+          }
           value="individual"
           onClick={(e) => typeHandler("individual")}
         >
-          Ind
-        </button>
-        <button
-          className="ml-2 w-[30px]"
+          {/* <GiPerson/> */}
+          <p>Individual</p>
+        </p>
+        <p
+          className={
+            buttonValue === "corporate"
+              ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2"
+              : "text-black"
+          }
           onClick={(e) => typeHandler("corporate")}
         >
-          corp
-        </button>
+          {/* <MdCorporateFare/>  */}
+          <p>Corporate</p>
+        </p>
       </div>
       <DataTableExtensions {...tableData}>
         <DataTable
           noHeader
+          columns={col}
           defaultSortField="title"
           defaultSortAsc={false}
           highlightOnHover
           pagination
           selectableRows
+          initialState
           striped
           responsive
           onSelectedRowsChange={handleChange}

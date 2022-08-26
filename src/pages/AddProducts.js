@@ -13,11 +13,13 @@ import {
 } from "@windmill/react-ui";
 import { useState, useEffect } from "react";
 import { tableData } from "./TableData";
+import { Link } from "react-router-dom";
+
 // import {Switch} from "react-button-switch";
 
 // import { MailIcon } from "../icons";
 
-function Forms() {
+function AddProducts() {
   const submitHandler = (e) => {
     e.preventDefault();
   };
@@ -44,8 +46,8 @@ function Forms() {
   const [isModalText, setIsModalText] = useState("");
   const [response, setResponse] = useState("");
 
-  const [productChecked,setProductChecked] = useState(true)
-  const [shippingChecked,setShippingChecked] = useState(true)
+  const [productChecked, setProductChecked] = useState(true);
+  const [shippingChecked, setShippingChecked] = useState(true);
 
   const getCategories = () => {
     console.log("CATEGORIES CALLED");
@@ -130,10 +132,14 @@ function Forms() {
   console.log("check", productChecked);
 
   return (
-    <>
+    <div>
       <PageTitle>Add Products</PageTitle>
       <SectionTitle>Product Details</SectionTitle>
-      {/* <Button onClick={getCategories}>get categories</Button> */}
+
+      <Button tag={Link} to="/app/productList">
+        Cancel
+      </Button>
+
 
       <form
         onSubmit={submitHandler}
@@ -392,16 +398,14 @@ function Forms() {
           </div>
         </div>
 
-        
-
         <div className="flex justify-center">
           <Button type="submit" className="mt-4" onClick={addproduct}>
             Add Product
           </Button>
         </div>
       </form>
-    </>
+    </div>
   );
 }
 
-export default Forms;
+export default AddProducts;
