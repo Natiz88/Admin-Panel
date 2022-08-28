@@ -41,10 +41,9 @@
     "react-scripts": "3.4.1",
     "react-styled-toggle": "^1.0.18",
     "react-transition-group": "4.4.1",
-    "yup": "^0.32.11",
-    "react-transition-group": "4.4.1",
     "styled": "^1.0.0",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@release-it/conventional-changelog": "1.1.4",

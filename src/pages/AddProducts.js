@@ -25,6 +25,8 @@ import {
 import { useState, useEffect } from "react";
 import { tableData } from "./TableData";
 import { Link } from "react-router-dom";
+import { EditIcon, TrashIcon, FormsIcon } from "../icons";
+
 
 // import {Switch} from "react-button-switch";
 
@@ -68,56 +70,56 @@ function AddProducts() {
 
   const [indPricelist, setIndPriceList] = useState(
     {
-      qty: "",
-      normal: "",
-      urgent: "",
-      discount: "",
+      qty: null,
+      normal: null,
+      urgent: null,
+      discount:null,
       type: "individual",
     },
   );
   const [corPricelist, setCorPriceList] = useState(
     {
-      qty: "",
-      normal: "",
-      urgent: "",
-      discount: "",
+      qty: null,
+      normal: null,
+      urgent: null,
+      discount:null,
       type: "corporate",
     },
   );
 
-  const getCategories = () => {
-    console.log("CATEGORIES CALLED");
-    const url = "http://192.168.100.21:8081/api/category/list";
-    const token = localStorage.getItem("token");
-    const config = {
-      headers: {
-        Accept: "application/json",
-      },
-    };
-    axios
-      .get("http://192.168.100.17:8081/api/category/list", config)
-      .then((response) => setCategories(response?.data?.data))
-      .catch((err) => console.log("error", err));
-  };
-  const getSubCategories = (e) => {
-    const id = e.target.value;
-    console.log("subCATEGORIES CALLED");
-    const url = `http://192.168.100.21:8081/api/category/${id}`;
-    const token = localStorage.getItem("token");
-    const config = {
-      headers: {
-        Accept: "application/json",
-      },
-    };
-    axios
-      .get(`http://192.168.100.17:8081/api/category/${id}`, config)
-      .then((response) => setSubCategories(response?.data?.children))
-      .catch((err) => console.log("error", err));
-  };
+  // const getCategories = () => {
+  //   console.log("CATEGORIES CALLED");
+  //   const url = "http://192.168.100.21:8081/api/category/list";
+  //   const token = localStorage.getItem("token");
+  //   const config = {
+  //     headers: {
+  //       Accept: "application/json",
+  //     },
+  //   };
+  //   axios
+  //     .get("http://192.168.100.17:8081/api/category/list", config)
+  //     .then((response) => setCategories(response?.data?.data))
+  //     .catch((err) => console.log("error", err));
+  // };
+  // const getSubCategories = (e) => {
+  //   const id = e.target.value;
+  //   console.log("subCATEGORIES CALLED");
+  //   const url = `http://192.168.100.21:8081/api/category/${id}`;
+  //   const token = localStorage.getItem("token");
+  //   const config = {
+  //     headers: {
+  //       Accept: "application/json",
+  //     },
+  //   };
+  //   axios
+  //     .get(`http://192.168.100.17:8081/api/category/${id}`, config)
+  //     .then((response) => setSubCategories(response?.data?.children))
+  //     .catch((err) => console.log("error", err));
+  // };
 
-  useEffect(() => {
-    getCategories();
-  }, []);
+  // useEffect(() => {
+  //   getCategories();
+  // }, []);
 
   // console.log(desc);
 
@@ -164,13 +166,24 @@ function AddProducts() {
         setPriceModalOpen(true)
       );
   };
-  console.log("category", subCategories);
-  console.log("check", productChecked);
 
   const [pageTable1, setPageTable1] = useState(1);
   const [dataTable1, setDataTable1] = useState([]);
   const resultsPerPage = 10;
   const totalResults = response.length;
+
+  const delPriceRow = (range) =>{
+    setTablePriceData(tablePriceData.filter(price => price.qty !== range))
+  }
+
+  const editPriceRow=(obj)=>{
+    const a = tablePriceData.filter(price => price.qty === obj.qty && price.type === "individual")[0]
+    const cor = tablePriceData.filter(price => price.qty === obj.qty && price.type === "corporate")[0]
+    setIndPriceList({qty:a.qty,normal:a.normal,urgent:a.urgent,discount:a.discount,type:"individual"})
+    setCorPriceList({qty:a.qty,normal:cor.normal,urgent:cor.urgent,discount:cor.discount,type:"corporate"})
+    setPriceModalOpen(true)
+  }
+
 
   function onPageChangeTable1(p) {
     setPageTable1(p);
@@ -186,6 +199,17 @@ function AddProducts() {
   //   console.log("table",data)
   // }
   const pushToTable = () =>{
+    console.log(indPricelist.qty)
+    const isPresent = tablePriceData.filter(data => data.qty === indPricelist.qty)
+    if(isPresent.length > 0){
+      console.log("delet",isPresent)
+      setTablePriceData(tablePriceData.filter(data => data.qty !== indPricelist.qty))
+      console.log("table",tablePriceData)
+    }
+    pushToCheck()
+
+  }
+  const pushToCheck = () =>{
     setTablePriceData([...tablePriceData,indPricelist,corPricelist])
     setIndPriceList({qty:"",normal:"",urgent:"",dicount:"",type:"individual"})
     setCorPriceList({qty:"",normal:"",urgent:"",dicount:"",type:"corporate"})
@@ -254,23 +278,23 @@ function AddProducts() {
           <Input type="email" className="mt-1" placeholder="Jane Doe" />
         </Label> */}
 
-        <Label className="mt-4">
+        {/* <Label className="mt-4">
           <span>Category</span>
           <Select className="mt-1" onChange={(e) => getSubCategories(e)}>
             <option value=""></option>
-            {categories.map((e) => (
+            {/* {categories.map((e) => (
               <option value={e.id}>{e.name}</option>
-            ))}
-          </Select>
-        </Label>
+            ))} */}
+          {/* </Select>
+        </Label> */} */}
 
         <Label className="mt-4">
           <span>Sub-Category</span>
           <Select className="mt-1">
             <option value=""></option>
-            {subCategories.map((e) => (
+            {/* {subCategories.map((e) => (
               <option value={e.id}>{e.name}</option>
-            ))}
+            ))} */}
           </Select>
         </Label>
 
@@ -358,6 +382,8 @@ function AddProducts() {
                   <Input
                     className="mt-1"
                     placeholder="100-200"
+                    defaultValue={indPricelist.qty}
+
                     onChange={(e) => setRange(e)}
                   />
                 </Label>
@@ -370,6 +396,8 @@ function AddProducts() {
                   <Input
                     className="mt-1"
                     placeholder="5"
+                    defaultValue={indPricelist.normal}
+
                     onChange={(e) => setIndPriceList({...indPricelist,normal:e.target.value})}
                   />
                 </Label>
@@ -385,6 +413,7 @@ function AddProducts() {
                   <Input
                     className="mt-1"
                     placeholder="10"
+                    defaultValue={indPricelist.urgent}
                     onChange={(e) => setIndPriceList({...indPricelist,urgent:e.target.value})}
                   />
                 </Label>
@@ -398,6 +427,8 @@ function AddProducts() {
                   <Input
                     className="mt-1"
                     placeholder="5%"
+                    defaultValue={indPricelist.discount}
+
                     onChange={(e) => setIndPriceList({...indPricelist,discount:e.target.value})}
                   />
                 </Label>
@@ -419,6 +450,8 @@ function AddProducts() {
                     <Input
                       className="mt-1"
                       placeholder="100-200"
+                    defaultValue={indPricelist.qty}
+
                       value={indPricelist.qty}
                       // onChange={(e) => setCorPriceList({...indPricelist,qty:e.target.value})}
                     />
@@ -430,6 +463,8 @@ function AddProducts() {
                       Normal Price
                     </span>
                     <Input className="mt-1" placeholder="5" 
+                    defaultValue={corPricelist.urgent}
+
                     onChange={(e) => setCorPriceList({...corPricelist,normal:e.target.value})}/>
                   </Label>
                 </div>
@@ -442,6 +477,8 @@ function AddProducts() {
                       Urgent Price
                     </span>
                     <Input className="mt-1" placeholder="10" 
+                    defaultValue={corPricelist.urgent}
+
                     onChange={(e) => setCorPriceList({...corPricelist,urgent:e.target.value})} />
                   </Label>
                 </div>
@@ -451,7 +488,10 @@ function AddProducts() {
                     <span className="flex justify-center font-bold">
                       Discount
                     </span>
-                    <Input className="mt-1" placeholder="5%" onChange={(e) => setCorPriceList({...corPricelist,discount:e.target.value})} />
+                    defaultValue={corPricelist.urgent}
+                    <Input className="mt-1" placeholder="5%" 
+                    defaultValue={corPricelist.discount}
+                    onChange={(e) => setCorPriceList({...corPricelist,discount:e.target.value})} />
                   </Label>
                 </div>
               </div>
@@ -475,6 +515,7 @@ function AddProducts() {
                   <TableCell>Urgent Price</TableCell>
                   <TableCell>Discount</TableCell>
                   <TableCell>Type</TableCell>
+                  <TableCell>Action</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
@@ -494,6 +535,30 @@ function AddProducts() {
                     </TableCell>
                     <TableCell>
                       <Badge>{list.type}</Badge>
+                    </TableCell>
+                    <TableCell>
+                    <div className="flex items-center">
+          <Button layout="link" size="icon" aria-label="Edit"></Button>
+
+          <Button
+            layout="link"
+            size="icon"
+            aria-label="Edit"
+            onClick={() => editPriceRow(list)}
+
+            // tag={Link}
+            // to={`/app/individualDetails/${row.id}`}
+          >
+            <EditIcon className="w-5 h-5" aria-hidden="true" />
+          </Button>
+          <Button layout="link" size="icon" aria-label="Delete">
+            <TrashIcon
+              className="w-5 h-5"
+              aria-hidden="true"
+              onClick={() => delPriceRow(list.qty)}
+            />
+          </Button>
+        </div>
                     </TableCell>
                   </TableRow>
                 ))}
