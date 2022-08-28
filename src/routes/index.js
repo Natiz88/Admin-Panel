@@ -17,6 +17,7 @@ const AdminProfile = lazy(() => import("../pages/AdminProfile"));
 const ChangePassword = lazy(() => import("../pages/ChangePassword"));
 const NewBanner = lazy(() => import("../pages/NewBanner"));
 const IndividualDetails = lazy(() => import("../pages/IndividualDetails"));
+const View = lazy(() => import("../pages/View"));
 
 /**
  * ⚠ These are internal routes!
@@ -36,6 +37,10 @@ const routes = [
   {
     path: "/forms",
     component: Forms,
+  },
+  {
+    path: "/view/:id",
+    component: View,
   },
   {
     path: "/cards",

@@ -6,7 +6,7 @@ export const LoginContext = React.createContext();
 export const LoginProvider = ({ children }) => {
   const initialToken = localStorage.getItem("token");
   const [token, setToken] = useState(initialToken);
-  const [isLoggedIn, setLoggedIn] = useState(!!token);
+  const [isLoggedIn, setLoggedIn] = useState(true);
 
   function logIn(token) {
     setLoggedIn(true);
