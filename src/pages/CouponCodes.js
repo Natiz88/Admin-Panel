@@ -52,8 +52,7 @@ const CouponCodes = () => {
   //   setUserAdded(true);
   // };
 
-  console.log("data", formik.values);
-
+  
   // const addCoupons = (e) => {
   //     e.preventDefault();
   //     setError(false);

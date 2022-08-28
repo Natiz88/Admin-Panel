@@ -179,3 +179,16 @@ export const getAdminProfile = async () => {
   return response;
 };
 
+export const getProducts = async () => {
+  const url = "http://192.168.100.17:8081/api/product/show";
+  const config = {
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.get(url, config);
+  return response;
+};
+
+

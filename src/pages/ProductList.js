@@ -3,7 +3,7 @@ import DataTable from "react-data-table-component";
 import DataTableExtensions from "react-data-table-component-extensions";
 import "react-data-table-component-extensions/dist/index.css";
 import PageTitle from "../components/Typography/PageTitle";
-import { getData, deleteUsers, deleteAllUsers } from "./../utils/demo/ApiCall";
+import {  deleteUsers, deleteAllUsers } from "./../utils/demo/ApiCall";
 import { Link } from "react-router-dom";
 // import { MdCorporateFare } from 'react-icons/md';
 // import { HiUserGroup } from 'react-icons/hi';
@@ -17,18 +17,28 @@ import {
   Textarea,
 } from "@windmill/react-ui";
 import { EditIcon, TrashIcon, FormsIcon } from "../icons";
+import { getProducts } from "./../utils/demo/ApiCall";
 
 const ProductList = () => {
     const [isError, setError] = useState(false);
     const [isDeleteSuccessfull, setDeleteSuccessfull] = useState(false);
     const [errorText, setErrorText] = useState("");
+    const [mainResponse,setMainResponse] = useState([])
+    const [response,setResponse] = useState([])
+    // const [data,setData]=useState()]
 
+    useEffect(() => {
+      // setCol(columns)
+      getProducts()
+        .then((res) => {
+          setMainResponse(res.data);
+          setResponse(res.data);
+        })
+        .catch((err) => console.log(err));
+    }, []);
 
+    console.log("product",response)
 
-    const tableData = {
-        // columns,
-        // data,
-      };
 
       const closeSuccessModal = () => {
         setDeleteSuccessfull(false);
@@ -43,6 +53,40 @@ const ProductList = () => {
           name: "S.N.",
           cell: (row, idx) => idx + 1,
           sortable: false,
+        },
+        {
+          id:"name",
+          name: " Product Name",
+          cell: (row) => row.name,
+          sortable: true,
+        },
+        {
+          name: "Product Image",
+          cell: (row) => row.image,
+          sortable: true,
+        },
+        {
+          id:"category",
+          name: "Category",
+          cell: (row) => row.discount,
+          sortable: true,
+        },
+    
+        {
+          name: "Sub-Category",
+          cell: (row) => row.weight,
+          sortable: true,
+          isVisible: false,
+        },
+        {
+          name: "Status",
+          cell: (row) => row.desc,
+          sortable: true,
+        },
+        {
+          name: "Added Date",
+          cell: (row) => row.size,
+          sortable: true,
         },
         {
           name: "Update",
@@ -70,42 +114,16 @@ const ProductList = () => {
               </Button>
             </div>
           ),
-        },
+        }
     
-        {
-          name: " Product Name",
-          cell: (row) => row.name,
-          sortable: true,
-        },
-        {
-          name: "Description",
-          cell: (row) => row.email,
-          sortable: true,
-        },
-        {
-          name: "Category",
-          cell: (row) => row.mobile_number,
-          sortable: true,
-        },
-    
-        {
-          name: "Sub-Category",
-          cell: (row) => row.type,
-          sortable: true,
-          isVisible: false,
-        },
-        {
-          name: "Gender",
-          cell: (row) => row.gender,
-          sortable: true,
-        },
-        {
-          name: "Joined Date",
-          cell: (row) => row.created_at,
-          sortable: true,
-        },
+
       ];
     
+      const data = response;
+      const tableData = {
+        columns,
+        data,
+      };
 
 
 
@@ -170,17 +188,17 @@ const ProductList = () => {
       </div> */}
       <DataTableExtensions {...tableData}>
         <DataTable
-        //   noHeader
-        // //   columns={col}
-        //   defaultSortField="title"
-        //   defaultSortAsc={false}
-        //   highlightOnHover
-        //   pagination
-        //   selectableRows
-        //   initialState
-        //   striped
-        //   responsive
-        //   onSelectedRowsChange={handleChange}
+          noHeader
+        //   columns={col}
+        defaultSortFieldId="name"
+        defaultSortAsc={true}
+          highlightOnHover
+          pagination
+          selectableRows
+          initialState
+          striped
+          responsive
+          // onSelectedRowsChange={handleChange}
         />
       </DataTableExtensions>
       {/* <Modal isOpen={isModalOpen} onClose={closeModal}>

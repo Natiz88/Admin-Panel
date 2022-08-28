@@ -4,12 +4,23 @@ import PageTitle from "../components/Typography/PageTitle";
 import SectionTitle from "../components/Typography/SectionTitle";
 import {
   Input,
-  Form,
-  HelperText,
   Label,
   Button,
   Select,
   Textarea,
+  Table,
+  TableHeader,
+  TableCell,
+  TableBody,
+  TableRow,
+  TableFooter,
+  TableContainer,
+  Badge,
+  Pagination,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "@windmill/react-ui";
 import { useState, useEffect } from "react";
 import { tableData } from "./TableData";
@@ -42,12 +53,37 @@ function AddProducts() {
   const [urgentPrice, setUrgentPrice] = useState();
   const [disc, setDisc] = useState();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPriceModalOpen, setPriceModalOpen] = useState(false);
   const [isModalText, setIsModalText] = useState("");
   const [response, setResponse] = useState("");
 
   const [productChecked, setProductChecked] = useState(true);
   const [shippingChecked, setShippingChecked] = useState(true);
+
+  function closeModal() {
+    setPriceModalOpen(false);
+  }
+
+  const [tablePriceData,setTablePriceData] = useState([])
+
+  const [indPricelist, setIndPriceList] = useState(
+    {
+      qty: "",
+      normal: "",
+      urgent: "",
+      discount: "",
+      type: "individual",
+    },
+  );
+  const [corPricelist, setCorPriceList] = useState(
+    {
+      qty: "",
+      normal: "",
+      urgent: "",
+      discount: "",
+      type: "corporate",
+    },
+  );
 
   const getCategories = () => {
     console.log("CATEGORIES CALLED");
@@ -118,18 +154,49 @@ function AddProducts() {
     };
 
     axios
-      .post("http://192.168.1.98:8081/api/product", data, config)
+      .post("http://192.168.100.17:8081/api/product/add", data, config)
       .then(
         (response) => setIsModalText("Product added Successfully"),
-        setIsModalOpen(true)
+        setPriceModalOpen(true)
       )
       .catch(
         (err) => setIsModalText(err.response.data.message),
-        setIsModalOpen(true)
+        setPriceModalOpen(true)
       );
   };
   console.log("category", subCategories);
   console.log("check", productChecked);
+
+  const [pageTable1, setPageTable1] = useState(1);
+  const [dataTable1, setDataTable1] = useState([]);
+  const resultsPerPage = 10;
+  const totalResults = response.length;
+
+  function onPageChangeTable1(p) {
+    setPageTable1(p);
+  }
+
+  // on page change, load new sliced data
+  // here you would make another server request for new data
+  // useEffect(() => {
+  //   setDataTable1(response.slice((pageTable1 - 1) * resultsPerPage, pageTable1 * resultsPerPage))
+  // }, [pageTable1])
+
+  // const addToPriceTable = (data) =>{
+  //   console.log("table",data)
+  // }
+  const pushToTable = () =>{
+    setTablePriceData([...tablePriceData,indPricelist,corPricelist])
+    setIndPriceList({qty:"",normal:"",urgent:"",dicount:"",type:"individual"})
+    setCorPriceList({qty:"",normal:"",urgent:"",dicount:"",type:"corporate"})
+    setPriceModalOpen(false)
+  }
+
+  const setRange = (e) =>{
+    setIndPriceList({...indPricelist,qty:e.target.value})
+    setCorPriceList({...corPricelist,qty:e.target.value})
+  }
+
 
   return (
     <div>
@@ -139,7 +206,6 @@ function AddProducts() {
       <Button tag={Link} to="/app/productList">
         Cancel
       </Button>
-
 
       <form
         onSubmit={submitHandler}
@@ -161,8 +227,8 @@ function AddProducts() {
           <label>
             <span>
               <img
-                className=" h-32 w-32 -z-10 cursor-pointer bg-red-400"
-                src={response.logo}
+                className=" h-32 w-32 -z-10 cursor-pointer"
+                src={img}
                 alt="pic"
               />
               <Input
@@ -260,26 +326,192 @@ function AddProducts() {
           </div>
         </div>
 
-        <div className="border border-gray-500 p-2 mt-4">
-          {/* <table>
-            <tr className="flex text-gray-500">
-              <th>Quantity Range</th>
-              <th>Normal Price</th>
-              <th>Urgent Price</th>
-              <th>Discount</th>
-            </tr>
-            {tableData.map((value,key)=>{
-              return(
-                <tr key={key}>
-                  <td>{value.quantityRange}</td>
-                  <td>{value.normalPrice}</td>
-                  <td>{value.urgentPrice}</td>
-                  <td>{value.discount}</td>
-                </tr>
-              )
-            })}
-          </table> */}
+        <div>
+          <div>
+            <Button onClick={()=>setPriceModalOpen(true)}>Add Price</Button>
+          </div>
+          <Modal isOpen={isPriceModalOpen} onClose={closeModal}>
+            {/* <ModalHeader>Delete User</ModalHeader>
+            <ModalBody>Are you sure you want to delete the user?</ModalBody>
+            <ModalFooter>
+              <div className="hidden sm:block">
+                <Button layout="outline" onClick={closeModal}>
+                  Cancel
+                </Button>
+              </div>
+              <div className="hidden sm:block">
+                <Button>Add Price</Button>
+              </div>
+            </ModalFooter> */}
+            <div className="p-2 mt-4">
+          <h1 className="font-bold text-red-500">
+            Price List (Individual Account)
+          </h1>
 
+          <div className="flex flex-col gap-1 justify-between  md:flex-row">
+            <div className="flex w-full md:w-1/2 justify-around">
+              <div>
+                <Label className="mt-4 w-4/5">
+                  <span className="flex justify-center font-bold">
+                     Range
+                  </span>
+                  <Input
+                    className="mt-1"
+                    placeholder="100-200"
+                    onChange={(e) => setRange(e)}
+                  />
+                </Label>
+              </div>
+              <div>
+                <Label className="mt-4 w-4/5">
+                  <span className="flex justify-center font-bold">
+                    Normal Price
+                  </span>
+                  <Input
+                    className="mt-1"
+                    placeholder="5"
+                    onChange={(e) => setIndPriceList({...indPricelist,normal:e.target.value})}
+                  />
+                </Label>
+              </div>
+            </div>
+
+            <div className="flex justify-around w-full md:w-1/2">
+              <div>
+                <Label className="mt-4 w-4/5">
+                  <span className="flex justify-center font-bold">
+                    Urgent Price
+                  </span>
+                  <Input
+                    className="mt-1"
+                    placeholder="10"
+                    onChange={(e) => setIndPriceList({...indPricelist,urgent:e.target.value})}
+                  />
+                </Label>
+              </div>
+
+              <div>
+                <Label className="mt-4 w-4/5">
+                  <span className="flex justify-center font-bold">
+                    Discount
+                  </span>
+                  <Input
+                    className="mt-1"
+                    placeholder="5%"
+                    onChange={(e) => setIndPriceList({...indPricelist,discount:e.target.value})}
+                  />
+                </Label>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <h1 className="font-bold text-red-500">
+              Price List(Corporate Account)
+            </h1>
+            <div className="flex flex-col gap-1 justify-between md:flex-row">
+              <div className="flex w-full md:w-1/2 justify-around">
+                <div>
+                  <Label className="mt-4 w-4/5">
+                    <span className="flex justify-center font-bold">
+                       Range
+                    </span>
+                    <Input
+                      className="mt-1"
+                      placeholder="100-200"
+                      value={indPricelist.qty}
+                      // onChange={(e) => setCorPriceList({...indPricelist,qty:e.target.value})}
+                    />
+                  </Label>
+                </div>
+                <div>
+                  <Label className="mt-4 w-4/5">
+                    <span className="flex justify-center font-bold">
+                      Normal Price
+                    </span>
+                    <Input className="mt-1" placeholder="5" 
+                    onChange={(e) => setCorPriceList({...corPricelist,normal:e.target.value})}/>
+                  </Label>
+                </div>
+              </div>
+
+              <div className="flex justify-around w-full md:w-1/2">
+                <div>
+                  <Label className="mt-4 w-4/5">
+                    <span className="flex justify-center font-bold">
+                      Urgent Price
+                    </span>
+                    <Input className="mt-1" placeholder="10" 
+                    onChange={(e) => setCorPriceList({...corPricelist,urgent:e.target.value})} />
+                  </Label>
+                </div>
+
+                <div>
+                  <Label className="mt-4 w-4/5">
+                    <span className="flex justify-center font-bold">
+                      Discount
+                    </span>
+                    <Input className="mt-1" placeholder="5%" onChange={(e) => setCorPriceList({...corPricelist,discount:e.target.value})} />
+                  </Label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-center">
+            <Button type="submit" className="mt-4" onClick={pushToTable}>
+              Add To Table 
+            </Button>
+          </div>
+        </div>
+          </Modal>
+
+          <TableContainer className="mb-8">
+            <Table>
+              <TableHeader>
+                <tr>
+                  <TableCell>Quantity Range</TableCell>
+                  <TableCell>Normal Price</TableCell>
+                  <TableCell>Urgent Price</TableCell>
+                  <TableCell>Discount</TableCell>
+                  <TableCell>Type</TableCell>
+                </tr>
+              </TableHeader>
+              <TableBody>
+                {tablePriceData.map((list, i) => (
+                  <TableRow key={i}>
+                    <TableCell>
+                      <span className="text-sm">$ {list.qty}</span>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm">$ {list.normal}</span>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm">$ {list.urgent}</span>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm">{list.discount}</span>
+                    </TableCell>
+                    <TableCell>
+                      <Badge>{list.type}</Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <TableFooter>
+              <Pagination
+                totalResults={totalResults}
+                resultsPerPage={resultsPerPage}
+                onChange={onPageChangeTable1}
+                label="Table navigation"
+              />
+            </TableFooter>
+          </TableContainer>
+        </div>
+
+        {/* Add More Price List In table */}
+        {/* <div className="border border-gray-500 p-2 mt-4">
           <h1 className="font-bold text-red-500">
             Price List (Individual Account)
           </h1>
@@ -396,7 +628,7 @@ function AddProducts() {
               Add More List
             </Button>
           </div>
-        </div>
+        </div> */}
 
         <div className="flex justify-center">
           <Button type="submit" className="mt-4" onClick={addproduct}>

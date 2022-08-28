@@ -99,6 +99,8 @@ const routes = [
   {
     path: "/orderlist",
     component: OrderList,
+  },
+  {
     path: "/newTables",
     component: NewTables,
   },
