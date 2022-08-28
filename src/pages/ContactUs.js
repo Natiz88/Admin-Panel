@@ -69,6 +69,9 @@ function ContactUs() {
       linkedIn: linkedIn,
       website: website,
     };
+
+    // console.log(data);
+
     axios
       .put("http://192.168.1.98:8081/api/admin/about/1/update", data, config)
       .then(
@@ -121,7 +124,7 @@ function ContactUs() {
     setImg(URL.createObjectURL(file));
   };
   return (
-    <>
+    <div>
       <PageTitle>Contact Us</PageTitle>
       <form
         onSubmit={sendHandler}
@@ -282,7 +285,7 @@ function ContactUs() {
           <ModalBody>{isModalText}</ModalBody>
         </Modal>
       </div>
-    </>
+    </div>
   );
 }
 

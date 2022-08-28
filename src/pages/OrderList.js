@@ -1,3 +1,15 @@
+// import React from 'react'
+
+// const OrderList = () => {
+//   return (
+//     <div>
+      
+//     </div>
+//   )
+// }
+
+// export default OrderList
+
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import DataTableExtensions from "react-data-table-component-extensions";
@@ -5,12 +17,6 @@ import "react-data-table-component-extensions/dist/index.css";
 import PageTitle from "../components/Typography/PageTitle";
 import { getData, deleteUsers, deleteAllUsers } from "./../utils/demo/ApiCall";
 import { Link } from "react-router-dom";
-// import { MdCorporateFare } from 'react-icons/md';
-// import { HiUserGroup } from 'react-icons/hi';
-// import { GiPerson } from 'react-icons/gi';
-import datas from "./../utils/demo/tableData";
-import "./Tables.css";
-import { AiOutlineEye } from "react-icons/ai";
 import {
   Modal,
   Button,
@@ -19,28 +25,26 @@ import {
   ModalFooter,
   Textarea,
 } from "@windmill/react-ui";
-import { EditIcon, TrashIcon, FormsIcon } from "../icons";
+import {view, TrashIcon, FormsIcon } from "../icons";
 
-function UserTable() {
-  const [mainResponse, setMainResponse] = useState([]);
-  const [col, setCol] = useState([]);
+
+function OrderList() {
   const [response, setResponse] = useState([]);
   const [id, setId] = useState(null);
-  const [buttonValue, setButtonValue] = useState("all");
   const [del, setDel] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUsersModalOpen, setIsUsersModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
-
-  // const [isAlertOpen, setAlertOpen] = useState(false);
-
   const [isAlertOpen, setAlertOpen] = useState(false);
-
   const [selected, setSelected] = useState([]);
   const [isDeleteSuccessfull, setDeleteSuccessfull] = useState(false);
   const [usersCount, setUsersCount] = useState(0);
   const [isError, setError] = useState(false);
   const [errorText, setErrorText] = useState("");
+  const [buttonValue, setButtonValue] = useState("allorders");
+  const [mainResponse, setMainResponse] = useState([]);
+
+
 
   const deleteUser = (user) => {
     setId(user);
@@ -102,67 +106,58 @@ function UserTable() {
   useEffect(() => {
     setUsersCount(selected.length);
   }, [selected]);
-
   const columns = [
     {
-      name: "S.N.",
+      name: "Order ID",
       cell: (row, idx) => idx + 1,
       sortable: false,
     },
     {
-      name: "Name",
+      name: "Customer Name",
       cell: (row) => row.name,
+      // cell: (row) => row.customerName,
       sortable: true,
     },
     {
-      name: "Email",
+      name: "Product Name",
       cell: (row) => row.email,
+      // cell: (row) => row.productName,
       sortable: true,
     },
     {
-      name: "Phone",
+      name: "Delivery Date",
       cell: (row) => row.mobile_number,
+      // cell: (row) => row.deliveredDate,
       sortable: true,
     },
 
     {
-      name: "User Type",
+      name: "Total Amount",
       cell: (row) => row.type,
+      // cell: (row) => row.totalAmount,
       sortable: true,
-      isVisible: false,
     },
     {
-      name: "Gender",
+      name: "Status",
       cell: (row) => row.gender,
+      // cell: (row) => row.status,
       sortable: true,
     },
     {
-      name: "Joined Date",
+      name: "Payment Modes",
       cell: (row) => row.created_at,
+      // cell: (row) => row.paymentModes,
       sortable: true,
     },
     {
-      name: "Update",
+      name: "View",
       print: false,
       export: false,
       cell: (row) => (
         <div className="flex items-center">
-          {/* Added by deepak katwal */}
-          <Button layout="link" size="icon" aria-label="View Details"></Button>
+          {/* <Button layout="link" size="icon" aria-label="Edit"></Button> */}
 
-          <Button
-            layout="link"
-            size="icon"
-            aria-label="View Details"
-            tag={Link}
-            to={`/app/view/${row.id}`}
-          >
-            <AiOutlineEye className="w-5 h-5" aria-hidden="true" />
-          </Button>
-
-          <Button layout="link" size="icon" aria-label="Edit"></Button>
-
-          <Button
+          {/* <Button
             layout="link"
             size="icon"
             aria-label="Edit"
@@ -170,7 +165,7 @@ function UserTable() {
             to={`/app/individualDetails/${row.id}`}
           >
             <EditIcon className="w-5 h-5" aria-hidden="true" />
-          </Button>
+          </Button> */}
           <Button layout="link" size="icon" aria-label="Delete">
             <TrashIcon
               className="w-5 h-5"
@@ -178,33 +173,61 @@ function UserTable() {
               onClick={() => deleteUser(row.id)}
             />
           </Button>
+
+          <Button layout="link" size="icon" aria-label="View">
+            <view
+              className="w-5 h-5"
+              aria-hidden="true"
+              onClick={() => deleteUser(row.id)}
+            />
+          </Button>
         </div>
       ),
-    },
+    }
   ];
 
-  console.log("colc", col);
 
-  //create this function for sorting ind cor all
+
   function setData() {
     console.log("function");
     if (buttonValue === "individual") {
-      let resp = mainResponse.filter((r) => r.type === "individual");
+      let resp = mainResponse.filter((r) => r.status === "pending");
       // let cols = columns.filter((c) => c.name === "Gender");
       // setCol(cols)
       setResponse(resp);
     } else if (buttonValue === "corporate") {
-      let resp = mainResponse.filter((r) => r.type === "corporate");
+      let resp = mainResponse.filter((r) => r.status === "deffered");
       // let cols = columns.filter((c) => c.name === "Name");
       // setCol(cols)
-
+      
       setResponse(resp);
-    } else {
+    }
+    else if (buttonValue === "individual") {
+      let resp = mainResponse.filter((r) => r.status === "cancelled");
+      // let cols = columns.filter((c) => c.name === "Gender");
+      // setCol(cols)
+      setResponse(resp);
+    } else if (buttonValue === "corporate") {
+      let resp = mainResponse.filter((r) => r.status === "underProcess");
+      // let cols = columns.filter((c) => c.name === "Name");
+      // setCol(cols)
+      
+      setResponse(resp);
+    }
+    else if (buttonValue === "corporate") {
+    let resp = mainResponse.filter((r) => r.status === "delivered");
+    // let cols = columns.filter((c) => c.name === "Name");
+    // setCol(cols)
+    
+    setResponse(resp);
+  } else {
       console.log("main", mainResponse);
       // setCol(columns)
       setResponse(mainResponse);
+
     }
   }
+
   useEffect(() => {
     // setCol(columns)
     getData()
@@ -222,7 +245,9 @@ function UserTable() {
     data,
   };
 
-  //for type handle in table
+  
+
+
   const typeHandler = (e) => {
     setButtonValue(e);
   };
@@ -231,20 +256,12 @@ function UserTable() {
     setData();
   }, [buttonValue]);
 
-  console.log("resr,", mainResponse);
-  console.log("button,", buttonValue);
-  // const initialState = { hiddenColumns: ['Name'] };
-
-  useEffect(() => {
-    getData()
-      .then((res) => setResponse(res))
-      .catch((err) => console.log(err));
-  }, [del, confirmUsersDelete]);
+  
 
   return (
     <>
-      <PageTitle>User Details</PageTitle>
-      <div className="">
+      <PageTitle>Order List</PageTitle>
+      {/* <div className="">
         <Button
           iconRight={FormsIcon}
           tag={Link}
@@ -252,8 +269,7 @@ function UserTable() {
         >
           <span>Add new User</span>
         </Button>
-      </div>
-
+      </div> */}
       {selected.length > 0 && (
         <div className="flex justify-end">
           <Button onClick={() => setIsUsersModalOpen(true)}>
@@ -265,40 +281,42 @@ function UserTable() {
         </div>
       )}
 
-      <div className="w-full  flex justify-start mt-8 text-[24px] gap-4">
+<div className="w-full  flex justify-start  text-[24px] gap-4 border-gray-400 pb-3  ">
         <p
-          className={
-            buttonValue === "all"
-              ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2"
-              : "text-black"
-          }
-          onClick={(e) => typeHandler("all")}
+          className={buttonValue === "allorders" ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2":"text-black"}
+          onClick={(e) => typeHandler("allorders")}
         >
-          {/* <HiUserGroup/> */}
-          <p className="ml-2">All user</p>
+           All Orders
         </p>
         <p
-          className={
-            buttonValue === "individual"
-              ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2"
-              : "text-black"
-          }
-          value="individual"
-          onClick={(e) => typeHandler("individual")}
+           className={buttonValue === "pending" ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2":"text-black"} 
+          onClick={(e) => typeHandler("pending")}
         >
-          {/* <GiPerson/> */}
-          <p>Individual</p>
+          <p>Pending</p>
         </p>
         <p
-          className={
-            buttonValue === "corporate"
-              ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2"
-              : "text-black"
-          }
-          onClick={(e) => typeHandler("corporate")}
+            className={buttonValue === "deffered" ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2":"text-black"}
+          onClick={(e) => typeHandler("deffered")}
         >
-          {/* <MdCorporateFare/>  */}
-          <p>Corporate</p>
+           Deffered
+        </p>
+        <p
+         className={buttonValue === "cancelled" ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2":"text-black"}
+          onClick={(e) => typeHandler("cancelled")}
+        >
+           Cancelled
+        </p>
+        <p
+            className={buttonValue === "underProcess" ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2":"text-black"}
+          onClick={(e) => typeHandler("underProcess")}
+        >
+          Under Process
+        </p>
+        <p
+         className={buttonValue === "delivered" ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2":"text-black"}
+          onClick={(e) => typeHandler("delivered")}
+        >
+           Delivered
         </p>
       </div>
 
@@ -310,7 +328,6 @@ function UserTable() {
           highlightOnHover
           pagination
           selectableRows
-          initialState
           striped
           responsive
           onSelectedRowsChange={handleChange}
@@ -345,7 +362,7 @@ function UserTable() {
             <Button onClick={confirmUsersDelete}>Ok, Continue</Button>
           </div>
         </ModalFooter>
-      </Modal>
+      </Modal>   
       <Modal isOpen={isNotificationModalOpen} onClose={closeNotificationModal}>
         <ModalHeader>Send Notification</ModalHeader>
         <ModalBody>
@@ -367,4 +384,4 @@ function UserTable() {
   );
 }
 
-export default UserTable;
+export default OrderList;

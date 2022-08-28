@@ -1,8 +1,9 @@
 import { lazy } from "react";
+import CouponTable from "../pages/CouponTable";
 
 // use lazy for better code splitting, a.k.a. load faster
 const Dashboard = lazy(() => import("../pages/Dashboard"));
-const Forms = lazy(() => import("../pages/Forms"));
+const AddProducts = lazy(() => import("../pages/AddProducts"));
 const Cards = lazy(() => import("../pages/Cards"));
 const Charts = lazy(() => import("../pages/Charts"));
 const Buttons = lazy(() => import("../pages/Buttons"));
@@ -13,11 +14,20 @@ const Page404 = lazy(() => import("../pages/404"));
 const Blank = lazy(() => import("../pages/Blank"));
 const Logout = lazy(() => import("../pages/Logout"));
 const Banners = lazy(() => import("../pages/Banners"));
-const AdminProfile = lazy(() => import("../pages/AdminProfile"));
 const ChangePassword = lazy(() => import("../pages/ChangePassword"));
+const AdminProfile = lazy(() => import("../pages/AdminProfile"));
+// const ChangePassword = lazy(() => import("../pages/ChangePassword"));
 const NewBanner = lazy(() => import("../pages/NewBanner"));
 const IndividualDetails = lazy(() => import("../pages/IndividualDetails"));
+<<<<<<< HEAD
 const View = lazy(() => import("../pages/View"));
+=======
+// const AddBanners = lazy(() => import("../pages/AddBanners"));
+const CouponCodes = lazy(() => import("../pages/CouponCodes"));
+const OrderList = lazy(() => import("../pages/OrderList"));
+const ProductList = lazy(() => import("../pages/ProductList"));
+
+>>>>>>> deafb30eadba08da105ae72922d73bc76f10f93d
 
 /**
  * ⚠ These are internal routes!
@@ -31,12 +41,24 @@ const View = lazy(() => import("../pages/View"));
  */
 const routes = [
   {
+    path: "/CouponCodes", // the url
+    component: CouponCodes, // view rendered
+  },
+  {
+    path: "/couponTable", // the url
+    component: CouponTable, // view rendered
+  },
+  {
+    path: "/productList", // the url
+    component: ProductList, // view rendered
+  },
+  {
     path: "/dashboard", // the url
     component: Dashboard, // view rendered
   },
   {
-    path: "/forms",
-    component: Forms,
+    path: "/addProducts",
+    component: AddProducts,
   },
   {
     path: "/view/:id",
@@ -59,6 +81,10 @@ const routes = [
     component: ContactUs,
   },
   {
+    path: "/changePassword",
+    component: ChangePassword,
+  },
+  {
     path: "/banners",
     component: Banners,
   },
@@ -79,6 +105,10 @@ const routes = [
     component: Tables,
   },
   {
+    path: "/orderlist",
+    component: OrderList,
+  },
+  {
     path: "/newTables",
     component: NewTables,
   },
@@ -86,6 +116,10 @@ const routes = [
     path: "/individualDetails/:id",
     component: IndividualDetails,
   },
+  // {
+  //   path: "/addBanner",
+  //   component: AddBanners,
+  // },
   {
     path: "/404",
     component: Page404,

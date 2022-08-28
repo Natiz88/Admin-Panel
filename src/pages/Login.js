@@ -97,7 +97,6 @@ function Login() {
                   Incorrect email or Password
                 </h1>
               )}
-
               {isEmpty && (
                 <h1 className="text-red-500 mb-[30px]">
                   Please Fill the required fields

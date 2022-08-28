@@ -18,7 +18,10 @@ import {
   DropdownItem,
   WindmillContext,
 } from "@windmill/react-ui";
-import { useHistory, Link } from "react-router-dom";
+
+import { useHistory ,Link} from "react-router-dom";
+
+
 
 function Header() {
   const { mode, toggleMode } = useContext(WindmillContext);
@@ -34,6 +37,9 @@ function Header() {
 
   function handleProfileClick() {
     setIsProfileMenuOpen(!isProfileMenuOpen);
+    setTimeout(() => {
+      setIsProfileMenuOpen(false);
+    }, 2000);
   }
 
   const logOutHandler = () => {

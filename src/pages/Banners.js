@@ -2,9 +2,15 @@ import React from "react";
 import { ImCross } from "react-icons/im";
 import PageTitle from "../components/Typography/PageTitle";
 import { Link } from "react-router-dom";
-import Images from "./../utils/images/Images";
+
+import { Images } from "./Images";
+// import { useState } from "react";
+import photo from "./imagesbanner.jpg";
+
+// import Images from "./../utils/images/Images";
 import { useState } from "react";
 // import photo from "./imagesbanner.jpg";
+
 
 import {
   Modal,
@@ -20,7 +26,11 @@ import {
 const Banners = () => {
   console.log("images from", Images);
 
-  const [img, setImg] = useState(null);
+
+  const [img, setImg] = useState(photo);
+
+  // const [img, setImg] = useState(null);
+
   const onImageChange = (e) => {
     const [file] = e.target.files;
     setImg(URL.createObjectURL(file));
@@ -55,7 +65,21 @@ const Banners = () => {
             <span>Add Banner</span>
           </Button>
         </div>
-      </div>
+
+        
+        </div>
+
+        {Images.map((e) => (
+          <div className="mt-10 sm:mt-10 block w-full sm:w-4/5 sm:m-auto sm:flex sm:items-center ">
+            <div className="w-full border-2px border-black sm:w-11/12 md:w-4/5">
+            <img className="w-full h-full" src={e} />
+            </div>
+            <div className="sm:mb-3 w-full sm:w-1/4 flex justify-center mt-2 ">
+                <Button>Delete</Button>
+            </div>
+           </div>
+           
+        ))} 
 
       {Images.map((e) => (
         <div className="mt-10 sm:mt-10 block w-full sm:w-4/5 sm:m-auto sm:flex sm:items-center ">
@@ -69,6 +93,7 @@ const Banners = () => {
       ))}
     </>
   );
+
 };
 
 export default Banners;
