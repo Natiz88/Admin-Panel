@@ -362,8 +362,7 @@ function AddProducts() {
             onChange={(e) => setDesc(e.target.value)}
           />
         </Label>
-<<<<<<< HEAD
-=======
+
         {/* <Label className="mt-4">
           <span>Email</span>
           <Input type="email" className="mt-1" placeholder="Jane Doe" />
@@ -379,7 +378,7 @@ function AddProducts() {
            </Select>
         </Label>  */}
 
->>>>>>> 5578ade1dfba9d7f0b4285aa489b01d864f7202b
+
         <Label className="mt-4">
           <span>Sub-Category</span>
           <Select className="mt-1">
@@ -728,14 +727,7 @@ function AddProducts() {
                 ))}
               </TableBody>
             </Table>
-            <TableFooter>
-              <Pagination
-                totalResults={totalResults}
-                resultsPerPage={resultsPerPage}
-                onChange={onPageChangeTable1}
-                label="Table navigation"
-              />
-            </TableFooter>
+           
           </TableContainer>
           <div className="w-full flex justify-center items-center mb-2">
             <Button onClick={() => setPriceModalOpen(true)}>Add Price</Button>
