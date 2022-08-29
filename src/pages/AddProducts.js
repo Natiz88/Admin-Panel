@@ -362,6 +362,7 @@ function AddProducts() {
             onChange={(e) => setDesc(e.target.value)}
           />
         </Label>
+<<<<<<< HEAD
         <Label className="mt-4">
           <span>Email</span>
           <Input type="email" className="mt-1" placeholder="Jane Doe" />
@@ -375,6 +376,24 @@ function AddProducts() {
             ))}
           </Select>
         </Label>
+=======
+
+        {/* <Label className="mt-4">
+          <span>Email</span>
+          <Input type="email" className="mt-1" placeholder="Jane Doe" />
+        </Label> */}
+
+         {/* <Label className="mt-4">
+          <span>Category</span>
+          <Select className="mt-1" onChange={(e) => getSubCategories(e)}>
+            <option value=""></option>
+             {categories.map((e) => (
+              <option value={e.id}>{e.name}</option>
+            ))} 
+           </Select>
+        </Label>  */}
+
+>>>>>>> d40e8ccb0c400053cb51da68e700106c9b5bdcc9
 
         <Label className="mt-4">
           <span>Sub-Category</span>
@@ -484,18 +503,6 @@ function AddProducts() {
         </div>
         <div className="border-2 border-gray-300 my-4">
           <Modal isOpen={isPriceModalOpen} onClose={closeModal}>
-            {/* <ModalHeader>Delete User</ModalHeader>
-            <ModalBody>Are you sure you want to delete the user?</ModalBody>
-            <ModalFooter>
-              <div className="hidden sm:block">
-                <Button layout="outline" onClick={closeModal}>
-                  Cancel
-                </Button>
-              </div>
-              <div className="hidden sm:block">
-                <Button>Add Price</Button>
-              </div>
-            </ModalFooter> */}
             <div className="p-2 mt-4">
               <h1 className="font-bold text-red-500">
                 Price List (Individual Account)
@@ -735,14 +742,7 @@ function AddProducts() {
                 ))}
               </TableBody>
             </Table>
-            <TableFooter>
-              <Pagination
-                totalResults={totalResults}
-                resultsPerPage={resultsPerPage}
-                onChange={onPageChangeTable1}
-                label="Table navigation"
-              />
-            </TableFooter>
+           
           </TableContainer>
           <div className="w-full flex justify-center items-center mb-2">
             <Button onClick={() => setPriceModalOpen(true)}>Add Price</Button>
