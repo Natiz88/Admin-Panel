@@ -19,102 +19,97 @@ import {
 import { EditIcon, TrashIcon, FormsIcon } from "../icons";
 
 const ProductList = () => {
-    const [isError, setError] = useState(false);
-    const [isDeleteSuccessfull, setDeleteSuccessfull] = useState(false);
-    const [errorText, setErrorText] = useState("");
+  const [isError, setError] = useState(false);
+  const [isDeleteSuccessfull, setDeleteSuccessfull] = useState(false);
+  const [errorText, setErrorText] = useState("");
 
+  const tableData = {
+    // columns,
+    // data,
+  };
 
+  const closeSuccessModal = () => {
+    setDeleteSuccessfull(false);
+  };
 
-    const tableData = {
-        // columns,
-        // data,
-      };
+  const closeErrorModal = () => {
+    setError(false);
+  };
 
-      const closeSuccessModal = () => {
-        setDeleteSuccessfull(false);
-      };
+  const columns = [
+    {
+      name: "S.N.",
+      cell: (row, idx) => idx + 1,
+      sortable: false,
+    },
+    {
+      name: "Update",
+      print: false,
+      export: false,
+      cell: (row) => (
+        <div className="flex items-center">
+          <Button layout="link" size="icon" aria-label="Edit"></Button>
 
-      const closeErrorModal = () => {
-        setError(false);
-      };
+          <Button
+            layout="link"
+            size="icon"
+            aria-label="Edit"
+            tag={Link}
+            to={`/app/addProduct/${row.id}`}
+          >
+            <EditIcon className="w-5 h-5" aria-hidden="true" />
+          </Button>
+          <Button layout="link" size="icon" aria-label="Delete">
+            <TrashIcon
+              className="w-5 h-5"
+              aria-hidden="true"
+              //   onClick={() => deleteUser(row.id)}
+            />
+          </Button>
+        </div>
+      ),
+    },
 
-      const columns = [
-        {
-          name: "S.N.",
-          cell: (row, idx) => idx + 1,
-          sortable: false,
-        },
-        {
-          name: "Update",
-          print: false,
-          export: false,
-          cell: (row) => (
-            <div className="flex items-center">
-              <Button layout="link" size="icon" aria-label="Edit"></Button>
-    
-              <Button
-                layout="link"
-                size="icon"
-                aria-label="Edit"
-                tag={Link}
-                to={`/app/addProduct/${row.id}`}
-              >
-                <EditIcon className="w-5 h-5" aria-hidden="true" />
-              </Button>
-              <Button layout="link" size="icon" aria-label="Delete">
-                <TrashIcon
-                  className="w-5 h-5"
-                  aria-hidden="true"
-                //   onClick={() => deleteUser(row.id)}
-                />
-              </Button>
-            </div>
-          ),
-        },
-    
-        {
-          name: " Product Name",
-          cell: (row) => row.name,
-          sortable: true,
-        },
-        {
-          name: "Description",
-          cell: (row) => row.email,
-          sortable: true,
-        },
-        {
-          name: "Category",
-          cell: (row) => row.mobile_number,
-          sortable: true,
-        },
-    
-        {
-          name: "Sub-Category",
-          cell: (row) => row.type,
-          sortable: true,
-          isVisible: false,
-        },
-        {
-          name: "Gender",
-          cell: (row) => row.gender,
-          sortable: true,
-        },
-        {
-          name: "Joined Date",
-          cell: (row) => row.created_at,
-          sortable: true,
-        },
-      ];
-    
+    {
+      name: " Product Name",
+      cell: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Description",
+      cell: (row) => row.email,
+      sortable: true,
+    },
+    {
+      name: "Category",
+      cell: (row) => row.mobile_number,
+      sortable: true,
+    },
 
-
+    {
+      name: "Sub-Category",
+      cell: (row) => row.type,
+      sortable: true,
+      isVisible: false,
+    },
+    {
+      name: "Gender",
+      cell: (row) => row.gender,
+      sortable: true,
+    },
+    {
+      name: "Joined Date",
+      cell: (row) => row.created_at,
+      sortable: true,
+    },
+  ];
 
   return (
     <div>
       <PageTitle>Product List</PageTitle>
       <div className="">
         <Button
-        //   iconRight={FormsIcon}
+          //   iconRight={FormsIcon}
           tag={Link}
           to={`/app/addProducts`}
         >
@@ -231,7 +226,7 @@ const ProductList = () => {
         <ModalBody>{errorText}</ModalBody>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
-export default ProductList
+export default ProductList;
