@@ -17,10 +17,22 @@ const routes = [
     name: "Billing",
   },
   {
-    path: "/app/ProductList",
-    icon: "FormsIcon",
-    name: "Product List",
+    icon: "PagesIcon",
+    name: "Products",
+    routes: [
+      {
+        path: "/app/ProductList",
+        icon: "TablesIcon",
+        name: "Product List",
+      },
+      {
+        path: "/app/addProducts",
+        icon: "FormsIcon",
+        name: "Add Product",
+      },
+    ],
   },
+
   {
     path: "/app/cards",
     icon: "CardsIcon",
@@ -58,9 +70,16 @@ const routes = [
   // },
   //,
   {
-    path: "/app/tables",
-    icon: "TablesIcon",
+    icon: "PagesIcon",
     name: "Users",
+    routes: [
+      { path: "/app/tables", icon: "TablesIcon", name: "Users Table" },
+      {
+        path: "/app/individualDetails/:id",
+        icon: "FormIcon",
+        name: "Add Users",
+      },
+    ],
   },
   {
     path: "/app/orderList",

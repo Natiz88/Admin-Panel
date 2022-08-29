@@ -3,7 +3,6 @@ import axios from "axios";
 const token = localStorage.getItem("token");
 
 export const deleteAllUsers = async (arr) => {
-
   const url = "http://192.168.100.17:8081/api/admin/deleteAllUser";
 
   console.log("url", url);
@@ -134,19 +133,13 @@ export const addUser = async (
   return resp;
 };
 
-
-export const addCoupon = async (
-  range,
-  discount,
-  product,
-  shipping
-) => {
+export const addCoupon = async (range, discount, product, shipping) => {
   const url = "http://192.168.100.17:8081/api/signup";
   console.log("url", url);
-}
+};
 
-export const updateProfile = async (name, address, mobile, gender) => {
-  const url = "http://192.168.100.17:8081/api/profile/update";
+export const updateProfile = async (id, name, address, mobile, gender) => {
+  const url = `http://192.168.100.17:8081/api/user/${id}profile/update`;
 
   const config = {
     headers: {
@@ -155,17 +148,15 @@ export const updateProfile = async (name, address, mobile, gender) => {
     },
   };
   const data = {
-
     name: name,
     address: address,
     gender: gender,
-    mobile_number: mobile
+    mobile_number: mobile,
   };
   console.log("data", data);
-  const resp = await axios.post(url, data, config);
+  const resp = await axios.put(url, data, config);
   return resp;
 };
-
 
 export const getAdminProfile = async () => {
   const url = "http://192.168.100.17:8081/api/profile";
@@ -190,5 +181,3 @@ export const getProducts = async () => {
   const response = await axios.get(url, config);
   return response;
 };
-
-
