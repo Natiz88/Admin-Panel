@@ -11,11 +11,11 @@ const routes = [
     icon: "HomeIcon", // the component being exported from icons/index.js
     name: "Dashboard", // name that appear in Sidebar
   },
-  // {
-  //   path: "/app/addProducts",
-  //   icon: "FormsIcon",
-  //   name: "Add Products",
-  // },
+  {
+    path: "/app/bill",
+    icon: "FormsIcon",
+    name: "Billing",
+  },
   {
     path: "/app/ProductList",
     icon: "FormsIcon",

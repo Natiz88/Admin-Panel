@@ -278,15 +278,15 @@ function AddProducts() {
           <Input type="email" className="mt-1" placeholder="Jane Doe" />
         </Label> */}
 
-        {/* <Label className="mt-4">
+         {/* <Label className="mt-4">
           <span>Category</span>
           <Select className="mt-1" onChange={(e) => getSubCategories(e)}>
             <option value=""></option>
-            {/* {categories.map((e) => (
+             {categories.map((e) => (
               <option value={e.id}>{e.name}</option>
-            ))} */}
-          {/* </Select>
-        </Label> */} */
+            ))} 
+           </Select>
+        </Label>  */}
 
         <Label className="mt-4">
           <span>Sub-Category</span>
@@ -355,18 +355,6 @@ function AddProducts() {
             <Button onClick={()=>setPriceModalOpen(true)}>Add Price</Button>
           </div>
           <Modal isOpen={isPriceModalOpen} onClose={closeModal}>
-            {/* <ModalHeader>Delete User</ModalHeader>
-            <ModalBody>Are you sure you want to delete the user?</ModalBody>
-            <ModalFooter>
-              <div className="hidden sm:block">
-                <Button layout="outline" onClick={closeModal}>
-                  Cancel
-                </Button>
-              </div>
-              <div className="hidden sm:block">
-                <Button>Add Price</Button>
-              </div>
-            </ModalFooter> */}
             <div className="p-2 mt-4">
           <h1 className="font-bold text-red-500">
             Price List (Individual Account)

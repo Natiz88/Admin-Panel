@@ -19,15 +19,17 @@ const AdminProfile = lazy(() => import("../pages/AdminProfile"));
 // const ChangePassword = lazy(() => import("../pages/ChangePassword"));
 const NewBanner = lazy(() => import("../pages/NewBanner"));
 const IndividualDetails = lazy(() => import("../pages/IndividualDetails"));
-<<<<<<< HEAD
+
+
 const View = lazy(() => import("../pages/View"));
-=======
+
 // const AddBanners = lazy(() => import("../pages/AddBanners"));
 const CouponCodes = lazy(() => import("../pages/CouponCodes"));
 const OrderList = lazy(() => import("../pages/OrderList"));
 const ProductList = lazy(() => import("../pages/ProductList"));
+const Bill = lazy(() => import("../pages/Bill"));
 
->>>>>>> deafb30eadba08da105ae72922d73bc76f10f93d
+
 
 /**
  * ⚠ These are internal routes!
@@ -43,6 +45,10 @@ const routes = [
   {
     path: "/CouponCodes", // the url
     component: CouponCodes, // view rendered
+  },
+  {
+    path: "/bill", // the url
+    component: Bill, // view rendered
   },
   {
     path: "/couponTable", // the url
