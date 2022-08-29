@@ -362,6 +362,24 @@ function AddProducts() {
             onChange={(e) => setDesc(e.target.value)}
           />
         </Label>
+<<<<<<< HEAD
+=======
+        {/* <Label className="mt-4">
+          <span>Email</span>
+          <Input type="email" className="mt-1" placeholder="Jane Doe" />
+        </Label> */}
+
+        {/* <Label className="mt-4">
+          <span>Category</span>
+          <Select className="mt-1" onChange={(e) => getSubCategories(e)}>
+            <option value=""></option>
+            {/* {categories.map((e) => (
+              <option value={e.id}>{e.name}</option>
+            ))} */}
+          {/* </Select>
+        </Label> */} */
+
+>>>>>>> 5578ade1dfba9d7f0b4285aa489b01d864f7202b
         <Label className="mt-4">
           <span>Sub-Category</span>
           <Select className="mt-1">
