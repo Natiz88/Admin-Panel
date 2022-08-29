@@ -23,10 +23,11 @@ import {
   ModalFooter,
 } from "@windmill/react-ui";
 import { useState, useEffect } from "react";
+import uploadImage from "./../assets/img/upload_pic.png";
 import { tableData } from "./TableData";
 import { Link } from "react-router-dom";
 import { EditIcon, TrashIcon, FormsIcon } from "../icons";
-
+import { modes } from "react-transition-group/SwitchTransition";
 
 // import {Switch} from "react-button-switch";
 
@@ -42,7 +43,7 @@ function AddProducts() {
   const [subCategories, setSubCategories] = useState([]);
   const [category, setCategory] = useState("");
   const [productName, setproductName] = useState();
-  const [img, setImg] = useState(null);
+  const [img, setImg] = useState(uploadImage);
   const [desc, setDesc] = useState();
   // const [email, setEmail] = useState()
   const [subCategory, setSubCategory] = useState();
@@ -56,36 +57,51 @@ function AddProducts() {
   const [disc, setDisc] = useState();
 
   const [isPriceModalOpen, setPriceModalOpen] = useState(false);
+  const [isAttributeModalOpen, setAttributeModalOpen] = useState(false);
   const [isModalText, setIsModalText] = useState("");
   const [response, setResponse] = useState("");
-
-  const [productChecked, setProductChecked] = useState(true);
-  const [shippingChecked, setShippingChecked] = useState(true);
+  const [editMode, setEditMode] = useState(false);
+  const [tableErrorMsg, setTableErrorMsg] = useState("");
 
   function closeModal() {
     setPriceModalOpen(false);
+    setAttributeModalOpen(false);
+    setEditMode(false);
+    setIndPriceList({
+      qty: "",
+      normal: "",
+      urgent: "",
+      dicount: "",
+      type: "individual",
+    });
+    setCorPriceList({
+      qty: "",
+      normal: "",
+      urgent: "",
+      dicount: "",
+      type: "corporate",
+    });
+    setAttributes({ attribute: "", value: "" });
   }
 
-  const [tablePriceData,setTablePriceData] = useState([])
+  const [attributes, setAttributes] = useState({ attribute: "", value: "" });
+  const [tableAttributeData, setTableAttributeData] = useState([]);
 
-  const [indPricelist, setIndPriceList] = useState(
-    {
-      qty: null,
-      normal: null,
-      urgent: null,
-      discount:null,
-      type: "individual",
-    },
-  );
-  const [corPricelist, setCorPriceList] = useState(
-    {
-      qty: null,
-      normal: null,
-      urgent: null,
-      discount:null,
-      type: "corporate",
-    },
-  );
+  const [tablePriceData, setTablePriceData] = useState([]);
+  const [indPricelist, setIndPriceList] = useState({
+    qty: null,
+    normal: null,
+    urgent: null,
+    discount: null,
+    type: "individual",
+  });
+  const [corPricelist, setCorPriceList] = useState({
+    qty: null,
+    normal: null,
+    urgent: null,
+    discount: null,
+    type: "corporate",
+  });
 
   // const getCategories = () => {
   //   console.log("CATEGORIES CALLED");
@@ -162,7 +178,7 @@ function AddProducts() {
         setPriceModalOpen(true)
       )
       .catch(
-        (err) => setIsModalText(err.response.data.message),
+        (err) => setIsModalText(err?.response?.data?.message),
         setPriceModalOpen(true)
       );
   };
@@ -172,18 +188,48 @@ function AddProducts() {
   const resultsPerPage = 10;
   const totalResults = response.length;
 
-  const delPriceRow = (range) =>{
-    setTablePriceData(tablePriceData.filter(price => price.qty !== range))
-  }
+  const delAttributeRow = (obj) => {
+    setTableAttributeData(
+      tableAttributeData.filter((data) => data.attribute !== obj.attribute)
+    );
+  };
 
-  const editPriceRow=(obj)=>{
-    const a = tablePriceData.filter(price => price.qty === obj.qty && price.type === "individual")[0]
-    const cor = tablePriceData.filter(price => price.qty === obj.qty && price.type === "corporate")[0]
-    setIndPriceList({qty:a.qty,normal:a.normal,urgent:a.urgent,discount:a.discount,type:"individual"})
-    setCorPriceList({qty:a.qty,normal:cor.normal,urgent:cor.urgent,discount:cor.discount,type:"corporate"})
-    setPriceModalOpen(true)
-  }
+  const delPriceRow = (range) => {
+    setTablePriceData(tablePriceData.filter((price) => price.qty !== range));
+  };
 
+  const editAttributeRow = (obj) => {
+    setEditMode(true);
+    const attr = tableAttributeData.filter(
+      (data) => data.attribute === obj.attribute
+    )[0];
+    setAttributes({ attribute: attr.attribute, value: attr.value });
+    setAttributeModalOpen(true);
+  };
+
+  const editPriceRow = (obj) => {
+    const a = tablePriceData.filter(
+      (price) => price.qty === obj.qty && price.type === "individual"
+    )[0];
+    const cor = tablePriceData.filter(
+      (price) => price.qty === obj.qty && price.type === "corporate"
+    )[0];
+    setIndPriceList({
+      qty: a.qty,
+      normal: a.normal,
+      urgent: a.urgent,
+      discount: a.discount,
+      type: "individual",
+    });
+    setCorPriceList({
+      qty: a.qty,
+      normal: cor.normal,
+      urgent: cor.urgent,
+      discount: cor.discount,
+      type: "corporate",
+    });
+    setPriceModalOpen(true);
+  };
 
   function onPageChangeTable1(p) {
     setPageTable1(p);
@@ -198,29 +244,74 @@ function AddProducts() {
   // const addToPriceTable = (data) =>{
   //   console.log("table",data)
   // }
-  const pushToTable = () =>{
-    console.log(indPricelist.qty)
-    const isPresent = tablePriceData.filter(data => data.qty === indPricelist.qty)
-    if(isPresent.length > 0){
-      console.log("delet",isPresent)
-      setTablePriceData(tablePriceData.filter(data => data.qty !== indPricelist.qty))
-      console.log("table",tablePriceData)
+  const checkAttributeTable = () => {
+    const isPresent = tableAttributeData.filter(
+      (data) => data.attribute === attributes.attribute
+    );
+    return isPresent.length > 0 ? true : false;
+  };
+  const pushToAttributeTable = () => {
+    setTableErrorMsg("");
+    const isPresent = checkAttributeTable();
+    if (!editMode && isPresent) {
+      setTableErrorMsg("Attribute already present in the table");
+      return;
+    } else if (!editMode) {
+      setTableAttributeData([...tableAttributeData, attributes]);
+      setAttributes({ attribute: "", value: "" });
+
+      // edit mode
+    } else {
+      setTableAttributeData(
+        tableAttributeData.map((object) => {
+          if (object.attribute === attributes.attribute) {
+            return { attribute: attributes.attribute, value: attributes.value };
+          }
+          return object;
+        })
+      );
     }
-    pushToCheck()
+    setAttributeModalOpen(false);
+    setEditMode(false);
+  };
 
-  }
-  const pushToCheck = () =>{
-    setTablePriceData([...tablePriceData,indPricelist,corPricelist])
-    setIndPriceList({qty:"",normal:"",urgent:"",dicount:"",type:"individual"})
-    setCorPriceList({qty:"",normal:"",urgent:"",dicount:"",type:"corporate"})
-    setPriceModalOpen(false)
-  }
+  const pushToTable = () => {
+    console.log(indPricelist.qty);
+    const isPresent = tablePriceData.filter(
+      (data) => data.qty === indPricelist.qty
+    );
+    if (isPresent.length > 0) {
+      console.log("delet", isPresent);
+      setTablePriceData(
+        tablePriceData.filter((data) => data.qty !== indPricelist.qty)
+      );
+      console.log("table", tablePriceData);
+    }
+    pushToCheck();
+  };
+  const pushToCheck = () => {
+    setTablePriceData([...tablePriceData, indPricelist, corPricelist]);
+    setIndPriceList({
+      qty: "",
+      normal: "",
+      urgent: "",
+      dicount: "",
+      type: "individual",
+    });
+    setCorPriceList({
+      qty: "",
+      normal: "",
+      urgent: "",
+      dicount: "",
+      type: "corporate",
+    });
+    setPriceModalOpen(false);
+  };
 
-  const setRange = (e) =>{
-    setIndPriceList({...indPricelist,qty:e.target.value})
-    setCorPriceList({...corPricelist,qty:e.target.value})
-  }
-
+  const setRange = (e) => {
+    setIndPriceList({ ...indPricelist, qty: e.target.value });
+    setCorPriceList({ ...corPricelist, qty: e.target.value });
+  };
 
   return (
     <div>
@@ -243,9 +334,8 @@ function AddProducts() {
             onChange={(e) => setproductName(e.target.value)}
           />
         </Label>
-
         <Label>
-          <span>Logo</span>
+          <span>Image</span>
         </Label>
         <div className="my-4 h-32 w-32 rounded-full relative">
           <label>
@@ -264,7 +354,6 @@ function AddProducts() {
             </span>
           </label>
         </div>
-
         <Label className="mt-4">
           <span>Description</span>
           <Textarea
@@ -273,21 +362,6 @@ function AddProducts() {
             onChange={(e) => setDesc(e.target.value)}
           />
         </Label>
-        {/* <Label className="mt-4">
-          <span>Email</span>
-          <Input type="email" className="mt-1" placeholder="Jane Doe" />
-        </Label> */}
-
-        {/* <Label className="mt-4">
-          <span>Category</span>
-          <Select className="mt-1" onChange={(e) => getSubCategories(e)}>
-            <option value=""></option>
-            {/* {categories.map((e) => (
-              <option value={e.id}>{e.name}</option>
-            ))} */}
-          {/* </Select>
-        </Label> */} */}
-
         <Label className="mt-4">
           <span>Sub-Category</span>
           <Select className="mt-1">
@@ -298,62 +372,104 @@ function AddProducts() {
           </Select>
         </Label>
 
-        <div className=" mt-3 mb-6 flex flex-col gap-1 justify-between md:flex-row">
-          <div className="flex w-full md:w-1/2 justify-around">
+        <div className="border-2 border-gray-300 my-4">
+          <Modal isOpen={isAttributeModalOpen} onClose={closeModal}>
             <div>
               <Label className="mt-4 w-4/5">
-                <span className="flex justify-center font-bold">Size</span>
+                <span className="flex justify-center font-bold">Attribute</span>
                 <Input
                   className="mt-1"
-                  placeholder="10*20 px"
-                  onChange={(e) => setSize(e.target.value)}
+                  placeholder="Size"
+                  defaultValue={attributes.attribute}
+                  disabled={editMode ? true : false}
+                  onChange={(e) =>
+                    setAttributes({ ...attributes, attribute: e.target.value })
+                  }
                 />
               </Label>
             </div>
             <div>
               <Label className="mt-4 w-4/5">
-                <span className="flex justify-center font-bold">
-                  Paper Weight
-                </span>
+                <span className="flex justify-center font-bold">Value</span>
                 <Input
                   className="mt-1"
-                  placeholder="5 gms"
-                  onChange={(e) => setPaperWeight(e.target.value)}
+                  placeholder="A4"
+                  defaultValue={attributes.value}
+                  onChange={(e) =>
+                    setAttributes({ ...attributes, value: e.target.value })
+                  }
                 />
               </Label>
             </div>
-          </div>
+            <Label className="text-red-400">{tableErrorMsg}</Label>
+            <div className="flex justify-center">
+              <Button
+                type="submit"
+                className="mt-4"
+                onClick={pushToAttributeTable}
+              >
+                Add To Table
+              </Button>
+            </div>
+          </Modal>
+          <TableContainer className="mb-8">
+            <Table>
+              <TableHeader>
+                <tr>
+                  <TableCell>Attribute</TableCell>
+                  <TableCell>Value</TableCell>
+                  <TableCell>Action</TableCell>
+                </tr>
+              </TableHeader>
+              <TableBody>
+                {tableAttributeData.map((list, i) => (
+                  <TableRow key={i}>
+                    <TableCell>
+                      <span className="text-sm">{list.attribute}</span>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm">{list.value}</span>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center">
+                        <Button
+                          layout="link"
+                          size="icon"
+                          aria-label="Edit"
+                        ></Button>
 
-          <div className="flex justify-around w-full md:w-1/2">
-            <div>
-              <Label className="mt-4 w-4/5">
-                <span className="flex justify-center font-bold">
-                  Lamination
-                </span>
-                <Input
-                  className="mt-1"
-                  onChange={(e) => setLamination(e.target.value)}
-                />
-              </Label>
-            </div>
+                        <Button
+                          layout="link"
+                          size="icon"
+                          aria-label="Edit"
+                          onClick={() => editAttributeRow(list)}
 
-            <div>
-              <Label className="mt-4 w-4/5">
-                <span className="flex justify-center font-bold">Weight</span>
-                <Input
-                  className="mt-1"
-                  placeholder="700 gms"
-                  onChange={(e) => setWeight(e.target.value)}
-                />
-              </Label>
-            </div>
+                          // tag={Link}
+                          // to={`/app/individualDetails/${row.id}`}
+                        >
+                          <EditIcon className="w-5 h-5" aria-hidden="true" />
+                        </Button>
+                        <Button layout="link" size="icon" aria-label="Delete">
+                          <TrashIcon
+                            className="w-5 h-5"
+                            aria-hidden="true"
+                            onClick={() => delAttributeRow(list)}
+                          />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <div className="w-full flex justify-center items-center mb-2">
+            <Button onClick={() => setAttributeModalOpen(true)}>
+              Add Attribute
+            </Button>
           </div>
         </div>
-
-        <div>
-          <div>
-            <Button onClick={()=>setPriceModalOpen(true)}>Add Price</Button>
-          </div>
+        <div className="border-2 border-gray-300 my-4">
           <Modal isOpen={isPriceModalOpen} onClose={closeModal}>
             {/* <ModalHeader>Delete User</ModalHeader>
             <ModalBody>Are you sure you want to delete the user?</ModalBody>
@@ -368,142 +484,174 @@ function AddProducts() {
               </div>
             </ModalFooter> */}
             <div className="p-2 mt-4">
-          <h1 className="font-bold text-red-500">
-            Price List (Individual Account)
-          </h1>
+              <h1 className="font-bold text-red-500">
+                Price List (Individual Account)
+              </h1>
 
-          <div className="flex flex-col gap-1 justify-between  md:flex-row">
-            <div className="flex w-full md:w-1/2 justify-around">
-              <div>
-                <Label className="mt-4 w-4/5">
-                  <span className="flex justify-center font-bold">
-                     Range
-                  </span>
-                  <Input
-                    className="mt-1"
-                    placeholder="100-200"
-                    defaultValue={indPricelist.qty}
+              <div className="flex flex-col gap-1 justify-between  md:flex-row">
+                <div className="flex w-full md:w-1/2 justify-around">
+                  <div>
+                    <Label className="mt-4 w-4/5">
+                      <span className="flex justify-center font-bold">
+                        Range
+                      </span>
+                      <Input
+                        className="mt-1"
+                        placeholder="100-200"
+                        defaultValue={indPricelist.qty}
+                        onChange={(e) => setRange(e)}
+                      />
+                    </Label>
+                  </div>
+                  <div>
+                    <Label className="mt-4 w-4/5">
+                      <span className="flex justify-center font-bold">
+                        Normal Price
+                      </span>
+                      <Input
+                        className="mt-1"
+                        placeholder="5"
+                        defaultValue={indPricelist.normal}
+                        onChange={(e) =>
+                          setIndPriceList({
+                            ...indPricelist,
+                            normal: e.target.value,
+                          })
+                        }
+                      />
+                    </Label>
+                  </div>
+                </div>
 
-                    onChange={(e) => setRange(e)}
-                  />
-                </Label>
+                <div className="flex justify-around w-full md:w-1/2">
+                  <div>
+                    <Label className="mt-4 w-4/5">
+                      <span className="flex justify-center font-bold">
+                        Urgent Price
+                      </span>
+                      <Input
+                        className="mt-1"
+                        placeholder="10"
+                        defaultValue={indPricelist.urgent}
+                        onChange={(e) =>
+                          setIndPriceList({
+                            ...indPricelist,
+                            urgent: e.target.value,
+                          })
+                        }
+                      />
+                    </Label>
+                  </div>
+
+                  <div>
+                    <Label className="mt-4 w-4/5">
+                      <span className="flex justify-center font-bold">
+                        Discount
+                      </span>
+                      <Input
+                        className="mt-1"
+                        placeholder="5%"
+                        defaultValue={indPricelist.discount}
+                        onChange={(e) =>
+                          setIndPriceList({
+                            ...indPricelist,
+                            discount: e.target.value,
+                          })
+                        }
+                      />
+                    </Label>
+                  </div>
+                </div>
               </div>
-              <div>
-                <Label className="mt-4 w-4/5">
-                  <span className="flex justify-center font-bold">
-                    Normal Price
-                  </span>
-                  <Input
-                    className="mt-1"
-                    placeholder="5"
-                    defaultValue={indPricelist.normal}
 
-                    onChange={(e) => setIndPriceList({...indPricelist,normal:e.target.value})}
-                  />
-                </Label>
+              <div className="mt-4">
+                <h1 className="font-bold text-red-500">
+                  Price List(Corporate Account)
+                </h1>
+                <div className="flex flex-col gap-1 justify-between md:flex-row">
+                  <div className="flex w-full md:w-1/2 justify-around">
+                    <div>
+                      <Label className="mt-4 w-4/5">
+                        <span className="flex justify-center font-bold">
+                          Range
+                        </span>
+                        <Input
+                          className="mt-1"
+                          placeholder="100-200"
+                          defaultValue={indPricelist.qty}
+                          value={indPricelist.qty}
+                          // onChange={(e) => setCorPriceList({...indPricelist,qty:e.target.value})}
+                        />
+                      </Label>
+                    </div>
+                    <div>
+                      <Label className="mt-4 w-4/5">
+                        <span className="flex justify-center font-bold">
+                          Normal Price
+                        </span>
+                        <Input
+                          className="mt-1"
+                          placeholder="5"
+                          defaultValue={corPricelist.urgent}
+                          onChange={(e) =>
+                            setCorPriceList({
+                              ...corPricelist,
+                              normal: e.target.value,
+                            })
+                          }
+                        />
+                      </Label>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-around w-full md:w-1/2">
+                    <div>
+                      <Label className="mt-4 w-4/5">
+                        <span className="flex justify-center font-bold">
+                          Urgent Price
+                        </span>
+                        <Input
+                          className="mt-1"
+                          placeholder="10"
+                          defaultValue={corPricelist.urgent}
+                          onChange={(e) =>
+                            setCorPriceList({
+                              ...corPricelist,
+                              urgent: e.target.value,
+                            })
+                          }
+                        />
+                      </Label>
+                    </div>
+
+                    <div>
+                      <Label className="mt-4 w-4/5">
+                        <span className="flex justify-center font-bold">
+                          Discount
+                        </span>
+                        <Input
+                          className="mt-1"
+                          placeholder="5%"
+                          defaultValue={corPricelist.discount}
+                          onChange={(e) =>
+                            setCorPriceList({
+                              ...corPricelist,
+                              discount: e.target.value,
+                            })
+                          }
+                        />
+                      </Label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-center">
+                <Button type="submit" className="mt-4" onClick={pushToTable}>
+                  Add To Table
+                </Button>
               </div>
             </div>
-
-            <div className="flex justify-around w-full md:w-1/2">
-              <div>
-                <Label className="mt-4 w-4/5">
-                  <span className="flex justify-center font-bold">
-                    Urgent Price
-                  </span>
-                  <Input
-                    className="mt-1"
-                    placeholder="10"
-                    defaultValue={indPricelist.urgent}
-                    onChange={(e) => setIndPriceList({...indPricelist,urgent:e.target.value})}
-                  />
-                </Label>
-              </div>
-
-              <div>
-                <Label className="mt-4 w-4/5">
-                  <span className="flex justify-center font-bold">
-                    Discount
-                  </span>
-                  <Input
-                    className="mt-1"
-                    placeholder="5%"
-                    defaultValue={indPricelist.discount}
-
-                    onChange={(e) => setIndPriceList({...indPricelist,discount:e.target.value})}
-                  />
-                </Label>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4">
-            <h1 className="font-bold text-red-500">
-              Price List(Corporate Account)
-            </h1>
-            <div className="flex flex-col gap-1 justify-between md:flex-row">
-              <div className="flex w-full md:w-1/2 justify-around">
-                <div>
-                  <Label className="mt-4 w-4/5">
-                    <span className="flex justify-center font-bold">
-                       Range
-                    </span>
-                    <Input
-                      className="mt-1"
-                      placeholder="100-200"
-                    defaultValue={indPricelist.qty}
-
-                      value={indPricelist.qty}
-                      // onChange={(e) => setCorPriceList({...indPricelist,qty:e.target.value})}
-                    />
-                  </Label>
-                </div>
-                <div>
-                  <Label className="mt-4 w-4/5">
-                    <span className="flex justify-center font-bold">
-                      Normal Price
-                    </span>
-                    <Input className="mt-1" placeholder="5" 
-                    defaultValue={corPricelist.urgent}
-
-                    onChange={(e) => setCorPriceList({...corPricelist,normal:e.target.value})}/>
-                  </Label>
-                </div>
-              </div>
-
-              <div className="flex justify-around w-full md:w-1/2">
-                <div>
-                  <Label className="mt-4 w-4/5">
-                    <span className="flex justify-center font-bold">
-                      Urgent Price
-                    </span>
-                    <Input className="mt-1" placeholder="10" 
-                    defaultValue={corPricelist.urgent}
-
-                    onChange={(e) => setCorPriceList({...corPricelist,urgent:e.target.value})} />
-                  </Label>
-                </div>
-
-                <div>
-                  <Label className="mt-4 w-4/5">
-                    <span className="flex justify-center font-bold">
-                      Discount
-                    </span>
-                    defaultValue={corPricelist.urgent}
-                    <Input className="mt-1" placeholder="5%" 
-                    defaultValue={corPricelist.discount}
-                    onChange={(e) => setCorPriceList({...corPricelist,discount:e.target.value})} />
-                  </Label>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex justify-center">
-            <Button type="submit" className="mt-4" onClick={pushToTable}>
-              Add To Table 
-            </Button>
-          </div>
-        </div>
           </Modal>
 
           <TableContainer className="mb-8">
@@ -534,31 +682,41 @@ function AddProducts() {
                       <span className="text-sm">{list.discount}</span>
                     </TableCell>
                     <TableCell>
-                      <Badge>{list.type}</Badge>
+                      <Badge
+                        type={
+                          list.type === "individual" ? "success" : "primary"
+                        }
+                      >
+                        {list.type}
+                      </Badge>
                     </TableCell>
                     <TableCell>
-                    <div className="flex items-center">
-          <Button layout="link" size="icon" aria-label="Edit"></Button>
+                      <div className="flex items-center">
+                        <Button
+                          layout="link"
+                          size="icon"
+                          aria-label="Edit"
+                        ></Button>
 
-          <Button
-            layout="link"
-            size="icon"
-            aria-label="Edit"
-            onClick={() => editPriceRow(list)}
+                        <Button
+                          layout="link"
+                          size="icon"
+                          aria-label="Edit"
+                          onClick={() => editPriceRow(list)}
 
-            // tag={Link}
-            // to={`/app/individualDetails/${row.id}`}
-          >
-            <EditIcon className="w-5 h-5" aria-hidden="true" />
-          </Button>
-          <Button layout="link" size="icon" aria-label="Delete">
-            <TrashIcon
-              className="w-5 h-5"
-              aria-hidden="true"
-              onClick={() => delPriceRow(list.qty)}
-            />
-          </Button>
-        </div>
+                          // tag={Link}
+                          // to={`/app/individualDetails/${row.id}`}
+                        >
+                          <EditIcon className="w-5 h-5" aria-hidden="true" />
+                        </Button>
+                        <Button layout="link" size="icon" aria-label="Delete">
+                          <TrashIcon
+                            className="w-5 h-5"
+                            aria-hidden="true"
+                            onClick={() => delPriceRow(list.qty)}
+                          />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -573,127 +731,10 @@ function AddProducts() {
               />
             </TableFooter>
           </TableContainer>
+          <div className="w-full flex justify-center items-center mb-2">
+            <Button onClick={() => setPriceModalOpen(true)}>Add Price</Button>
+          </div>
         </div>
-
-        {/* Add More Price List In table */}
-        {/* <div className="border border-gray-500 p-2 mt-4">
-          <h1 className="font-bold text-red-500">
-            Price List (Individual Account)
-          </h1>
-
-          <div className="flex flex-col gap-1 justify-between md:flex-row">
-            <div className="flex w-full md:w-1/2 justify-around">
-              <div>
-                <Label className="mt-4 w-4/5">
-                  <span className="flex justify-center font-bold">
-                    Quantity Range
-                  </span>
-                  <Input
-                    className="mt-1"
-                    placeholder="100-200"
-                    onChange={(e) => setQuantityRange(e.target.value)}
-                  />
-                </Label>
-              </div>
-              <div>
-                <Label className="mt-4 w-4/5">
-                  <span className="flex justify-center font-bold">
-                    Normal Price
-                  </span>
-                  <Input
-                    className="mt-1"
-                    placeholder="5"
-                    onChange={(e) => setNormalPrice(e.target.value)}
-                  />
-                </Label>
-              </div>
-            </div>
-
-            <div className="flex justify-around w-full md:w-1/2">
-              <div>
-                <Label className="mt-4 w-4/5">
-                  <span className="flex justify-center font-bold">
-                    Urgent Price
-                  </span>
-                  <Input
-                    className="mt-1"
-                    placeholder="10"
-                    onChange={(e) => setUrgentPrice(e.target.value)}
-                  />
-                </Label>
-              </div>
-
-              <div>
-                <Label className="mt-4 w-4/5">
-                  <span className="flex justify-center font-bold">
-                    Discount
-                  </span>
-                  <Input
-                    className="mt-1"
-                    placeholder="5%"
-                    onChange={(e) => setDisc(e.target.value)}
-                  />
-                </Label>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4">
-            <h1 className="font-bold text-red-500">
-              Price List(Corporate Account)
-            </h1>
-            <div className="flex flex-col gap-1 justify-between md:flex-row">
-              <div className="flex w-full md:w-1/2 justify-around">
-                <div>
-                  <Label className="mt-4 w-4/5">
-                    <span className="flex justify-center font-bold">
-                      Quantity Range
-                    </span>
-                    <Input
-                      className="mt-1"
-                      placeholder="100-200"
-                      onChange={(e) => setQuantityRange(e.target.value)}
-                    />
-                  </Label>
-                </div>
-                <div>
-                  <Label className="mt-4 w-4/5">
-                    <span className="flex justify-center font-bold">
-                      Normal Price
-                    </span>
-                    <Input className="mt-1" placeholder="5" setNormalPrice />
-                  </Label>
-                </div>
-              </div>
-
-              <div className="flex justify-around w-full md:w-1/2">
-                <div>
-                  <Label className="mt-4 w-4/5">
-                    <span className="flex justify-center font-bold">
-                      Urgent Price
-                    </span>
-                    <Input className="mt-1" placeholder="10" setUrgentPrice />
-                  </Label>
-                </div>
-
-                <div>
-                  <Label className="mt-4 w-4/5">
-                    <span className="flex justify-center font-bold">
-                      Discount
-                    </span>
-                    <Input className="mt-1" placeholder="5%" setDisc />
-                  </Label>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex justify-center">
-            <Button type="submit" className="mt-4">
-              Add More List
-            </Button>
-          </div>
-        </div> */}
 
         <div className="flex justify-center">
           <Button type="submit" className="mt-4" onClick={addproduct}>

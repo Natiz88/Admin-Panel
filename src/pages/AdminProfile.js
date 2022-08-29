@@ -30,7 +30,7 @@ function AdminProfile() {
       setError(true);
       return;
     } else {
-      updateProfile(name, address, mobile, gender)
+      updateProfile(response.id, name, address, mobile, gender)
         .then((res) => console.log("update", res))
         .catch((err) => console.log("update error", err));
     }
@@ -38,7 +38,7 @@ function AdminProfile() {
 
   useEffect(() => {
     getAdminProfile()
-      .then((res) => setResponse(res.data))
+      .then((res) => setResponse(res?.data || []))
       .catch((err) => console.log(err));
   }, []);
 
@@ -182,8 +182,4 @@ function AdminProfile() {
   );
 }
 
-
 export default AdminProfile;
-
-
-

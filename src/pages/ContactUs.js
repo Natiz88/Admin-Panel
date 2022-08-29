@@ -29,6 +29,7 @@ function ContactUs() {
   const [twitter, setTwitter] = useState("");
   const [instagram, setInstagram] = useState("");
   const [linkedIn, setLinkedIn] = useState("");
+  const [maps, setMaps] = useState("");
   const [website, setWebsite] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalText, setIsModalText] = useState("");
@@ -68,12 +69,17 @@ function ContactUs() {
       instagram: instagram,
       linkedIn: linkedIn,
       website: website,
+      maps: maps,
     };
 
     // console.log(data);
 
     axios
-      .put("http://192.168.1.98:8081/api/admin/about/1/update", data, config)
+      .put(
+        `http://192.168.100.17:8081/api/about/${response.id}/update`,
+        data,
+        config
+      )
       .then(
         (response) => setIsModalText("Data was updated"),
         setTimeout(() => setIsModalOpen(false), 1000),
@@ -96,26 +102,28 @@ function ContactUs() {
     };
 
     axios
-      .get("http://192.168.1.98:8081/api/about", config)
-      .then((res) => setResponse(res.data[0]))
-      .catch((err) => console.log(err.response));
+      .get("http://192.168.100.17:8081/api/about/show", config)
+      .then((res) => setResponse(res?.data[0] || []))
+      .catch((err) => console.log(err?.response));
   }, []);
 
   useEffect(() => {
-    if (response.length !== undefined || response.length !== 0) {
-      setName(response.name);
-      setEstablished(response.estd);
-      setAddress(response.address);
-      setZip(response.zip);
-      setMobile(response.mobile_number);
-      setLandline(response.landline);
-      setEmail(response.email);
-      setAboutUs(response.about_us);
-      setFacebook(response.facebook);
-      setTwitter(response.twitter);
-      setInstagram(response.instagram);
-      setLinkedIn(response.linkedIn);
-      setWebsite(response.website);
+    console.log("response", response);
+    if (response !== undefined || response.length !== 0) {
+      setName(response?.name);
+      setEstablished(response?.estd);
+      setAddress(response?.address);
+      setZip(response?.zip);
+      setMobile(response?.mobile_number);
+      setLandline(response?.landline);
+      setEmail(response?.email);
+      setAboutUs(response?.about_us);
+      setFacebook(response?.facebook);
+      setTwitter(response?.twitter);
+      setInstagram(response?.instagram);
+      setLinkedIn(response?.linkedIn);
+      setWebsite(response?.website);
+      setMaps(response?.maps);
     }
   }, [response]);
 
@@ -130,10 +138,10 @@ function ContactUs() {
         onSubmit={sendHandler}
         className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
       >
-        <Label>
+        {/* <Label>
           <span>Logo</span>
-        </Label>
-        <div className="my-4 h-32 w-32 rounded-full relative flex justify-center">
+        </Label> */}
+        {/* <div className="my-4 h-32 w-32 rounded-full relative flex justify-center">
           <label>
             <span>
               <img
@@ -148,7 +156,7 @@ function ContactUs() {
               />
             </span>
           </label>
-        </div>
+        </div> */}
         <Label>
           <span>Name</span>
           <Input
@@ -269,6 +277,14 @@ function ContactUs() {
             className="mt-2"
             value={website}
             onChange={(e) => setWebsite(e.target.value)}
+          />
+        </Label>
+        <Label className="mt-4">
+          <span>Maps</span>
+          <Input
+            className="mt-2"
+            value={maps}
+            onChange={(e) => setMaps(e.target.value)}
           />
         </Label>
         {isEmpty && <h1>The field is empty</h1>}

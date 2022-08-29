@@ -40,7 +40,6 @@ const CouponCodes = () => {
     //     .max(15,"Must be 15 characters or less")
     //     .required("Required"),
     // }),
-    
   });
 
   // const couponAddedSuccessfully = (res) => {
@@ -52,7 +51,6 @@ const CouponCodes = () => {
   //   setUserAdded(true);
   // };
 
-  
   // const addCoupons = (e) => {
   //     e.preventDefault();
   //     setError(false);
@@ -125,13 +123,13 @@ const CouponCodes = () => {
         />
       </DataTableExtensions>
       ; */}
-       <PageTitle>Create Coupons</PageTitle>
-      <form 
+      <PageTitle>Create Coupons</PageTitle>
+      <form
         onSubmit={(e) => {
-        e.preventDefault();
-        formik.handleSubmit();
-      }}>
-
+          e.preventDefault();
+          formik.handleSubmit();
+        }}
+      >
         <Label className="mt-4">
           <span>Coupon Code</span>
           <Input
@@ -165,7 +163,6 @@ const CouponCodes = () => {
 
                   />
                 </Label> */}
-
 
         {/* <div className="border border-gray-500 p-2 mt-4">
           <div className="flex flex-col gap-1 justify-between md:flex-row">
@@ -225,7 +222,7 @@ const CouponCodes = () => {
                     Products
                   </span>
                   {/* <Toggle width="80" height="30" checked={productChecked} onChange={()=>setProductChecked(!productChecked)}/> */}
-                  {/* <Toggle
+        {/* <Toggle
                     width="55"
                     height="20"
                     name="product"
@@ -244,7 +241,7 @@ const CouponCodes = () => {
               Add Coupons
             </Button>
           </div>
-        </div> */} 
+        </div> */}
       </form>
     </>
   );
