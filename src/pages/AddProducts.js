@@ -286,7 +286,7 @@ function AddProducts() {
               <option value={e.id}>{e.name}</option>
             ))} */}
           {/* </Select>
-        </Label> */} */}
+        </Label> */} */
 
         <Label className="mt-4">
           <span>Sub-Category</span>
