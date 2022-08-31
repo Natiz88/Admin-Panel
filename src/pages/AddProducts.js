@@ -103,39 +103,39 @@ function AddProducts() {
     type: "corporate",
   });
 
-  // const getCategories = () => {
-  //   console.log("CATEGORIES CALLED");
-  //   const url = "http://192.168.100.21:8081/api/category/list";
-  //   const token = localStorage.getItem("token");
-  //   const config = {
-  //     headers: {
-  //       Accept: "application/json",
-  //     },
-  //   };
-  //   axios
-  //     .get("http://192.168.100.17:8081/api/category/list", config)
-  //     .then((response) => setCategories(response?.data?.data))
-  //     .catch((err) => console.log("error", err));
-  // };
-  // const getSubCategories = (e) => {
-  //   const id = e.target.value;
-  //   console.log("subCATEGORIES CALLED");
-  //   const url = `http://192.168.100.21:8081/api/category/${id}`;
-  //   const token = localStorage.getItem("token");
-  //   const config = {
-  //     headers: {
-  //       Accept: "application/json",
-  //     },
-  //   };
-  //   axios
-  //     .get(`http://192.168.100.17:8081/api/category/${id}`, config)
-  //     .then((response) => setSubCategories(response?.data?.children))
-  //     .catch((err) => console.log("error", err));
-  // };
+  const getCategories = () => {
+    console.log("CATEGORIES CALLED");
+    const url = "http://192.168.100.17:8081/api/category/list";
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        Accept: "application/json",
+      },
+    };
+    axios
+      .get("http://192.168.100.17:8081/api/category/list", config)
+      .then((response) => setCategories(response?.data?.data || []))
+      .catch((err) => console.log("error", err));
+  };
+  const getSubCategories = (e) => {
+    const id = e.target.value;
+    console.log("subCATEGORIES CALLED");
+    const url = `http://192.168.100.21:8081/api/category/${id}`;
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        Accept: "application/json",
+      },
+    };
+    axios
+      .get(`http://192.168.100.17:8081/api/category/${id}`, config)
+      .then((response) => setSubCategories(response?.data?.children || []))
+      .catch((err) => console.log("error", err));
+  };
 
-  // useEffect(() => {
-  //   getCategories();
-  // }, []);
+  useEffect(() => {
+    getCategories();
+  }, []);
 
   // console.log(desc);
 
@@ -362,6 +362,21 @@ function AddProducts() {
             onChange={(e) => setDesc(e.target.value)}
           />
         </Label>
+<<<<<<< HEAD
+        <Label className="mt-4">
+          <span>Email</span>
+          <Input type="email" className="mt-1" placeholder="Jane Doe" />
+        </Label>
+        <Label className="mt-4">
+          <span>Category</span>
+          <Select className="mt-1" onChange={(e) => getSubCategories(e)}>
+            <option value=""></option>
+            {categories.map((e) => (
+              <option value={e.id}>{e.name}</option>
+            ))}
+          </Select>
+        </Label>
+=======
 
         {/* <Label className="mt-4">
           <span>Email</span>
@@ -378,17 +393,17 @@ function AddProducts() {
            </Select>
         </Label>  */}
 
+>>>>>>> d40e8ccb0c400053cb51da68e700106c9b5bdcc9
 
         <Label className="mt-4">
           <span>Sub-Category</span>
           <Select className="mt-1">
             <option value=""></option>
-            {/* {subCategories.map((e) => (
+            {subCategories.map((e) => (
               <option value={e.id}>{e.name}</option>
-            ))} */}
+            ))}
           </Select>
         </Label>
-
         <div className="border-2 border-gray-300 my-4">
           <Modal isOpen={isAttributeModalOpen} onClose={closeModal}>
             <div>
@@ -733,7 +748,6 @@ function AddProducts() {
             <Button onClick={() => setPriceModalOpen(true)}>Add Price</Button>
           </div>
         </div>
-
         <div className="flex justify-center">
           <Button type="submit" className="mt-4" onClick={addproduct}>
             Add Product
