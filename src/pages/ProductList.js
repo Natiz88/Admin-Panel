@@ -62,7 +62,7 @@ const ProductList = () => {
         },
         {
           name: "Product Image",
-          cell: (row) => row.image,
+          cell: (row) => <img src={row.image}/>,
           sortable: true,
         },
         {
