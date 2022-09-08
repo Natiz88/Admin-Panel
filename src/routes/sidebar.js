@@ -75,7 +75,7 @@ const routes = [
     routes: [
       { path: "/app/tables", icon: "TablesIcon", name: "Users Table" },
       {
-        path: "/app/individualDetails/:id",
+        path: "/app/individualDetails/-1",
         icon: "FormIcon",
         name: "Add Users",
       },

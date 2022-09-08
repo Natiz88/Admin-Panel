@@ -1,16 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import PageTitle from "../components/Typography/PageTitle";
 import { Link } from "react-router-dom";
 import DataTableExtensions from "react-data-table-component-extensions";
 import DataTable from "react-data-table-component";
 import { EditIcon, TrashIcon, FormsIcon } from "../icons";
-import { Images } from "./Images";
-// import { useState } from "react";
 import photo from "./imagesbanner.jpg";
-
-// import Images from "./../utils/images/Images";
-import { useState } from "react";
+import zoro from "./../assets/Zoro.jpg";
+import { AiOutlineEye } from "react-icons/ai";
+import { getBanners, getBanner, deleteBanner } from "./../utils/demo/ApiCall";
+import Images from "./../utils/images/Images";
 // import photo from "./imagesbanner.jpg";
 
 import {
@@ -28,14 +27,48 @@ const Banners = () => {
   console.log("images from", Images);
 
   const [isModalOpen, setisModalOpen] = useState(false);
-  const [img, setImg] = useState(photo);
+  const [IsModalOpen, setIsModalOpen] = useState(false);
+  const [img, setImg] = useState();
   const [response, setResponse] = useState([]);
+  const [id, setId] = useState(null);
+  const [isBannerModalOpen, setIsBannerModalOpen] = useState(false);
+  const [mainResponse, setMainResponse] = useState([]);
+
+  const [isDeleteSuccessfull, setDeleteSuccessfull] = useState(false);
+  const [errorText, setErrorText] = useState("");
+  const [del, setDel] = useState(true);
+  // const [isBannerModalOpen, setIsBannerModalOpen] = useState(false);
 
   // const [img, setImg] = useState(null);
 
   const onImageChange = (e) => {
     const [file] = e.target.files;
     setImg(URL.createObjectURL(file));
+  };
+
+  const deleteBanners = (banner) => {
+    setId(banner);
+    setIsModalOpen(true);
+  };
+
+  function closeModal() {
+    setIsModalOpen(false);
+  }
+
+  const confirmDelete = () => {
+    sendDeleteBanner();
+    setIsModalOpen(false);
+  };
+
+  const sendDeleteBanner = () => {
+    deleteBanner(id)
+      .then(
+        (res) => console.log("del-Banner", res),
+        setTimeout(() => setDeleteSuccessfull(false), 1000),
+        setDeleteSuccessfull(true)
+      )
+      .catch((err) => setErrorText(err.response.data.message));
+    setDel(!true);
   };
 
   const columns = [
@@ -49,18 +82,15 @@ const Banners = () => {
       cell: (row) => row.title,
       sortable: true,
     },
-    {
-      name: "Slug",
-      cell: (row) => row.slug,
-      sortable: true,
-    },
+
     {
       name: "Photo",
       cell: (row) => (
         <img
-          src={row.photo}
+          src={row.banner}
           alt="no image"
           onClick={() => setisModalOpen(true)}
+          className="cursor-pointer"
         />
       ),
       sortable: true,
@@ -73,27 +103,77 @@ const Banners = () => {
       isVisible: false,
     },
     {
+      name: "Description",
+      cell: (row) => row.desc,
+      sortable: true,
+      isVisible: false,
+    },
+    {
       name: "Status",
       cell: (row) => row.status,
       sortable: true,
     },
+    // {
+    //   name: "Action",
+    //   cell: (row) => row.action,
+    //   sortable: true,
+    // },
+
     {
       name: "Action",
-      cell: (row) => row.action,
-      sortable: true,
+      print: false,
+      export: false,
+      cell: (row) => (
+        <div className="flex items-center">
+          {/* Added by deepak katwal */}
+          {/* <Button layout="link" size="icon" aria-label="View Details"></Button> */}
+
+          <Button layout="link" size="icon" aria-label="Edit"></Button>
+
+          <Button
+            layout="link"
+            size="icon"
+            aria-label="Edit"
+            tag={Link}
+            to={`/app/BannerAdd/${id}`}
+          >
+            <EditIcon className="w-5 h-5" aria-hidden="true" />
+          </Button>
+          <Button layout="link" size="icon" aria-label="Delete">
+            <TrashIcon
+              className="w-5 h-5"
+              aria-hidden="true"
+              onClick={() => deleteBanners(row.id)}
+            />
+          </Button>
+        </div>
+      ),
     },
   ];
 
-  const data = [
-    {
-      title: "home page banneer",
-      slug: "banner",
-      photo: photo,
-      type: "banner",
-      status: "Active",
-    },
-  ];
+  // useEffect(() => {
+  //   setData();
+  // }, [buttonValue]);
 
+  // useEffect(() => {
+  //   getBanner()
+  //     .then((res) => setResponse(res))
+  //     .catch((err) => console.log(err));
+  // }, [del, confirmBannerDelete]);
+
+  // getting data
+  useEffect(() => {
+    // setCol(columns)
+    getBanners()
+      .then((res) => {
+        setMainResponse(res);
+        setResponse(res);
+        console.log("reloaded", mainResponse);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const data = response;
   const tableData = {
     columns,
     data,
@@ -106,9 +186,9 @@ const Banners = () => {
       </div>
       <div className="">
         <Button
-          iconRight={FormsIcon}
+          //   iconRight={FormsIcon}
           tag={Link}
-          to={`/app/individualDetails/-1`}
+          to={`/app/BannerAdd`}
         >
           <span>Add Banner</span>
         </Button>
@@ -134,6 +214,21 @@ const Banners = () => {
           // onSelectedRowsChange={handleChange}
         />
       </DataTableExtensions>
+
+      <Modal isOpen={IsModalOpen} onClose={closeModal}>
+        <ModalHeader>Delete Banner</ModalHeader>
+        <ModalBody>Are you sure you want to delete the Banner?</ModalBody>
+        <ModalFooter>
+          <div className="hidden sm:block">
+            <Button layout="outline" onClick={closeModal}>
+              Cancel
+            </Button>
+          </div>
+          <div className="hidden sm:block">
+            <Button onClick={confirmDelete}>Ok, Continue</Button>
+          </div>
+        </ModalFooter>
+      </Modal>
 
       {/* <DataTableExtensions {...tableData}></DataTableExtensions> */}
 

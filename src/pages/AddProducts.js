@@ -362,13 +362,10 @@ function AddProducts() {
             onChange={(e) => setDesc(e.target.value)}
           />
         </Label>
-<<<<<<< HEAD
-=======
         {/* <Label className="mt-4">
           <span>Email</span>
           <Input type="email" className="mt-1" placeholder="Jane Doe" />
         </Label> */}
-
         {/* <Label className="mt-4">
           <span>Category</span>
           <Select className="mt-1" onChange={(e) => getSubCategories(e)}>
@@ -376,10 +373,8 @@ function AddProducts() {
             {/* {categories.map((e) => (
               <option value={e.id}>{e.name}</option>
             ))} */}
-          {/* </Select>
-        </Label> */} */
-
->>>>>>> 5578ade1dfba9d7f0b4285aa489b01d864f7202b
+        {/* </Select>
+        </Label> */}{" "}
         <Label className="mt-4">
           <span>Sub-Category</span>
           <Select className="mt-1">
@@ -389,7 +384,6 @@ function AddProducts() {
             ))} */}
           </Select>
         </Label>
-
         <div className="border-2 border-gray-300 my-4">
           <Modal isOpen={isAttributeModalOpen} onClose={closeModal}>
             <div>
@@ -753,7 +747,6 @@ function AddProducts() {
             <Button onClick={() => setPriceModalOpen(true)}>Add Price</Button>
           </div>
         </div>
-
         <div className="flex justify-center">
           <Button type="submit" className="mt-4" onClick={addproduct}>
             Add Product
