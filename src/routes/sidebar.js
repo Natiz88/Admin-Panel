@@ -11,11 +11,11 @@ const routes = [
     icon: "HomeIcon", // the component being exported from icons/index.js
     name: "Dashboard", // name that appear in Sidebar
   },
-  // {
-  //   path: "/app/addProducts",
-  //   icon: "FormsIcon",
-  //   name: "Add Products",
-  // },
+  {
+    path: "/app/bill",
+    icon: "FormsIcon",
+    name: "Billing",
+  },
   {
     icon: "PagesIcon",
     name: "Products",
@@ -63,11 +63,6 @@ const routes = [
     icon: "CardsIcon",
     name: "Coupon Table",
   },
-  // {
-  //   path: "/app/CouponCodes",
-  //   icon: "CardsIcon",
-  //   name: "Coupon Codes",
-  // },
   //,
   {
     icon: "PagesIcon",
@@ -112,6 +107,12 @@ const routes = [
         name: "Blank",
       },
     ],
+  },
+  
+  {
+    path: "/app/view/:id",
+    icon: "CardsIcon",
+    name: "View",
   },
 ];
 
