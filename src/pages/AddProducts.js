@@ -362,7 +362,6 @@ function AddProducts() {
             onChange={(e) => setDesc(e.target.value)}
           />
         </Label>
-<<<<<<< HEAD
         <Label className="mt-4">
           <span>Email</span>
           <Input type="email" className="mt-1" placeholder="Jane Doe" />
@@ -376,14 +375,12 @@ function AddProducts() {
             ))}
           </Select>
         </Label>
-=======
-
         {/* <Label className="mt-4">
           <span>Email</span>
           <Input type="email" className="mt-1" placeholder="Jane Doe" />
         </Label> */}
 
-         {/* <Label className="mt-4">
+        {/* <Label className="mt-4">
           <span>Category</span>
           <Select className="mt-1" onChange={(e) => getSubCategories(e)}>
             <option value=""></option>
@@ -392,8 +389,6 @@ function AddProducts() {
             ))} 
            </Select>
         </Label>  */}
-
->>>>>>> d40e8ccb0c400053cb51da68e700106c9b5bdcc9
 
         <Label className="mt-4">
           <span>Sub-Category</span>
@@ -742,7 +737,6 @@ function AddProducts() {
                 ))}
               </TableBody>
             </Table>
-           
           </TableContainer>
           <div className="w-full flex justify-center items-center mb-2">
             <Button onClick={() => setPriceModalOpen(true)}>Add Price</Button>
