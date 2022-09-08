@@ -132,6 +132,11 @@ function UserTable() {
       isVisible: false,
     },
     {
+      name: "PAN Image",
+      cell: (row) => <img src={row.image}/>,
+      sortable: true,
+    },
+    {
       name: "Gender",
       cell: (row) => row.gender,
       sortable: true,

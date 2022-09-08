@@ -63,11 +63,6 @@ const routes = [
     icon: "CardsIcon",
     name: "Coupon Table",
   },
-  // {
-  //   path: "/app/CouponCodes",
-  //   icon: "CardsIcon",
-  //   name: "Coupon Codes",
-  // },
   //,
   {
     icon: "PagesIcon",
@@ -75,7 +70,7 @@ const routes = [
     routes: [
       { path: "/app/tables", icon: "TablesIcon", name: "Users Table" },
       {
-        path: "/app/individualDetails/:id",
+        path: "/app/individualDetails/-1",
         icon: "FormIcon",
         name: "Add Users",
       },
@@ -112,6 +107,12 @@ const routes = [
         name: "Blank",
       },
     ],
+  },
+  
+  {
+    path: "/app/view/:id",
+    icon: "CardsIcon",
+    name: "View",
   },
 ];
 

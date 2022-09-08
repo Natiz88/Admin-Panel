@@ -14,6 +14,7 @@ const Page404 = lazy(() => import("../pages/404"));
 const Blank = lazy(() => import("../pages/Blank"));
 const Logout = lazy(() => import("../pages/Logout"));
 const Banners = lazy(() => import("../pages/Banners"));
+const BannerAdd = lazy(() => import("../pages/BannerAdd"));
 const ChangePassword = lazy(() => import("../pages/ChangePassword"));
 const AdminProfile = lazy(() => import("../pages/AdminProfile"));
 // const ChangePassword = lazy(() => import("../pages/ChangePassword"));
@@ -74,6 +75,10 @@ const routes = [
   {
     path: "/addProducts",
     component: AddProducts,
+  },
+  {
+    path: "/bannerAdd",
+    component: BannerAdd,
   },
   {
     path: "/view/:id",

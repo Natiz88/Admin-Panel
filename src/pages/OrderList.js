@@ -3,7 +3,7 @@
 // const OrderList = () => {
 //   return (
 //     <div>
-      
+
 //     </div>
 //   )
 // }
@@ -25,7 +25,8 @@ import {
   ModalFooter,
   Textarea,
 } from "@windmill/react-ui";
-import {view, TrashIcon, FormsIcon } from "../icons";
+import { view, TrashIcon, FormsIcon } from "../icons";
+import { AiOutlineEye } from "react-icons/ai";
 
 
 function OrderList() {
@@ -43,8 +44,6 @@ function OrderList() {
   const [errorText, setErrorText] = useState("");
   const [buttonValue, setButtonValue] = useState("allorders");
   const [mainResponse, setMainResponse] = useState([]);
-
-
 
   const deleteUser = (user) => {
     setId(user);
@@ -166,6 +165,16 @@ function OrderList() {
           >
             <EditIcon className="w-5 h-5" aria-hidden="true" />
           </Button> */}
+
+          <Button
+            layout="link"
+            size="icon"
+            aria-label="View Details"
+            tag={Link}
+            to={`/app/bill`}
+          >
+            <AiOutlineEye className="w-5 h-5" aria-hidden="true" />
+          </Button>
           <Button layout="link" size="icon" aria-label="Delete">
             <TrashIcon
               className="w-5 h-5"
@@ -183,10 +192,43 @@ function OrderList() {
           </Button>
         </div>
       ),
-    }
+    },
+    {
+      name: "Billing",
+      print: false,
+      export: false,
+      cell: (row) => (
+        <div className="flex items-center">
+          
+
+          <Button
+            layout="link"
+            size="icon"
+            aria-label="View Details"
+            tag={Link}
+            to={`/app/bill`}
+          >
+            <AiOutlineEye className="w-5 h-5" aria-hidden="true" />
+          </Button>
+          {/* <Button layout="link" size="icon" aria-label="Delete">
+            <TrashIcon
+              className="w-5 h-5"
+              aria-hidden="true"
+              onClick={() => deleteUser(row.id)}
+            />
+          </Button> */}
+
+          {/* <Button layout="link" size="icon" aria-label="View">
+            <view
+              className="w-5 h-5"
+              aria-hidden="true"
+              onClick={() => deleteUser(row.id)}
+            />
+          </Button> */}
+        </div>
+      ),
+    },
   ];
-
-
 
   function setData() {
     console.log("function");
@@ -199,10 +241,9 @@ function OrderList() {
       let resp = mainResponse.filter((r) => r.status === "deffered");
       // let cols = columns.filter((c) => c.name === "Name");
       // setCol(cols)
-      
+
       setResponse(resp);
-    }
-    else if (buttonValue === "individual") {
+    } else if (buttonValue === "individual") {
       let resp = mainResponse.filter((r) => r.status === "cancelled");
       // let cols = columns.filter((c) => c.name === "Gender");
       // setCol(cols)
@@ -211,20 +252,18 @@ function OrderList() {
       let resp = mainResponse.filter((r) => r.status === "underProcess");
       // let cols = columns.filter((c) => c.name === "Name");
       // setCol(cols)
-      
+
       setResponse(resp);
-    }
-    else if (buttonValue === "corporate") {
-    let resp = mainResponse.filter((r) => r.status === "delivered");
-    // let cols = columns.filter((c) => c.name === "Name");
-    // setCol(cols)
-    
-    setResponse(resp);
-  } else {
+    } else if (buttonValue === "corporate") {
+      let resp = mainResponse.filter((r) => r.status === "delivered");
+      // let cols = columns.filter((c) => c.name === "Name");
+      // setCol(cols)
+
+      setResponse(resp);
+    } else {
       console.log("main", mainResponse);
       // setCol(columns)
       setResponse(mainResponse);
-
     }
   }
 
@@ -245,9 +284,6 @@ function OrderList() {
     data,
   };
 
-  
-
-
   const typeHandler = (e) => {
     setButtonValue(e);
   };
@@ -255,8 +291,6 @@ function OrderList() {
   useEffect(() => {
     setData();
   }, [buttonValue]);
-
-  
 
   return (
     <>
@@ -281,42 +315,67 @@ function OrderList() {
         </div>
       )}
 
-<div className="w-full  flex justify-start  text-[24px] gap-4 border-gray-400 pb-3  ">
+      <div className="w-full  flex justify-start  text-[24px] gap-4 border-gray-400 pb-3  ">
         <p
-          className={buttonValue === "allorders" ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2":"text-black"}
+          className={
+            buttonValue === "allorders"
+              ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2 cursor-pointer"
+              : "text-black cursor-pointer"
+          }
           onClick={(e) => typeHandler("allorders")}
+          
         >
-           All Orders
+          All Orders
         </p>
         <p
-           className={buttonValue === "pending" ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2":"text-black"} 
+          className={
+            buttonValue === "pending"
+              ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2 cursor-pointer"
+              : "text-black cursor-pointer"
+          }
           onClick={(e) => typeHandler("pending")}
         >
           <p>Pending</p>
         </p>
         <p
-            className={buttonValue === "deffered" ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2":"text-black"}
+          className={
+            buttonValue === "deffered"
+              ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2 cursor-pointer"
+              : "text-black cursor-pointer"
+          }
           onClick={(e) => typeHandler("deffered")}
         >
-           Deffered
+          Deffered
         </p>
         <p
-         className={buttonValue === "cancelled" ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2":"text-black"}
+          className={
+            buttonValue === "cancelled"
+              ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2 cursor-pointer"
+              : "text-black cursor-pointer"
+          }
           onClick={(e) => typeHandler("cancelled")}
         >
-           Cancelled
+          Cancelled
         </p>
         <p
-            className={buttonValue === "underProcess" ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2":"text-black"}
+          className={
+            buttonValue === "underProcess"
+              ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2 cursor-pointer"
+              : "text-black cursor-pointer"
+          }
           onClick={(e) => typeHandler("underProcess")}
         >
           Under Process
         </p>
         <p
-         className={buttonValue === "delivered" ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2":"text-black"}
+          className={
+            buttonValue === "delivered"
+              ? "  text-blue-500 font-semibold border-b-4 border-blue-400 pb-2 cursor-pointer"
+              : "text-black cursor-pointer"
+          }
           onClick={(e) => typeHandler("delivered")}
         >
-           Delivered
+          Delivered
         </p>
       </div>
 
@@ -362,7 +421,7 @@ function OrderList() {
             <Button onClick={confirmUsersDelete}>Ok, Continue</Button>
           </div>
         </ModalFooter>
-      </Modal>   
+      </Modal>
       <Modal isOpen={isNotificationModalOpen} onClose={closeNotificationModal}>
         <ModalHeader>Send Notification</ModalHeader>
         <ModalBody>

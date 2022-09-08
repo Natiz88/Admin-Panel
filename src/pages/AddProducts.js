@@ -29,11 +29,14 @@ import { Link } from "react-router-dom";
 import { EditIcon, TrashIcon, FormsIcon } from "../icons";
 import { modes } from "react-transition-group/SwitchTransition";
 
+import MultiImageInput from "react-multiple-image-input";
+
 // import {Switch} from "react-button-switch";
 
 // import { MailIcon } from "../icons";
 
 function AddProducts() {
+
   const submitHandler = (e) => {
     e.preventDefault();
   };
@@ -62,6 +65,15 @@ function AddProducts() {
   const [response, setResponse] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [tableErrorMsg, setTableErrorMsg] = useState("");
+
+
+  const crop = {
+    unit: "%",
+    aspect: 4 / 3,
+    width: "100"
+  };
+
+  const [images, setImages] = useState({});
 
   function closeModal() {
     setPriceModalOpen(false);
@@ -276,7 +288,7 @@ function AddProducts() {
   };
 
   const pushToTable = () => {
-    console.log(indPricelist.qty);
+    const begin = indPricelist.split()
     const isPresent = tablePriceData.filter(
       (data) => data.qty === indPricelist.qty
     );
@@ -352,8 +364,20 @@ function AddProducts() {
                 onChange={onImageChange}
               />
             </span>
+
           </label>
+          
         </div>
+
+        <label htmlFor="" >
+          <MultiImageInput
+      images={images}
+      setImages={setImages}
+      allowCrop={false}
+      theme={"light"}
+      cropConfig={{ crop, ruleOfThirds: true }}
+    />
+          </label>
         <Label className="mt-4">
           <span>Description</span>
           <Textarea
@@ -362,6 +386,11 @@ function AddProducts() {
             onChange={(e) => setDesc(e.target.value)}
           />
         </Label>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> e0c26fb18c262d20fba56a792760c72a0b55c6f4
         <Label className="mt-4">
           <span>Email</span>
           <Input type="email" className="mt-1" placeholder="Jane Doe" />
@@ -375,21 +404,43 @@ function AddProducts() {
             ))}
           </Select>
         </Label>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 14c2b6a5a9760cdd53d22849e8a49024dbacf797
+>>>>>>> e0c26fb18c262d20fba56a792760c72a0b55c6f4
         {/* <Label className="mt-4">
           <span>Email</span>
           <Input type="email" className="mt-1" placeholder="Jane Doe" />
         </Label> */}
-
+<<<<<<< HEAD
         {/* <Label className="mt-4">
+=======
+
+<<<<<<< HEAD
+        {/* <Label className="mt-4">
+=======
+         {/* <Label className="mt-4">
+>>>>>>> 14c2b6a5a9760cdd53d22849e8a49024dbacf797
+>>>>>>> e0c26fb18c262d20fba56a792760c72a0b55c6f4
           <span>Category</span>
           <Select className="mt-1" onChange={(e) => getSubCategories(e)}>
             <option value=""></option>
              {categories.map((e) => (
               <option value={e.id}>{e.name}</option>
+<<<<<<< HEAD
+            ))} */}
+        {/* </Select>
+        </Label> */}{" "}
+=======
             ))} 
            </Select>
         </Label>  */}
 
+<<<<<<< HEAD
+=======
+>>>>>>> 14c2b6a5a9760cdd53d22849e8a49024dbacf797
+>>>>>>> e0c26fb18c262d20fba56a792760c72a0b55c6f4
         <Label className="mt-4">
           <span>Sub-Category</span>
           <Select className="mt-1">
@@ -399,8 +450,13 @@ function AddProducts() {
             ))}
           </Select>
         </Label>
+<<<<<<< HEAD
         <div className="border-2 border-gray-300 my-4">
+=======
+        <form className="border-2 border-gray-300 my-4" >
+>>>>>>> 14c2b6a5a9760cdd53d22849e8a49024dbacf797
           <Modal isOpen={isAttributeModalOpen} onClose={closeModal}>
+            <form onSubmit={pushToAttributeTable}>
             <div>
               <Label className="mt-4 w-4/5">
                 <span className="flex justify-center font-bold">Attribute</span>
@@ -408,6 +464,7 @@ function AddProducts() {
                   className="mt-1"
                   placeholder="Size"
                   defaultValue={attributes.attribute}
+                  required
                   disabled={editMode ? true : false}
                   onChange={(e) =>
                     setAttributes({ ...attributes, attribute: e.target.value })
@@ -422,6 +479,7 @@ function AddProducts() {
                   className="mt-1"
                   placeholder="A4"
                   defaultValue={attributes.value}
+                  required
                   onChange={(e) =>
                     setAttributes({ ...attributes, value: e.target.value })
                   }
@@ -433,11 +491,12 @@ function AddProducts() {
               <Button
                 type="submit"
                 className="mt-4"
-                onClick={pushToAttributeTable}
+                
               >
                 Add To Table
               </Button>
             </div>
+            </form>
           </Modal>
           <TableContainer className="mb-8">
             <Table>
@@ -495,10 +554,10 @@ function AddProducts() {
               Add Attribute
             </Button>
           </div>
-        </div>
+        </form>
         <div className="border-2 border-gray-300 my-4">
           <Modal isOpen={isPriceModalOpen} onClose={closeModal}>
-            <div className="p-2 mt-4">
+            <form className="p-2 mt-4" onSubmit={pushToTable}>
               <h1 className="font-bold text-red-500">
                 Price List (Individual Account)
               </h1>
@@ -515,6 +574,7 @@ function AddProducts() {
                         placeholder="100-200"
                         defaultValue={indPricelist.qty}
                         onChange={(e) => setRange(e)}
+                        required
                       />
                     </Label>
                   </div>
@@ -533,6 +593,7 @@ function AddProducts() {
                             normal: e.target.value,
                           })
                         }
+                        required
                       />
                     </Label>
                   </div>
@@ -554,6 +615,7 @@ function AddProducts() {
                             urgent: e.target.value,
                           })
                         }
+                        required
                       />
                     </Label>
                   </div>
@@ -573,6 +635,7 @@ function AddProducts() {
                             discount: e.target.value,
                           })
                         }
+                        required
                       />
                     </Label>
                   </div>
@@ -595,6 +658,7 @@ function AddProducts() {
                           placeholder="100-200"
                           defaultValue={indPricelist.qty}
                           value={indPricelist.qty}
+                          required
                           // onChange={(e) => setCorPriceList({...indPricelist,qty:e.target.value})}
                         />
                       </Label>
@@ -614,6 +678,7 @@ function AddProducts() {
                               normal: e.target.value,
                             })
                           }
+                          required
                         />
                       </Label>
                     </div>
@@ -628,7 +693,9 @@ function AddProducts() {
                         <Input
                           className="mt-1"
                           placeholder="10"
-                          defaultValue={corPricelist.urgent}
+                          
+                          required
+                          // defaultValue={corPricelist.urgent}
                           onChange={(e) =>
                             setCorPriceList({
                               ...corPricelist,
@@ -654,6 +721,7 @@ function AddProducts() {
                               discount: e.target.value,
                             })
                           }
+                          required
                         />
                       </Label>
                     </div>
@@ -662,11 +730,11 @@ function AddProducts() {
               </div>
 
               <div className="flex justify-center">
-                <Button type="submit" className="mt-4" onClick={pushToTable}>
+                <Button type="submit" className="mt-4">
                   Add To Table
                 </Button>
               </div>
-            </div>
+            </form>
           </Modal>
 
           <TableContainer className="mb-8">
@@ -743,7 +811,7 @@ function AddProducts() {
           </div>
         </div>
         <div className="flex justify-center">
-          <Button type="submit" className="mt-4" onClick={addproduct}>
+          <Button type="submit" className="mt-4">
             Add Product
           </Button>
         </div>

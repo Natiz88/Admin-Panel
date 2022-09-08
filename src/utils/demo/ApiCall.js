@@ -3,20 +3,24 @@ import axios from "axios";
 const token = localStorage.getItem("token");
 
 export const deleteAllUsers = async (arr) => {
-  const url = "http://192.168.100.17:8081/api/admin/deleteAllUser";
+  try {
+    const url = "http://192.168.100.17:8081/api/admin/deleteAllUser";
 
-  console.log("url", url);
-  const config = {
-    headers: {
-      Accept: "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  };
-  const data = {
-    id: arr,
-  };
-  const resp = await axios.post(url, data, config);
-  return resp;
+    console.log("url", url);
+    const config = {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const data = {
+      id: arr,
+    };
+    const resp = await axios.post(url, data, config);
+    return resp;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const loginData = async (email, password) => {
@@ -34,9 +38,47 @@ export const loginData = async (email, password) => {
   const resp = await axios.post(url, data, config);
   return resp.data;
 };
+// export const PostBanner = async (title, status) => {
+//   const url = "http://192.168.100.17:8081/api/banner/add";
+//   const config = {
+//     headers: {
+//       Accept: "application/json",
+//     },
+//   };
+//   const data = {
+//     title: title,
+//     status: status
+//   };
+//   const resp = await axios.post(url, data, config);
+//   return resp.data;
+// };
 
 export const getData = async () => {
   const url = "http://192.168.100.17:8081/api/admin/user";
+  const config = {
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const resp = await axios.get(url, config);
+  return resp.data;
+};
+
+export const getBanners = async () => {
+  const url = "http://192.168.100.17:8081/api/banner/list";
+  const config = {
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const resp = await axios.get(url, config);
+  return resp.data;
+};
+
+export const getBanner = async (id) => {
+  const url = `http://192.168.100.17:8081/api/banner/${id}`;
   const config = {
     headers: {
       Accept: "application/json",
@@ -98,6 +140,17 @@ export const deleteUsers = async (id) => {
   return resp;
 };
 
+export const deleteBanner = async (id) => {
+  const url = `http://192.168.100.17:8081/api/admin/banner/${id}/delete`;
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const resp = await axios.delete(url, config);
+  return resp;
+};
 export const addUser = async (
   name,
   address,
