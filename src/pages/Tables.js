@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 // import { GiPerson } from 'react-icons/gi';
 import datas from "./../utils/demo/tableData";
 import "./Tables.css";
+import { AiOutlineEye } from "react-icons/ai";
 import {
   Modal,
   Button,
@@ -146,6 +147,19 @@ function UserTable() {
       export: false,
       cell: (row) => (
         <div className="flex items-center">
+          {/* Added by deepak katwal */}
+          <Button layout="link" size="icon" aria-label="View Details"></Button>
+
+          <Button
+            layout="link"
+            size="icon"
+            aria-label="View Details"
+            tag={Link}
+            to={`/app/view/${row.id}`}
+          >
+            <AiOutlineEye className="w-5 h-5" aria-hidden="true" />
+          </Button>
+
           <Button layout="link" size="icon" aria-label="Edit"></Button>
 
           <Button

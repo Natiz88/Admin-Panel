@@ -1,9 +1,14 @@
 .rdt_Table{
     margin-top: 50px;
+    border:1px solid gray
 }
-.rdt_TableCol{
+/* .rdt_TableCol{
     font-size: 1rem;
+    border:1px solid gray
 }
+.rdt_TableRow{
+    border:1px solid gray
+} */
 .rdt_input{
     background:red;
 }
