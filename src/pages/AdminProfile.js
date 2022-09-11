@@ -3,6 +3,7 @@ import { Input, Label, Select, Textarea, Button } from "@windmill/react-ui";
 import photo from "./../utils/images/user.png";
 import { useEffect, useState } from "react";
 import { getAdminProfile, updateProfile } from "./../utils/demo/ApiCall";
+import { withPrivateRoute } from "../utils/demo/WithPrivateRoute";
 
 import PageTitle from "../components/Typography/PageTitle";
 
@@ -182,4 +183,4 @@ function AdminProfile() {
   );
 }
 
-export default AdminProfile;
+export default withPrivateRoute(AdminProfile);

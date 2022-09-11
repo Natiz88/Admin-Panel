@@ -27,7 +27,7 @@ function IndividualDetails() {
 
   const history = useHistory();
 
-  useState(() => {
+  useEffect(() => {
     getUser(id).then((response) => setUser(response));
   }, []);
 
@@ -100,7 +100,7 @@ function IndividualDetails() {
       contact === "" ||
       password === "" ||
       confirmPassword === "" ||
-      confirmPassword == "" ||
+      confirmPassword === "" ||
       type === ""
     ) {
       setErrorMessage("Please fill up  all the fields");
