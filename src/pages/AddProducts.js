@@ -36,16 +36,13 @@ import MultiImageInput from "react-multiple-image-input";
 // import { MailIcon } from "../icons";
 
 function AddProducts() {
-  const submitHandler = (e) => {
-    e.preventDefault();
-  };
-
   const [categories, setCategories] = useState([]);
   // const [change,setchange] = useState(false);
   const [subCategories, setSubCategories] = useState([]);
   const [category, setCategory] = useState("");
   const [productName, setproductName] = useState();
-  const [img, setImg] = useState(uploadImage);
+  const [imgPreview, setImgPreview] = useState(uploadImage);
+  const [img, setImg] = useState([]);
   const [desc, setDesc] = useState();
   // const [email, setEmail] = useState()
   const [subCategory, setSubCategory] = useState();
@@ -71,7 +68,7 @@ function AddProducts() {
     width: "100",
   };
 
-  const [images, setImages] = useState({});
+  const [images, setImages] = useState([]);
 
   function closeModal() {
     setPriceModalOpen(false);
@@ -150,8 +147,8 @@ function AddProducts() {
   // console.log(desc);
 
   const onImageChange = (e) => {
-    const [file] = e.target.files;
-    setImg(URL.createObjectURL(file));
+    const file = e.target.files[0];
+    setImg([...img, file]);
   };
 
   const addproduct = (e) => {
@@ -192,6 +189,7 @@ function AddProducts() {
         setPriceModalOpen(true)
       );
   };
+  console.log("imgFile", img);
 
   const [pageTable1, setPageTable1] = useState(1);
   const [dataTable1, setDataTable1] = useState([]);
@@ -323,8 +321,48 @@ function AddProducts() {
     setCorPriceList({ ...corPricelist, qty: e.target.value });
   };
 
+  const submitHandler = (e) => {
+    e.preventDefault();
+
+    const attri = [
+      { name: "size", value: "large" },
+      { name: "weight", value: "a4" },
+    ];
+    let formData = new FormData();
+    formData.append("name", "Sweaterss");
+    formData.append("desc", "this is a sweater");
+    formData.append("subcategoriesId", 1);
+    formData.append("attributes", JSON.stringify(attri));
+    // attri.forEach((attr) => formData.append("attributes[]", attr));
+    formData.append(
+      "prices",
+      JSON.stringify([
+        {
+          from: 501,
+          to: 599,
+          indPrice: 30,
+          indUrgent: 40,
+          indDiscount: 10,
+          corPrice: 20,
+          corUrgent: 50,
+          corDiscount: 20,
+        },
+      ])
+    );
+    img.forEach((image) => formData.append("images", image));
+
+    formData.forEach((key, value) => {
+      console.log(key, value);
+    });
+
+    axios
+      .post("http://192.168.1.71:5000/api/products", formData)
+      .then((res) => console.log("res", res))
+      .catch((err) => console.log("err0r", err));
+  };
+
   return (
-    <div>
+    <form onSubmit={submitHandler}>
       <PageTitle>Add Products</PageTitle>
       <SectionTitle>Product Details</SectionTitle>
 
@@ -370,6 +408,7 @@ function AddProducts() {
             setImages={setImages}
             allowCrop={false}
             theme={"light"}
+            max={10}
             cropConfig={{ crop, ruleOfThirds: true }}
           />
         </label>
@@ -769,7 +808,7 @@ function AddProducts() {
           Add Product
         </Button>
       </div>
-    </div>
+    </form>
   );
 }
 

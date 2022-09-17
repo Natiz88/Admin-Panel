@@ -40,6 +40,14 @@ export default function BannerAdd() {
     getIndividualBanner(id).then((response) => setBanner(response));
   }, []);
 
+  // useEffect(() => {
+  //   const objectUrl = URL.createObjectURL(imgFile);
+  //   setimgPreview(objectUrl);
+
+  //   // free memory when ever this component is unmounted
+  //   return () => URL.revokeObjectURL(objectUrl);
+  // }, [imgFile]);
+
   useEffect(() => {
     if (id > 0) {
       setEditMode(true);
@@ -57,12 +65,13 @@ export default function BannerAdd() {
     if (event.target.files && event.target.files.length > 0) {
       const pickedFile = event.target.files[0];
       setimgFile(pickedFile);
-      // onImageChange();
+      onImageChange(event.target.files[0]);
     }
   };
 
-  const onImageChange = (e) => {
-    setimgPreview(URL.createObjectURL(imgFile));
+  const onImageChange = (img) => {
+    const file = URL.createObjectURL(img);
+    setimgPreview(file);
   };
 
   const addBanner = async () => {
@@ -165,7 +174,7 @@ export default function BannerAdd() {
         <label>
           <span>
             <img
-              className=" h-32 w-32 -z-10 cursor-pointer"
+              className=" h-62 w-32 -z-10 cursor-pointer"
               src={imgPreview}
               alt="pic"
             />
