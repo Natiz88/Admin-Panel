@@ -1,16 +1,14 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+// import './billtable.css'
 import BillTable from "./../components/BillTable";
 import logo from "./../components/images/BillingLogo.png";
 import product from "./../components/images/image.jpg";
-import {
-  Label,
-  Button,
-} from "@windmill/react-ui";
+import { Label, Button } from "@windmill/react-ui";
+import { EditIcon, TrashIcon, FormsIcon } from "../icons";
 
 const Bill = () => {
   const ref = useRef();
   const secondRef = useRef();
-  const [tableAttributeData, setTableAttributeData] = useState([]);
   const printBill = () => {
     let element = ref.current.innerHTML;
     let element2 = secondRef.current.innerHTML;
@@ -29,9 +27,9 @@ const Bill = () => {
       <p className=" flex flex-col w-full text-xs w-[1780px]">
         <div className="w-full " ref={ref}>
           <div className="p-3 pr-5 pt-8">
-          <Label className="mb-2 font-bold text-xl text-center">
-                Order Slip
-              </Label>
+            <Label className="mb-2 font-bold text-xl text-center">
+              Order Slip
+            </Label>
             <div className="flex justify-between mb-3 ">
               <div className="">
                 <div className="flex">
@@ -46,7 +44,6 @@ const Bill = () => {
               <img src={logo} alt="Logo" className="flex h-12 self-end" />
             </div>
             <div>
-              
               <div className="flex flex-col gap-4">
                 <div>
                   <Label className=" font-bold ">Bill No:</Label>
@@ -84,9 +81,9 @@ const Bill = () => {
 
         <div className="w-full " ref={secondRef}>
           <div className="p-3 pl-5 pt-8">
-          <Label className="mb-2 font-bold text-xl text-center">
-                Order Slip
-              </Label>
+            <Label className="mb-2 font-bold text-xl text-center">
+              Order Slip
+            </Label>
             <div className="flex justify-between h-10 mb-4">
               <div className="">
                 <div className="flex">
@@ -132,7 +129,6 @@ const Bill = () => {
                 </Label>
                 <Label>support@saralprint.com</Label>
                 <Label className=" font-normal ">www.saralprint.com</Label>
-
               </div>
               <div className="self-end w-1/4">
                 <Label>Bill Printed by</Label>
@@ -151,15 +147,13 @@ const Bill = () => {
                   <Label className="mb-1">Delivery Address:</Label>
                   <Label className="mb-1">Contact:</Label>
                   <Label className="mb-1">Order ID:</Label>
-                  <Label >Delivery Date:</Label>
+                  <Label>Delivery Date:</Label>
                 </div>
               </div>
 
               <div className="w-1/2 p-2">
                 <div>
-                  <Label className="flex justify-start font-bold">
-                    From
-                  </Label>
+                  <Label className="flex justify-start font-bold">From</Label>
                   <img src={logo} alt="Logo" className=" h-12" />
                   <div className="flex flex-col justify-center">
                     <Label>www.saralprint.com</Label>

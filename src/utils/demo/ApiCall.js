@@ -77,6 +77,18 @@ export const getBanners = async () => {
   return resp.data;
 };
 
+export const getIndividualBanner = async (id) => {
+  const url = `http://192.168.100.17:8081/api/banner/${id}`;
+  const config = {
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const resp = await axios.get(url, config);
+  return resp.data;
+};
+
 export const getBanner = async (id) => {
   const url = `http://192.168.100.17:8081/api/banner/${id}`;
   const config = {

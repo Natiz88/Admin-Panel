@@ -27,17 +27,13 @@ import { modes } from "react-transition-group/SwitchTransition";
 import MultiImageInput from "react-multiple-image-input";
 
 function AddProducts() {
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-  };
-
   const [categories, setCategories] = useState([]);
   // const [change,setchange] = useState(false);
   const [subCategories, setSubCategories] = useState([]);
   const [category, setCategory] = useState("");
   const [productName, setproductName] = useState();
-  const [img, setImg] = useState(uploadImage);
+  const [imgPreview, setImgPreview] = useState(uploadImage);
+  const [img, setImg] = useState([]);
   const [desc, setDesc] = useState();
   // const [email, setEmail] = useState()
   const [subCategory, setSubCategory] = useState();
@@ -57,17 +53,20 @@ function AddProducts() {
   const [editMode, setEditMode] = useState(false);
   const [tableErrorMsg, setTableErrorMsg] = useState("");
 
-
   const crop = {
     unit: "%",
     aspect: 4 / 3,
-    width: "100"
+    width: "100",
   };
+
 
 
   const [images, setImages] = useState([]);
 
   console.log(images,"images");
+
+  
+
 
   function closeModal() {
     setPriceModalOpen(false);
@@ -145,8 +144,8 @@ function AddProducts() {
 
 
   const onImageChange = (e) => {
-    const [file] = e.target.files;
-    setImg(URL.createObjectURL(file));
+    const file = e.target.files[0];
+    setImg([...img, file]);
   };
 
   const addproduct = (e) => {
@@ -187,6 +186,7 @@ function AddProducts() {
         setPriceModalOpen(true)
       );
   };
+  console.log("imgFile", img);
 
   const [pageTable1, setPageTable1] = useState(1);
   const [dataTable1, setDataTable1] = useState([]);
@@ -272,7 +272,7 @@ function AddProducts() {
   };
 
   const pushToTable = () => {
-    const begin = indPricelist.split()
+    const begin = indPricelist.split();
     const isPresent = tablePriceData.filter(
       (data) => data.qty === indPricelist.qty
     );
@@ -310,8 +310,48 @@ function AddProducts() {
     setCorPriceList({ ...corPricelist, qty: e.target.value });
   };
 
+  const submitHandler = (e) => {
+    e.preventDefault();
+
+    const attri = [
+      { name: "size", value: "large" },
+      { name: "weight", value: "a4" },
+    ];
+    let formData = new FormData();
+    formData.append("name", "Sweaterss");
+    formData.append("desc", "this is a sweater");
+    formData.append("subcategoriesId", 1);
+    formData.append("attributes", JSON.stringify(attri));
+    // attri.forEach((attr) => formData.append("attributes[]", attr));
+    formData.append(
+      "prices",
+      JSON.stringify([
+        {
+          from: 501,
+          to: 599,
+          indPrice: 30,
+          indUrgent: 40,
+          indDiscount: 10,
+          corPrice: 20,
+          corUrgent: 50,
+          corDiscount: 20,
+        },
+      ])
+    );
+    img.forEach((image) => formData.append("images", image));
+
+    formData.forEach((key, value) => {
+      console.log(key, value);
+    });
+
+    axios
+      .post("http://192.168.1.71:5000/api/products", formData)
+      .then((res) => console.log("res", res))
+      .catch((err) => console.log("err0r", err));
+  };
+
   return (
-    <div>
+    <form onSubmit={submitHandler}>
       <PageTitle>Add Products</PageTitle>
       <SectionTitle>Product Details</SectionTitle>
 
@@ -349,20 +389,18 @@ function AddProducts() {
                 onChange={onImageChange}
               />
             </span>
-
           </label>
-          
         </div>
-
-        <label htmlFor="" >
+        <label htmlFor="">
           <MultiImageInput
-      images={images}
-      setImages={setImages}
-      allowCrop={false}
-      theme={"light"}
-      cropConfig={{ crop, ruleOfThirds: true }}
-    />
-          </label>
+            images={images}
+            setImages={setImages}
+            allowCrop={false}
+            theme={"light"}
+            max={10}
+            cropConfig={{ crop, ruleOfThirds: true }}
+          />
+        </label>
         <Label className="mt-4">
           <span>Description</span>
           <Textarea
@@ -373,7 +411,14 @@ function AddProducts() {
         </Label>
 
 
+
        
+
+        <Label className="mt-4">
+          <span>Email</span>
+          <Input type="email" className="mt-1" placeholder="Jane Doe" />
+        </Label>
+
         <Label className="mt-4">
           <span>Category</span>
           <Select className="mt-1" onChange={(e) => getSubCategories(e)}>
@@ -385,6 +430,7 @@ function AddProducts() {
         </Label>
 
 
+
        
 
 
@@ -392,6 +438,34 @@ function AddProducts() {
 
           <Modal isOpen={isAttributeModalOpen} onClose={closeModal}>
             <form onSubmit={pushToAttributeTable}>
+
+        {/* <Label className="mt-4">
+          <span>Email</span>
+          <Input type="email" className="mt-1" placeholder="Jane Doe" />
+        </Label> */}
+        {/* <Label className="mt-4">
+
+         {/* <Label className="mt-4">
+          <span>Category</span>
+          <Select className="mt-1" onChange={(e) => getSubCategories(e)}>
+            <option value=""></option>
+             {categories.map((e) => (
+              <option value={e.id}>{e.name}</option>
+            ))} */}
+        {/* </Select>
+        </Label> */}{" "}
+        <Label className="mt-4">
+          <span>Sub-Category</span>
+          <Select className="mt-1">
+            <option value=""></option>
+            {subCategories.map((e) => (
+              <option value={e.id}>{e.name}</option>
+            ))}
+          </Select>
+        </Label>
+        <Modal isOpen={isAttributeModalOpen} onClose={closeModal}>
+          <form onSubmit={pushToAttributeTable}>
+
             <div>
               <Label className="mt-4 w-4/5">
                 <span className="flex justify-center font-bold">Attribute</span>
@@ -423,81 +497,159 @@ function AddProducts() {
             </div>
             <Label className="text-red-400">{tableErrorMsg}</Label>
             <div className="flex justify-center">
-              <Button
-                type="submit"
-                className="mt-4"
-                
-              >
+              <Button type="submit" className="mt-4">
                 Add To Table
               </Button>
             </div>
-            </form>
-          </Modal>
-          <TableContainer className="mb-8">
-            <Table>
-              <TableHeader>
-                <tr>
-                  <TableCell>Attribute</TableCell>
-                  <TableCell>Value</TableCell>
-                  <TableCell>Action</TableCell>
-                </tr>
-              </TableHeader>
-              <TableBody>
-                {tableAttributeData.map((list, i) => (
-                  <TableRow key={i}>
-                    <TableCell>
-                      <span className="text-sm">{list.attribute}</span>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">{list.value}</span>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center">
-                        <Button
-                          layout="link"
-                          size="icon"
-                          aria-label="Edit"
-                        ></Button>
+          </form>
+        </Modal>
+        <TableContainer className="mb-8">
+          <Table>
+            <TableHeader>
+              <tr>
+                <TableCell>Attribute</TableCell>
+                <TableCell>Value</TableCell>
+                <TableCell>Action</TableCell>
+              </tr>
+            </TableHeader>
+            <TableBody>
+              {tableAttributeData.map((list, i) => (
+                <TableRow key={i}>
+                  <TableCell>
+                    <span className="text-sm">{list.attribute}</span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">{list.value}</span>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center">
+                      <Button
+                        layout="link"
+                        size="icon"
+                        aria-label="Edit"
+                      ></Button>
 
-                        <Button
-                          layout="link"
-                          size="icon"
-                          aria-label="Edit"
-                          onClick={() => editAttributeRow(list)}
+                      <Button
+                        layout="link"
+                        size="icon"
+                        aria-label="Edit"
+                        onClick={() => editAttributeRow(list)}
 
-                          // tag={Link}
-                          // to={`/app/individualDetails/${row.id}`}
-                        >
-                          <EditIcon className="w-5 h-5" aria-hidden="true" />
-                        </Button>
-                        <Button layout="link" size="icon" aria-label="Delete">
-                          <TrashIcon
-                            className="w-5 h-5"
-                            aria-hidden="true"
-                            onClick={() => delAttributeRow(list)}
-                          />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <div className="w-full flex justify-center items-center mb-2">
-            <Button onClick={() => setAttributeModalOpen(true)}>
-              Add Attribute
-            </Button>
-          </div>
-        </form>
-        <div className="border-2 border-gray-300 my-4">
-          <Modal isOpen={isPriceModalOpen} onClose={closeModal}>
-            <form className="p-2 mt-4" onSubmit={pushToTable}>
+                        // tag={Link}
+                        // to={`/app/individualDetails/${row.id}`}
+                      >
+                        <EditIcon className="w-5 h-5" aria-hidden="true" />
+                      </Button>
+                      <Button layout="link" size="icon" aria-label="Delete">
+                        <TrashIcon
+                          className="w-5 h-5"
+                          aria-hidden="true"
+                          onClick={() => delAttributeRow(list)}
+                        />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <div className="w-full flex justify-center items-center mb-2">
+          <Button onClick={() => setAttributeModalOpen(true)}>
+            Add Attribute
+          </Button>
+        </div>
+      </form>
+      <div className="border-2 border-gray-300 my-4">
+        <Modal isOpen={isPriceModalOpen} onClose={closeModal}>
+          <form className="p-2 mt-4" onSubmit={pushToTable}>
+            <h1 className="font-bold text-red-500">
+              Price List (Individual Account)
+            </h1>
+
+            <div className="flex flex-col gap-1 justify-between  md:flex-row">
+              <div className="flex w-full md:w-1/2 justify-around">
+                <div>
+                  <Label className="mt-4 w-4/5">
+                    <span className="flex justify-center font-bold">Range</span>
+                    <Input
+                      className="mt-1"
+                      placeholder="100-200"
+                      defaultValue={indPricelist.qty}
+                      onChange={(e) => setRange(e)}
+                      required
+                    />
+                  </Label>
+                </div>
+                <div>
+                  <Label className="mt-4 w-4/5">
+                    <span className="flex justify-center font-bold">
+                      Normal Price
+                    </span>
+                    <Input
+                      className="mt-1"
+                      placeholder="5"
+                      defaultValue={indPricelist.normal}
+                      onChange={(e) =>
+                        setIndPriceList({
+                          ...indPricelist,
+                          normal: e.target.value,
+                        })
+                      }
+                      required
+                    />
+                  </Label>
+                </div>
+              </div>
+
+              <div className="flex justify-around w-full md:w-1/2">
+                <div>
+                  <Label className="mt-4 w-4/5">
+                    <span className="flex justify-center font-bold">
+                      Urgent Price
+                    </span>
+                    <Input
+                      className="mt-1"
+                      placeholder="10"
+                      defaultValue={indPricelist.urgent}
+                      onChange={(e) =>
+                        setIndPriceList({
+                          ...indPricelist,
+                          urgent: e.target.value,
+                        })
+                      }
+                      required
+                    />
+                  </Label>
+                </div>
+
+                <div>
+                  <Label className="mt-4 w-4/5">
+                    <span className="flex justify-center font-bold">
+                      Discount
+                    </span>
+                    <Input
+                      className="mt-1"
+                      placeholder="5%"
+                      defaultValue={indPricelist.discount}
+                      onChange={(e) =>
+                        setIndPriceList({
+                          ...indPricelist,
+                          discount: e.target.value,
+                        })
+                      }
+                      required
+                    />
+                  </Label>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4">
               <h1 className="font-bold text-red-500">
-                Price List (Individual Account)
+                Price List(Corporate Account)
               </h1>
-
-              <div className="flex flex-col gap-1 justify-between  md:flex-row">
+              <div className="flex flex-col gap-1 justify-between md:flex-row">
                 <div className="flex w-full md:w-1/2 justify-around">
                   <div>
                     <Label className="mt-4 w-4/5">
@@ -508,8 +660,9 @@ function AddProducts() {
                         className="mt-1"
                         placeholder="100-200"
                         defaultValue={indPricelist.qty}
-                        onChange={(e) => setRange(e)}
+                        value={indPricelist.qty}
                         required
+                        // onChange={(e) => setCorPriceList({...indPricelist,qty:e.target.value})}
                       />
                     </Label>
                   </div>
@@ -521,10 +674,10 @@ function AddProducts() {
                       <Input
                         className="mt-1"
                         placeholder="5"
-                        defaultValue={indPricelist.normal}
+                        defaultValue={corPricelist.urgent}
                         onChange={(e) =>
-                          setIndPriceList({
-                            ...indPricelist,
+                          setCorPriceList({
+                            ...corPricelist,
                             normal: e.target.value,
                           })
                         }
@@ -543,14 +696,14 @@ function AddProducts() {
                       <Input
                         className="mt-1"
                         placeholder="10"
-                        defaultValue={indPricelist.urgent}
+                        required
+                        // defaultValue={corPricelist.urgent}
                         onChange={(e) =>
-                          setIndPriceList({
-                            ...indPricelist,
+                          setCorPriceList({
+                            ...corPricelist,
                             urgent: e.target.value,
                           })
                         }
-                        required
                       />
                     </Label>
                   </div>
@@ -563,10 +716,10 @@ function AddProducts() {
                       <Input
                         className="mt-1"
                         placeholder="5%"
-                        defaultValue={indPricelist.discount}
+                        defaultValue={corPricelist.discount}
                         onChange={(e) =>
-                          setIndPriceList({
-                            ...indPricelist,
+                          setCorPriceList({
+                            ...corPricelist,
                             discount: e.target.value,
                           })
                         }
@@ -576,6 +729,8 @@ function AddProducts() {
                   </div>
                 </div>
               </div>
+            </div>
+
 
               <div className="mt-4">
                 <h1 className="font-bold text-red-500">
@@ -639,70 +794,67 @@ function AddProducts() {
                       </Label>
                     </div>
 
-                    <div>
-                      <Label className="mt-4 w-4/5">
-                        <span className="flex justify-center font-bold">
-                          Discount
-                        </span>
-                        <Input
-                          className="mt-1"
-                          placeholder="5%"
-                          defaultValue={corPricelist.discount}
-                          onChange={(e) =>
-                            setCorPriceList({
-                              ...corPricelist,
-                              discount: e.target.value,
-                            })
-                          }
-                          required
-                        />
-                      </Label>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="flex justify-center">
+              <Button type="submit" className="mt-4">
+                Add To Table
+              </Button>
+            </div>
+          </form>
+        </Modal>
 
-              <div className="flex justify-center">
-                <Button type="submit" className="mt-4">
-                  Add To Table
-                </Button>
-              </div>
-            </form>
-          </Modal>
+        <TableContainer className="mb-8">
+          <Table>
+            <TableHeader>
+              <tr>
+                <TableCell>Quantity Range</TableCell>
+                <TableCell>Normal Price</TableCell>
+                <TableCell>Urgent Price</TableCell>
+                <TableCell>Discount</TableCell>
+                <TableCell>Type</TableCell>
+                <TableCell>Action</TableCell>
+              </tr>
+            </TableHeader>
+            <TableBody>
+              {tablePriceData.map((list, i) => (
+                <TableRow key={i}>
+                  <TableCell>
+                    <span className="text-sm">$ {list.qty}</span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">$ {list.normal}</span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">$ {list.urgent}</span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">{list.discount}</span>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      type={list.type === "individual" ? "success" : "primary"}
+                    >
+                      {list.type}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center">
+                      <Button
+                        layout="link"
+                        size="icon"
+                        aria-label="Edit"
+                      ></Button>
 
-          <TableContainer className="mb-8">
-            <Table>
-              <TableHeader>
-                <tr>
-                  <TableCell>Quantity Range</TableCell>
-                  <TableCell>Normal Price</TableCell>
-                  <TableCell>Urgent Price</TableCell>
-                  <TableCell>Discount</TableCell>
-                  <TableCell>Type</TableCell>
-                  <TableCell>Action</TableCell>
-                </tr>
-              </TableHeader>
-              <TableBody>
-                {tablePriceData.map((list, i) => (
-                  <TableRow key={i}>
-                    <TableCell>
-                      <span className="text-sm">$ {list.qty}</span>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">$ {list.normal}</span>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">$ {list.urgent}</span>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">{list.discount}</span>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        type={
-                          list.type === "individual" ? "success" : "primary"
-                        }
+
+                      <Button
+                        layout="link"
+                        size="icon"
+                        aria-label="Edit"
+                        onClick={() => editPriceRow(list)}
+
+                        // tag={Link}
+                        // to={`/app/individualDetails/${row.id}`}
                       >
+
                         {list.type}
                       </Badge>
                     </TableCell>
@@ -740,14 +892,34 @@ function AddProducts() {
           <div className="w-full flex justify-center items-center mb-2">
             <Button onClick={() => setPriceModalOpen(true)}>Add Price</Button>
           </div>
+
+                        <EditIcon className="w-5 h-5" aria-hidden="true" />
+                      </Button>
+                      <Button layout="link" size="icon" aria-label="Delete">
+                        <TrashIcon
+                          className="w-5 h-5"
+                          aria-hidden="true"
+                          onClick={() => delPriceRow(list.qty)}
+                        />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <div className="w-full flex justify-center items-center mb-2">
+          <Button onClick={() => setPriceModalOpen(true)}>Add Price</Button>
+
         </div>
-        <div className="flex justify-center">
-          <Button type="submit" className="mt-4">
-            Add Product
-          </Button>
-        </div>
-      </form>
-    </div>
+      </div>
+      <div className="flex justify-center">
+        <Button type="submit" className="mt-4">
+          Add Product
+        </Button>
+      </div>
+    </form>
   );
 }
 

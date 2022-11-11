@@ -71,6 +71,11 @@ const Banners = () => {
     setDel(!true);
   };
 
+  const bannerModal = (img) => {
+    setIsBannerModalOpen(true);
+    setImg(img);
+  };
+
   const columns = [
     {
       name: "S.N.",
@@ -87,9 +92,9 @@ const Banners = () => {
       name: "Photo",
       cell: (row) => (
         <img
-          src={row.banner}
+          src={row.cover_img}
           alt="no image"
-          onClick={() => setisModalOpen(true)}
+          onClick={() => bannerModal(row.cover_img)}
           className="cursor-pointer"
         />
       ),
@@ -135,7 +140,7 @@ const Banners = () => {
             size="icon"
             aria-label="Edit"
             tag={Link}
-            to={`/app/BannerAdd/${id}`}
+            to={`/app/BannerAdd/${row.id}`}
           >
             <EditIcon className="w-5 h-5" aria-hidden="true" />
           </Button>
@@ -171,7 +176,7 @@ const Banners = () => {
         console.log("reloaded", mainResponse);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [isDeleteSuccessfull]);
 
   const data = response;
   const tableData = {
@@ -188,15 +193,18 @@ const Banners = () => {
         <Button
           //   iconRight={FormsIcon}
           tag={Link}
-          to={`/app/BannerAdd`}
+          to={`/app/BannerAdd/-1`}
         >
           <span>Add Banner</span>
         </Button>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={() => setisModalOpen(false)}>
+      <Modal
+        isOpen={isBannerModalOpen}
+        onClose={() => setIsBannerModalOpen(false)}
+      >
         <div className="h-64">
-          <img src={photo} alt="" className="h-48 mt-3" />
+          <img src={img} alt="" className="h-full w-full" />
         </div>
       </Modal>
 
@@ -230,6 +238,12 @@ const Banners = () => {
         </ModalFooter>
       </Modal>
 
+      <Modal
+        isOpen={isDeleteSuccessfull}
+        onClose={() => setDeleteSuccessfull(false)}
+      >
+        Banner deleted Successfully
+      </Modal>
       {/* <DataTableExtensions {...tableData}></DataTableExtensions> */}
 
       {/* <PageTitle>Banners</PageTitle>

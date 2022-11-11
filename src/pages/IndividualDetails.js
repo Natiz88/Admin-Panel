@@ -100,7 +100,7 @@ function IndividualDetails() {
       contact === "" ||
       password === "" ||
       confirmPassword === "" ||
-      confirmPassword == "" ||
+      confirmPassword === "" ||
       type === ""
     ) {
       setErrorMessage("Please fill up  all the fields");
