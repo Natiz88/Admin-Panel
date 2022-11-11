@@ -80,10 +80,10 @@ const routes = [
     path: "/bannerAdd",
     component: BannerAdd,
   },
-  {
-    path: "/view/:id",
-    component: View,
-  },
+  // {
+  //   path: "/view/:id",
+  //   component: View,
+  // },
   {
     path: "/cards",
     component: Cards,

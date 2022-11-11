@@ -39,122 +39,13 @@ const ProductList = () => {
     // setCol(columns)
     getProducts()
       .then((res) => {
-        setMainResponse(res.data);
-        setResponse(res.data);
+        setMainResponse(res?.data?.data?.products);
+        setResponse(res?.data?.data?.products);
       })
       .catch((err) => console.log(err));
   }, []);
 
   console.log("product", response);
-
-  const columns = [
-    {
-      name: "S.N.",
-      cell: (row, idx) => idx + 1,
-      sortable: false,
-    },
-    {
-      name: "Update",
-      print: false,
-      export: false,
-      cell: (row) => (
-        <div className="flex items-center">
-          <Button layout="link" size="icon" aria-label="Edit"></Button>
-          <Button
-            layout="link"
-            size="icon"
-            aria-label="Edit"
-            tag={Link}
-            to={`/app/addProduct/${row.id}`}
-          >
-            <EditIcon className="w-5 h-5" aria-hidden="true" />
-          </Button>
-          <Button layout="link" size="icon" aria-label="Delete">
-            <TrashIcon
-              className="w-5 h-5"
-              aria-hidden="true"
-              //   onClick={() => deleteUser(row.id)}
-            />
-          </Button>
-        </div>
-      ),
-    },
-  ];
-
-<<<<<<< HEAD
-  // const closeErrorModal = () => {
-  //   setError(false);
-  // };
-=======
-      const columns = [
-        {
-          name: "S.N.",
-          cell: (row, idx) => idx + 1,
-          sortable: false,
-        },
-        {
-          id:"name",
-          name: " Product Name",
-          cell: (row) => row.name,
-          sortable: true,
-        },
-        {
-          name: "Product Image",
-          cell: (row) => <img src={row.image}/>,
-          sortable: true,
-        },
-        {
-          id:"category",
-          name: "Category",
-          cell: (row) => row.discount,
-          sortable: true,
-        },
-    
-        {
-          name: "Sub-Category",
-          cell: (row) => row.weight,
-          sortable: true,
-          isVisible: false,
-        },
-        {
-          name: "Status",
-          cell: (row) => row.desc,
-          sortable: true,
-        },
-        {
-          name: "Added Date",
-          cell: (row) => row.size,
-          sortable: true,
-        },
-        {
-          name: "Update",
-          print: false,
-          export: false,
-          cell: (row) => (
-            <div className="flex items-center">
-              <Button layout="link" size="icon" aria-label="Edit"></Button>
-    
-              <Button
-                layout="link"
-                size="icon"
-                aria-label="Edit"
-                tag={Link}
-                to={`/app/addProduct/${row.id}`}
-              >
-                <EditIcon className="w-5 h-5" aria-hidden="true" />
-              </Button>
-              <Button layout="link" size="icon" aria-label="Delete">
-                <TrashIcon
-                  className="w-5 h-5"
-                  aria-hidden="true"
-                //   onClick={() => deleteUser(row.id)}
-                />
-              </Button>
-            </div>
-          ),
-        }
-    
->>>>>>> 14c2b6a5a9760cdd53d22849e8a49024dbacf797
 
   // const columns = [
   //   {
@@ -163,47 +54,12 @@ const ProductList = () => {
   //     sortable: false,
   //   },
   //   {
-  //     id:"name",
-  //     name: " Product Name",
-  //     cell: (row) => row.name,
-  //     sortable: true,
-  //   },
-  //   {
-  //     name: "Product Image",
-  //     cell: (row) => row.image,
-  //     sortable: true,
-  //   },
-  //   {
-  //     id:"category",
-  //     name: "Category",
-  //     cell: (row) => row.discount,
-  //     sortable: true,
-  //   },
-
-  //   {
-  //     name: "Sub-Category",
-  //     cell: (row) => row.weight,
-  //     sortable: true,
-  //     isVisible: false,
-  //   },
-  //   {
-  //     name: "Status",
-  //     cell: (row) => row.desc,
-  //     sortable: true,
-  //   },
-  //   {
-  //     name: "Added Date",
-  //     cell: (row) => row.size,
-  //     sortable: true,
-  //   },
-  //   {
   //     name: "Update",
   //     print: false,
   //     export: false,
   //     cell: (row) => (
   //       <div className="flex items-center">
   //         <Button layout="link" size="icon" aria-label="Edit"></Button>
-
   //         <Button
   //           layout="link"
   //           size="icon"
@@ -217,14 +73,87 @@ const ProductList = () => {
   //           <TrashIcon
   //             className="w-5 h-5"
   //             aria-hidden="true"
-  //           //   onClick={() => deleteUser(row.id)}
+  //             //   onClick={() => deleteUser(row.id)}
   //           />
   //         </Button>
   //       </div>
   //     ),
-  //   }
-
+  //   },
   // ];
+
+  // const closeErrorModal = () => {
+  //   setError(false);
+  // };
+
+  const columns = [
+    {
+      name: "S.N.",
+      cell: (row, idx) => idx + 1,
+      sortable: false,
+    },
+    {
+      id:"name",
+      name: " Product Name",
+      cell: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Product Image",
+      cell: (row) => row.image,
+      sortable: true,
+    },
+    {
+      id:"category",
+      name: "Category",
+      cell: (row) => row.discount,
+      sortable: true,
+    },
+
+    {
+      name: "Sub-Category",
+      cell: (row) => row.weight,
+      sortable: true,
+      isVisible: false,
+    },
+    {
+      name: "Status",
+      cell: (row) => row.desc,
+      sortable: true,
+    },
+    {
+      name: "Added Date",
+      cell: (row) => row.size,
+      sortable: true,
+    },
+    {
+      name: "Update",
+      print: false,
+      export: false,
+      cell: (row) => (
+        <div className="flex items-center">
+          <Button layout="link" size="icon" aria-label="Edit"></Button>
+
+          <Button
+            layout="link"
+            size="icon"
+            aria-label="Edit"
+            tag={Link}
+            to={`/app/addProduct/${row.id}`}
+          >
+            <EditIcon className="w-5 h-5" aria-hidden="true" />
+          </Button>
+          <Button layout="link" size="icon" aria-label="Delete">
+            <TrashIcon
+              className="w-5 h-5"
+              aria-hidden="true"
+            //   onClick={() => deleteUser(row.id)}
+            />
+          </Button>
+        </div>
+      ),
+    }
+
+  ];
 
   const data = response;
   const tableData = {
@@ -327,7 +256,7 @@ const ProductList = () => {
       <DataTableExtensions {...tableData}>
         <DataTable
           noHeader
-          //   columns={col}
+          columns
           defaultSortFieldId="name"
           defaultSortAsc={true}
           highlightOnHover

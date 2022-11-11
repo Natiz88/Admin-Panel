@@ -20,6 +20,8 @@ import {
   Textarea,
 } from "@windmill/react-ui";
 import { EditIcon, TrashIcon, FormsIcon } from "../icons";
+import View from "./View";
+
 
 function UserTable() {
   const [mainResponse, setMainResponse] = useState([]);
@@ -31,16 +33,29 @@ function UserTable() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUsersModalOpen, setIsUsersModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
-
-  // const [isAlertOpen, setAlertOpen] = useState(false);
-
   const [isAlertOpen, setAlertOpen] = useState(false);
-
   const [selected, setSelected] = useState([]);
   const [isDeleteSuccessfull, setDeleteSuccessfull] = useState(false);
   const [usersCount, setUsersCount] = useState(0);
   const [isError, setError] = useState(false);
   const [errorText, setErrorText] = useState("");
+  const [indUser,setIndUser] = useState({})
+
+
+
+
+  const [viewModalOpen, setViewModalOpen] = useState(false);
+  function closeViewModal() {
+    setViewModalOpen(false);
+  }
+
+  function viewUser(row){
+    setViewModalOpen(true)
+    setIndUser(row)
+  }
+
+
+
 
   const deleteUser = (user) => {
     setId(user);
@@ -132,11 +147,6 @@ function UserTable() {
       isVisible: false,
     },
     {
-      name: "PAN Image",
-      cell: (row) => <img src={row.image}/>,
-      sortable: true,
-    },
-    {
       name: "Gender",
       cell: (row) => row.gender,
       sortable: true,
@@ -159,8 +169,9 @@ function UserTable() {
             layout="link"
             size="icon"
             aria-label="View Details"
-            tag={Link}
-            to={`/app/view/${row.id}`}
+            // tag={Link}
+            // to={`/app/view/${row.id}`}
+            onClick={()=>viewUser(row)}
           >
             <AiOutlineEye className="w-5 h-5" aria-hidden="true" />
           </Button>
@@ -258,6 +269,8 @@ function UserTable() {
           <span>Add new User</span>
         </Button>
       </div>
+      {/* <View/> */}
+
 
       {selected.length > 0 && (
         <div className="flex justify-end">
@@ -321,6 +334,22 @@ function UserTable() {
           onSelectedRowsChange={handleChange}
         />
       </DataTableExtensions>
+      {/* <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <ModalHeader>Delete User</ModalHeader>
+        <ModalBody>Are you sure you want to delete the user?</ModalBody>
+        <ModalFooter>
+          <div className="hidden sm:block">
+            <Button layout="outline" onClick={closeModal}>
+              Cancel
+            </Button>
+          </div>
+          <div className="hidden sm:block">
+            <Button onClick={confirmDelete}>Ok, Continue</Button>
+          </div>
+        </ModalFooter>
+      </Modal> */}
+
+
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <ModalHeader>Delete User</ModalHeader>
         <ModalBody>Are you sure you want to delete the user?</ModalBody>
@@ -367,6 +396,13 @@ function UserTable() {
       </Modal>
       <Modal isOpen={isError} close={closeErrorModal}>
         <ModalBody>{errorText}</ModalBody>
+      </Modal>
+
+
+
+
+      <Modal className="w-1/2" isOpen={viewModalOpen} onClose={closeViewModal}>
+        <View user={indUser}/>
       </Modal>
     </>
   );

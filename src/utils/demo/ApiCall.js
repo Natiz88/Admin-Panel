@@ -224,13 +224,15 @@ export const getAdminProfile = async () => {
 };
 
 export const getProducts = async () => {
-  const url = "http://192.168.100.17:8081/api/product/show";
+  const url = "http://192.168.100.22:5000/api/products";
   const config = {
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.get(url, config);
+  const response = await axios.get(url);
+  console.log("reponse",response?.data?.data?.products)
+
   return response;
 };

@@ -109,11 +109,11 @@ const routes = [
     ],
   },
   
-  {
-    path: "/app/view/:id",
-    icon: "CardsIcon",
-    name: "View",
-  },
+  // {
+  //   path: "/app/view/:id",
+  //   icon: "CardsIcon",
+  //   name: "View",
+  // },
 ];
 
 export default routes;

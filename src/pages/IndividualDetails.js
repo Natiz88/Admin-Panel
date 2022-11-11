@@ -27,7 +27,7 @@ function IndividualDetails() {
 
   const history = useHistory();
 
-  useState(() => {
+  useEffect(() => {
     getUser(id).then((response) => setUser(response));
   }, []);
 

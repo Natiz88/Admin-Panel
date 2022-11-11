@@ -13,14 +13,9 @@ import {
   TableCell,
   TableBody,
   TableRow,
-  TableFooter,
   TableContainer,
   Badge,
-  Pagination,
   Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
 } from "@windmill/react-ui";
 import { useState, useEffect } from "react";
 import uploadImage from "./../assets/img/upload_pic.png";
@@ -30,10 +25,6 @@ import { EditIcon, TrashIcon, FormsIcon } from "../icons";
 import { modes } from "react-transition-group/SwitchTransition";
 
 import MultiImageInput from "react-multiple-image-input";
-
-// import {Switch} from "react-button-switch";
-
-// import { MailIcon } from "../icons";
 
 function AddProducts() {
 
@@ -73,7 +64,10 @@ function AddProducts() {
     width: "100"
   };
 
-  const [images, setImages] = useState({});
+
+  const [images, setImages] = useState([]);
+
+  console.log(images,"images");
 
   function closeModal() {
     setPriceModalOpen(false);
@@ -149,7 +143,6 @@ function AddProducts() {
     getCategories();
   }, []);
 
-  // console.log(desc);
 
   const onImageChange = (e) => {
     const [file] = e.target.files;
@@ -247,15 +240,6 @@ function AddProducts() {
     setPageTable1(p);
   }
 
-  // on page change, load new sliced data
-  // here you would make another server request for new data
-  // useEffect(() => {
-  //   setDataTable1(response.slice((pageTable1 - 1) * resultsPerPage, pageTable1 * resultsPerPage))
-  // }, [pageTable1])
-
-  // const addToPriceTable = (data) =>{
-  //   console.log("table",data)
-  // }
   const checkAttributeTable = () => {
     const isPresent = tableAttributeData.filter(
       (data) => data.attribute === attributes.attribute
@@ -298,6 +282,7 @@ function AddProducts() {
         tablePriceData.filter((data) => data.qty !== indPricelist.qty)
       );
       console.log("table", tablePriceData);
+      
     }
     pushToCheck();
   };
@@ -386,12 +371,9 @@ function AddProducts() {
             onChange={(e) => setDesc(e.target.value)}
           />
         </Label>
-<<<<<<< HEAD
-=======
-        <Label className="mt-4">
-          <span>Email</span>
-          <Input type="email" className="mt-1" placeholder="Jane Doe" />
-        </Label>
+
+
+       
         <Label className="mt-4">
           <span>Category</span>
           <Select className="mt-1" onChange={(e) => getSubCategories(e)}>
@@ -402,46 +384,12 @@ function AddProducts() {
           </Select>
         </Label>
 
->>>>>>> 14c2b6a5a9760cdd53d22849e8a49024dbacf797
-        {/* <Label className="mt-4">
-          <span>Email</span>
-          <Input type="email" className="mt-1" placeholder="Jane Doe" />
-        </Label> */}
-<<<<<<< HEAD
-        {/* <Label className="mt-4">
-=======
 
-         {/* <Label className="mt-4">
->>>>>>> 14c2b6a5a9760cdd53d22849e8a49024dbacf797
-          <span>Category</span>
-          <Select className="mt-1" onChange={(e) => getSubCategories(e)}>
-            <option value=""></option>
-             {categories.map((e) => (
-              <option value={e.id}>{e.name}</option>
-<<<<<<< HEAD
-            ))} */}
-        {/* </Select>
-        </Label> */}{" "}
-=======
-            ))} 
-           </Select>
-        </Label>  */}
+       
 
->>>>>>> 14c2b6a5a9760cdd53d22849e8a49024dbacf797
-        <Label className="mt-4">
-          <span>Sub-Category</span>
-          <Select className="mt-1">
-            <option value=""></option>
-            {subCategories.map((e) => (
-              <option value={e.id}>{e.name}</option>
-            ))}
-          </Select>
-        </Label>
-<<<<<<< HEAD
-        <div className="border-2 border-gray-300 my-4">
-=======
+
         <form className="border-2 border-gray-300 my-4" >
->>>>>>> 14c2b6a5a9760cdd53d22849e8a49024dbacf797
+
           <Modal isOpen={isAttributeModalOpen} onClose={closeModal}>
             <form onSubmit={pushToAttributeTable}>
             <div>
@@ -646,7 +594,6 @@ function AddProducts() {
                           defaultValue={indPricelist.qty}
                           value={indPricelist.qty}
                           required
-                          // onChange={(e) => setCorPriceList({...indPricelist,qty:e.target.value})}
                         />
                       </Label>
                     </div>
@@ -682,7 +629,6 @@ function AddProducts() {
                           placeholder="10"
                           
                           required
-                          // defaultValue={corPricelist.urgent}
                           onChange={(e) =>
                             setCorPriceList({
                               ...corPricelist,
@@ -773,9 +719,6 @@ function AddProducts() {
                           size="icon"
                           aria-label="Edit"
                           onClick={() => editPriceRow(list)}
-
-                          // tag={Link}
-                          // to={`/app/individualDetails/${row.id}`}
                         >
                           <EditIcon className="w-5 h-5" aria-hidden="true" />
                         </Button>
